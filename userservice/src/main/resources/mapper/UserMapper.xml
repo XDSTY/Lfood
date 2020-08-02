@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xdsty.userservice.mapper.UserMapper">
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO tb_user(username, profile_pic, link_phone, company_id, password)
+        VALUE (#{username}, #{profilePic}, #{linkPhone}, #{companyId}, #{password})
+    </insert>
+    <select id="checkExistByPhone" resultType="java.lang.Integer">
+        SELECT 1 FROM tb_user t
+        WHERE t.link_phone = #{phone}
+    </select>
+    <select id="selectUserByPhoneAndPsd" resultType="com.xdsty.userservice.entity.User">
+        SELECT t.id AS id,
+               t.username AS username,
+               t.link_phone AS linkPhone,
+               t.company_id AS companyId
+        FROM tb_user t
+        WHERE t.link_phone = #{phone} AND t.password = #{password}
+    </select>
+    <select id="getUserDetail" resultType="com.xdsty.userservice.entity.UserDetail">
+        SELECT t.id AS userId,
+               t.username AS username,
+               t.profile_pic AS profilePic,
+               t.link_phone AS linkPhone,
+               t.company_id AS companyId,
+               c.short_name AS shortName,
+               c2.id AS cityId,
+               c2.city_name AS cityName
+        FROM tb_user t
+        JOIN tb_company c ON t.company_id = c.id
+        JOIN tb_city c2 ON c.city_id = c2.id
+        WHERE t.id = #{userId}
+    </select>
+    <select id="checkExistByUsername" resultType="java.lang.Integer">
+        SELECT 1
+        FROM tb_user t
+        WHERE t.username = #{username}
+    </select>
+    <select id="selectUserNowCity" resultType="com.xdsty.userservice.entity.City">
+        SELECT city.id AS cityId,
+               city.city_name AS cityName
+        FROM tb_user u JOIN tb_company c ON u.company_id = c.id
+              JOIN tb_city city ON c.city_id = city.id
+    </select>
+</mapper>

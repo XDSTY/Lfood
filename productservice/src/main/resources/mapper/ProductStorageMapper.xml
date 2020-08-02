@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xdsty.productservice.mapper.ProductStorageMapper">
+    <update id="lockProductStorage">
+        UPDATE tb_product_storage
+        SET available_qty = available_qty - #{lockedQty},
+            locked_qty = locked_qty + #{lockedQty}
+        WHERE product_id = #{productId} AND available_qty >= #{lockedQty}
+    </update>
+    <update id="unlockProductStorage">
+        UPDATE tb_product_storage
+        SET available_qty = available_qty + #{lockedQty},
+            locked_qty = locked_qty - #{lockedQty}
+        WHERE product_id = #{productId} AND locked_qty >= #{lockedQty}
+    </update>
+    <update id="commitProductStorage">
+        UPDATE tb_product_storage
+        SET locked_qty = locked_qty - #{lockedQty}
+        WHERE product_id = #{productId} AND locked_qty >= #{lockedQty}
+    </update>
+</mapper>

@@ -1,0 +1,56 @@
+project:
+  name: productservice
+
+server:
+  port: 8083
+
+spring:
+  datasource:
+    druid:
+      username: root
+      password: Zhangfuhua123!
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://119.23.240.184:3306/algproduct?characterEncoding=utf-8&useUnicode=true&useSSL=false
+      initial-size: 5
+      max-active: 5
+      max-wait: 6000
+      min-idle: 5
+      pool-prepared-statements: false
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    root: info
+  file:
+    path: ./log
+
+dubbo:
+  application:
+    name: product-service-provider
+  registry:
+    address: nacos://119.23.240.184:8848
+    register: true
+    timeout: 10000
+  protocol:
+    name: dubbo
+    ssl-enabled: false
+    port: 20880
+  scan:
+    base-packages: com.xdsty.productservice.service
+  config-center:
+    timeout: 6000
+  provider:
+    filter: dubboExceptionFilter,-exception
+
+# 配置管理
+nacos:
+  config:
+    server-addr: 119.23.240.184:8848
+
+seata:
+  service-group-name : product-service-group

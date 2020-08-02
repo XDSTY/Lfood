@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xdsty.orderservice.mapper.CartMapper">
+    <insert id="insertCartItem" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+      INSERT INTO tb_carts(product_extend_id, user_id, product_num)
+      VALUE (#{productExtendId}, #{userId}, #{productNum})
+    </insert>
+    <insert id="insertCartAdditional">
+        INSERT INTO tb_cart_additional (cart_id, additional_id, num)
+        VALUES
+        <foreach collection="additionals" item="item" separator=",">
+            (#{item.cartId}, #{item.additionalId}, #{item.num})
+        </foreach>
+    </insert>
+    <update id="incrCartItemNum">
+      UPDATE tb_carts t
+      SET t.product_num = t.product_num + #{productNum}
+      WHERE t.id = #{id} AND t.user_id = #{userId} AND t.product_extend_id = #{productExtendId}
+    </update>
+    <update id="descCartItemNum">
+        UPDATE tb_carts t
+        SET t.product_num = t.product_num - #{productNum}
+        WHERE t.id = #{id} AND t.user_id = #{userId} AND t.product_extend_id = #{productExtendId} AND t.product_num > #{productNum}
+    </update>
+    <delete id="delCartItem">
+        UPDATE tb_carts t
+        SET t.status = 0
+        WHERE t.id = #{cartId}
+    </delete>
+    <select id="getCartIdByUserIdAndProductId" resultType="java.lang.Long">
+        SELECT t.id
+        FROM tb_carts t
+        WHERE t.user_id = #{userId} AND t.product_extend_id = #{productId}
+    </select>
+    <select id="getAdditionalIdsByCartId" resultType="java.lang.Long">
+        SELECT ca.additional_id
+        FROM tb_cart_additional ca
+        WHERE ca.cart_id = #{id}
+    </select>
+    <select id="checkUserCartExist" resultType="java.lang.Integer">
+        SELECT t.product_num
+        FROM tb_carts t
+        WHERE t.id = #{id} AND t.user_id = #{userId} AND t.product_extend_id = #{productExtendId} AND t.status = 1
+    </select>
+    <select id="getCartItemList" resultType="com.xdsty.orderservice.entity.CartItem">
+        SELECT c.id AS id,
+               c.product_extend_id AS productExtendId,
+               c.product_num AS productNum
+        FROM tb_carts c
+        WHERE c.user_id = #{userId} AND c.status = 1
+        LIMIT #{offset}, #{pageSize}
+    </select>
+    <select id="getCartAdditionalByCartIds" resultType="com.xdsty.orderservice.entity.CartAdditional">
+        SELECT ca.id AS id,
+               ca.additional_id AS additionalId,
+               ca.cart_id AS cartId
+        FROM tb_cart_additional ca
+        WHERE ca.cart_id IN
+        <foreach collection="cartIds" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <select id="getCartItemAdditional" resultType="com.xdsty.orderservice.entity.CartAdditional">
+        SELECT ca.additional_id AS additionalId,
+               ca.num AS num
+        FROM tb_cart_additional ca
+        WHERE ca.cart_id = #{cartId}
+    </select>
+</mapper>

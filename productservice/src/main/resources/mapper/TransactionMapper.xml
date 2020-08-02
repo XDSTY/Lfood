@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xdsty.productservice.mapper.TransactionMapper">
+    <insert id="insertTransaction">
+      INSERT INTO tb_branch_transaction
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != xid'>
+                xid,
+            </if>
+            <if test ='null != branchId'>
+                branch_id,
+            </if>
+            <if test ='null != argsJson'>
+                args_json,
+            </if>
+            <if test ='true'>
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != xid'>
+                #{xid},
+            </if>
+            <if test ='null != branchId'>
+                #{branchId},
+            </if>
+            <if test ='null != argsJson'>
+                #{argsJson},
+            </if>
+            <if test ='true'>
+                #{status},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateTransaction">
+        UPDATE tb_branch_transaction
+        SET status = #{status}
+        WHERE xid = #{xid} AND branch_id = #{branchId}
+    </update>
+
+    <select id="getTransaction" resultType="com.xdsty.productservice.transaction.Transaction">
+        SELECT t.id AS id,
+               t.status AS status
+        FROM tb_branch_transaction t
+        WHERE t.xid = #{xid} AND t.branch_id = #{branchId}
+    </select>
+</mapper>

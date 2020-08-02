@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xdsty.orderservice.mapper.OrderMapper">
+    <insert id="insertOrder">
+        INSERT INTO tb_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test ='null != orderId'>
+                order_id,
+            </if>
+            <if test ='null != userId'>
+                user_id,
+            </if>
+            <if test ='null != totalPrice'>
+                total_price,
+            </if>
+            <if test ='null != status'>
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test ='null != orderId'>
+                #{orderId},
+            </if>
+            <if test ='null != userId'>
+                #{userId},
+            </if>
+            <if test ='null != totalPrice'>
+                #{totalPrice},
+            </if>
+            <if test ='null != status'>
+                #{status},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateOrder">
+        UPDATE tb_order
+        SET status = #{status}
+        WHERE order_id = #{orderId}
+    </update>
+</mapper>
