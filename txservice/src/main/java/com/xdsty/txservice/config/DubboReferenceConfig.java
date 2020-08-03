@@ -1,4 +1,4 @@
-package com.xdsty.api.config;
+package com.xdsty.txservice.config;
 
 import com.xdsty.orderclient.service.OrderTxService;
 import com.xdsty.productclient.service.StorageTxService;

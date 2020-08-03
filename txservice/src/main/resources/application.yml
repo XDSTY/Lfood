@@ -1,0 +1,38 @@
+project:
+  name: productservice
+
+server:
+  port: 8086
+
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    root: info
+  file:
+    path: ./log
+
+dubbo:
+  application:
+    name: tx-service-provider
+  registry:
+    address: nacos://119.23.240.184:8848
+    register: true
+    timeout: 10000
+  protocol:
+    name: dubbo
+    ssl-enabled: false
+    port: 20883
+  scan:
+    base-packages: com.xdsty.txservice.service
+  config-center:
+    timeout: 6000
+  provider:
+    filter: dubboExceptionFilter,-exception
+
+# ≈‰÷√π‹¿Ì
+nacos:
+  config:
+    server-addr: 119.23.240.184:8848
+
+seata:
+  service-group-name: tx-service-group

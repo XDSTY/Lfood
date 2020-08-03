@@ -25,6 +25,7 @@
         <curator.version>4.3.0</curator.version>
         <basecommon.version>1.0-SNAPSHOT</basecommon.version>
         <productclient.version>1.0-SNAPSHOT</productclient.version>
+        <txclient.version>1.0-SNAPSHOT</txclient.version>
         <nacos.starter.version>0.2.7</nacos.starter.version>
         <nacos.discovery.version>0.2.7</nacos.discovery.version>
         <seata.version>1.3.0</seata.version>
@@ -135,6 +136,12 @@
             <groupId>io.seata</groupId>
             <artifactId>seata-all</artifactId>
             <version>${seata.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xdsty</groupId>
+            <artifactId>txclient</artifactId>
+            <version>${txclient.version}</version>
         </dependency>
     </dependencies>
 

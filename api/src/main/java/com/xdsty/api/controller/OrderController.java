@@ -4,12 +4,10 @@ import com.xdsty.api.controller.param.OrderAddParam;
 import com.xdsty.api.controller.param.OrderProductAddParam;
 import com.xdsty.orderclient.dto.OrderAddDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
-import com.xdsty.orderclient.service.OrderTxService;
 import com.xdsty.productclient.dto.ProductStorageDto;
-import com.xdsty.productclient.dto.ProductStorageListDto;
-import com.xdsty.productclient.service.StorageTxService;
+import com.xdsty.txclient.service.OrderTransactionService;
 import io.seata.spring.annotation.GlobalTransactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
@@ -21,15 +19,8 @@ import java.util.stream.Collectors;
 @RestController
 public class OrderController {
 
-    private OrderTxService orderTxService;
-
-    private StorageTxService storageTxService;
-
-    @Autowired
-    public OrderController(OrderTxService orderTxService, StorageTxService storageTxService) {
-        this.orderTxService = orderTxService;
-        this.storageTxService = storageTxService;
-    }
+    @DubboReference(version = "1.0")
+    private OrderTransactionService orderTransactionService;
 
     @RequestMapping("placeOrder")
     @GlobalTransactional
@@ -48,14 +39,7 @@ public class OrderController {
 
         OrderAddDto dto = convert2OrderAddDto(param);
 
-        List<ProductStorageDto> storageDtos = dto.getProductDtos().stream().map(this::convert2ProductStorageDto).collect(Collectors.toList());
-        ProductStorageListDto listDto = new ProductStorageListDto();
-        listDto.setUserId(1L);
-        listDto.setProductStorageDtos(storageDtos);
-        storageTxService.prepare(null, listDto);
-
-        orderTxService.prepare(null, dto);
-
+        orderTransactionService.placeOrder(dto);
 
     }
 
