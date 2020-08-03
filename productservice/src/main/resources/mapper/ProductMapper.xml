@@ -3,23 +3,23 @@
 <mapper namespace="com.xdsty.productservice.mapper.ProductMapper">
     <select id="selectProductList" resultType="com.xdsty.productclient.re.ProductListRe">
         SELECT pe.id AS productId,
-               p.product_name AS productName,
-               p.thumbnail AS thumbnail,
-               pe.price AS price
+        p.product_name AS productName,
+        p.thumbnail AS thumbnail,
+        pe.price AS price
         FROM tb_product_extend pe
-                JOIN tb_product p ON pe.product_id = p.id
+        JOIN tb_product p ON pe.product_id = p.id
         WHERE pe.city_id = #{cityId}
         LIMIT #{offset}, #{pageSize}
     </select>
     <select id="selectOne" resultType="com.xdsty.productservice.entity.Product">
         SELECT pe.id AS productExtendId,
-               pe.product_id AS productId,
-               p.product_name AS productName,
-               p.thumbnail AS thumbnail,
-               pe.cut_off_time AS cutOffTime,
-               pe.price AS price
+        pe.product_id AS productId,
+        p.product_name AS productName,
+        p.thumbnail AS thumbnail,
+        pe.cut_off_time AS cutOffTime,
+        pe.price AS price
         FROM tb_product_extend pe
-                 JOIN tb_product p ON pe.product_id = p.id
+        JOIN tb_product p ON pe.product_id = p.id
         WHERE pe.id = #{id}
     </select>
     <select id="selectProductBanner" resultType="java.lang.String">
@@ -34,16 +34,16 @@
     </select>
     <select id="selectAdditionalItem" resultType="com.xdsty.productservice.entity.AdditionalItem">
         SELECT t.id AS id,
-               t.name AS name,
-               t.price AS price
+        t.name AS name,
+        t.price AS price
         FROM tb_product_additional t
         WHERE t.product_id = #{productId}
     </select>
     <select id="selectProductListByIds" resultType="com.xdsty.productservice.entity.Product">
         SELECT pe.id AS productExtendId,
-               pe.price AS price,
-               p.product_name AS productName,
-               p.thumbnail AS thumbnail
+        pe.price AS price,
+        p.product_name AS productName,
+        p.thumbnail AS thumbnail
         FROM tb_product_extend pe JOIN tb_product p ON pe.product_id = p.id
         WHERE pe.id IN
         <foreach collection="productIds" item="id" open="(" close=")" separator=",">
@@ -54,8 +54,8 @@
     </select>
     <select id="selectAdditionalItemByIds" resultType="com.xdsty.productservice.entity.AdditionalItem">
         SELECT pa.id AS id,
-               pa.price AS price,
-               pa.name AS name
+        pa.price AS price,
+        pa.name AS name
         FROM tb_product_additional pa
         WHERE pa.id IN
         <foreach collection="itemIds" item="id" open="(" close=")" separator=",">
@@ -66,7 +66,8 @@
     <select id="selectValidProduct" resultType="java.lang.Long">
         SELECT pe.id
         FROM tb_product_extend pe
-        WHERE pe.id = #{productId} AND pe.status = 1
+        WHERE pe.id = #{productId}
+        AND pe.status = 1
     </select>
     <select id="selectValidAdditionalCount" resultType="java.lang.Integer">
         SELECT COUNT(*)

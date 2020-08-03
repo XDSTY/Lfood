@@ -28,8 +28,9 @@ public class ConfigManager {
 
     /**
      * 添加配置中心监听器
-     * @param dataId key
-     * @param groupId groupId
+     *
+     * @param dataId   key
+     * @param groupId  groupId
      * @param listener 监听器
      */
     public static void addConfigListener(String dataId, String groupId, NacosConfigListener listener) {
@@ -37,7 +38,7 @@ public class ConfigManager {
         try {
             configValue = configService.getConfig(dataId, groupId, DEFAULT_TIMEOUT);
             log.error("初始化配置中心项，dataId: {}, groupId: {}, cofigValue: {}", dataId, groupId, configValue);
-            if(StringUtils.isNotEmpty(configValue)) {
+            if (StringUtils.isNotEmpty(configValue)) {
                 ConfigCenter.setConfigKeyValue(dataId, configValue);
             }
             configService.addListener(dataId, groupId, listener);

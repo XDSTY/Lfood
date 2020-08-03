@@ -10,7 +10,7 @@ spring:
       username: root
       password: Zhangfuhua123!
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://119.23.240.184:3306/algproduct?characterEncoding=utf-8&useUnicode=true&useSSL=false
+      url: jdbc:mysql://119.23.240.184:3306/algproduct?characterEncoding=utf-8&useUnicode=true&useSSL=false&serverTimezone=GMT%2B8
       initial-size: 5
       max-active: 5
       max-wait: 6000
@@ -53,4 +53,4 @@ nacos:
     server-addr: 119.23.240.184:8848
 
 seata:
-  service-group-name : product-service-group
+  service-group-name: product-service-group

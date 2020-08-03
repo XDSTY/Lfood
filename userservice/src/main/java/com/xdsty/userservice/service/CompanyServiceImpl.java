@@ -29,7 +29,7 @@ public class CompanyServiceImpl implements CompanyService {
         return companies.stream().map(this::convertCompanyRe).collect(Collectors.toList());
     }
 
-    private CompanyRe convertCompanyRe(Company company){
+    private CompanyRe convertCompanyRe(Company company) {
         CompanyRe re = new CompanyRe();
         re.setId(company.getCompanyId());
         re.setFullName(company.getFullName());

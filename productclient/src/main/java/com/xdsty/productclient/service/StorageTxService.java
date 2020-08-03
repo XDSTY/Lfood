@@ -13,8 +13,9 @@ public interface StorageTxService {
 
     /**
      * 冻结库存接口
+     *
      * @param context 事务上下文
-     * @param dto 入参
+     * @param dto     入参
      * @return
      */
     @TwoPhaseBusinessAction(name = "prepare", commitMethod = "commit", rollbackMethod = "rollback")
@@ -22,6 +23,7 @@ public interface StorageTxService {
 
     /**
      * 事务提交接口
+     *
      * @param context 事务上下文
      * @return
      */
@@ -29,6 +31,7 @@ public interface StorageTxService {
 
     /**
      * 回滚接口
+     *
      * @param context 事务上下文
      * @return
      */

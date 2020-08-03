@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * 用户详细信息
+ *
  * @author 张富华
  * @date 2020/6/17 14:46
  */

@@ -1,9 +1,9 @@
 package com.xdsty.orderservice.service;
 
 import basecommon.exception.BusinessRuntimeException;
-import com.xdsty.algorderclient.dto.*;
-import com.xdsty.algorderclient.re.*;
-import com.xdsty.algorderclient.service.CartService;
+import com.xdsty.orderclient.dto.*;
+import com.xdsty.orderclient.re.*;
+import com.xdsty.orderclient.service.CartService;
 import com.xdsty.orderservice.entity.CartAdditional;
 import com.xdsty.orderservice.entity.CartItem;
 import com.xdsty.orderservice.mapper.CartMapper;
@@ -32,11 +32,11 @@ public class CartServiceImpl implements CartService {
     @Transactional(rollbackFor = Exception.class)
     public CartItemAddRe addCartItem(CartItemDto cartItemDto) {
         List<Long> cartIds = cartMapper.getCartIdByUserIdAndProductId(cartItemDto.getUserId(), cartItemDto.getProductId());
-        if(!CollectionUtils.isEmpty(cartIds)) {
-            for(Long cartId : cartIds) {
+        if (!CollectionUtils.isEmpty(cartIds)) {
+            for (Long cartId : cartIds) {
                 List<Long> additionalItemIds = cartMapper.getAdditionalIdsByCartId(cartId);
                 List<Long> additionalItemIdsDto = null;
-                if(!CollectionUtils.isEmpty(cartItemDto.getAdditionalList())) {
+                if (!CollectionUtils.isEmpty(cartItemDto.getAdditionalList())) {
                     additionalItemIdsDto = cartItemDto.getAdditionalList().stream().map(CartAdditionalItem::getId).collect(Collectors.toList());
                 }
                 // 新加入的商品已经在用户的购物车中
@@ -58,7 +58,7 @@ public class CartServiceImpl implements CartService {
         cartItem.setProductNum(cartItemDto.getProductNum());
         cartMapper.insertCartItem(cartItem);
         // 新建购物车的附加
-        if(!CollectionUtils.isEmpty(cartItemDto.getAdditionalList())) {
+        if (!CollectionUtils.isEmpty(cartItemDto.getAdditionalList())) {
             List<CartAdditional> additionals = cartItemDto.getAdditionalList().stream().map(a -> convert2CartAdditional(a, cartItem.getId())).collect(Collectors.toList());
             cartMapper.insertCartAdditional(additionals);
         }
@@ -78,14 +78,14 @@ public class CartServiceImpl implements CartService {
         CartListRe re = new CartListRe();
         // 获取购物车信息
         List<CartItem> cartItems = cartMapper.getCartItemList(dto);
-        if(!CollectionUtils.isEmpty(cartItems)) {
+        if (!CollectionUtils.isEmpty(cartItems)) {
             List<CartItemRe> cartItemRes = cartItems.stream().map(this::convert2CartItemRe).collect(Collectors.toList());
             re.setCartItemRes(cartItemRes);
 
             // 根据购物车信息获取商品附加信息
             List<Long> cartIds = cartItems.stream().map(CartItem::getId).collect(Collectors.toList());
             List<CartAdditional> cartAdditionals = cartMapper.getCartAdditionalByCartIds(cartIds);
-            if(!CollectionUtils.isEmpty(cartAdditionals)) {
+            if (!CollectionUtils.isEmpty(cartAdditionals)) {
                 List<CartAdditionalItemRe> cartAdditionalItemRes = cartAdditionals.stream().map(this::convert2CartAdditionalItemRe).collect(Collectors.toList());
                 re.setCartAdditionalItemRes(cartAdditionalItemRes);
             }
@@ -119,12 +119,12 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartItemModifyRe descCartItem(CartItemModifyDto dto) {
         Integer num = checkCartItemExistAndGetNum(dto.getCartId(), dto.getUserId(), dto.getProductId());
-        if(num <= dto.getModifyNum()) {
+        if (num <= dto.getModifyNum()) {
             throw new BusinessRuntimeException("购物车商品数量不足");
         }
         CartItem cartItem = new CartItem(dto.getCartId(), dto.getProductId(), dto.getUserId(), dto.getModifyNum());
         Integer count = cartMapper.descCartItemNum(cartItem);
-        if(count != 1) {
+        if (count != 1) {
             throw new BusinessRuntimeException("购物车商品数量不足");
         }
         return new CartItemModifyRe();
@@ -137,7 +137,7 @@ public class CartServiceImpl implements CartService {
         cartItem.setProductExtendId(productId);
         // 判断是否存在且未删除
         Integer num = cartMapper.checkUserCartExist(cartItem);
-        if(num == null) {
+        if (num == null) {
             throw new BusinessRuntimeException("该购物车商品不存在");
         }
         return num;

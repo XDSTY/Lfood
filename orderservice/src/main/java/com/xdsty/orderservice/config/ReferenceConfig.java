@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class ReferenceConfig {
 
     @Bean
-    public ReferenceBean<StorageTxService> serviceReferenceBean () {
+    public ReferenceBean<StorageTxService> serviceReferenceBean() {
         ReferenceBean<StorageTxService> bean = new ReferenceBean<>();
         bean.setVersion("1.0");
         bean.setInterface(StorageTxService.class);

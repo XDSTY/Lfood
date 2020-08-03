@@ -8,6 +8,7 @@ public interface OrderMapper {
 
     /**
      * 插入状态为待确认状态的订单
+     *
      * @param order 订单信息
      * @return
      */
@@ -15,6 +16,7 @@ public interface OrderMapper {
 
     /**
      * 修改订单状态
+     *
      * @param order 订单
      * @return
      */

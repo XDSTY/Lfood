@@ -51,6 +51,7 @@ public abstract class AbstractConfigInfo<T> implements InitializingBean, Listene
 
     /**
      * 获取nacos dataId
+     *
      * @return nacos dataId
      */
     protected abstract String getDataId();
@@ -58,6 +59,7 @@ public abstract class AbstractConfigInfo<T> implements InitializingBean, Listene
     /**
      * 获取nacos groupId
      * <p>默认NacosConstant.GROUP_ID</p>
+     *
      * @return nacos groupId
      */
     protected String getGroupId() {

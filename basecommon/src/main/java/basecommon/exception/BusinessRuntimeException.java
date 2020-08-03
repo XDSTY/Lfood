@@ -2,6 +2,7 @@ package basecommon.exception;
 
 /**
  * 公共业务异常
+ *
  * @author 张富华
  * @date 2020/6/16 15:04
  */

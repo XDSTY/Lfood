@@ -18,6 +18,7 @@ public enum TransactionEnum {
     public String desc;
 
     TransactionEnum(Integer status, String desc) {
+        this.status = status;
         this.desc = desc;
     }
 }

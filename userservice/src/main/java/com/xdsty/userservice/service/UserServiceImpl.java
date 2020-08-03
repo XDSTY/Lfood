@@ -47,10 +47,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void registerUser(UserRegisterDto dto) {
-        if(userMapper.checkExistByPhone(dto.getLinkPhone()) != null) {
+        if (userMapper.checkExistByPhone(dto.getLinkPhone()) != null) {
             throw new BusinessRuntimeException("该用户手机号已注册");
         }
-        if(userMapper.checkExistByUsername(dto.getUsername()) != null) {
+        if (userMapper.checkExistByUsername(dto.getUsername()) != null) {
             throw new BusinessRuntimeException("该用户名已存在");
         }
 
@@ -71,14 +71,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserLoginRe login(UserLoginDto dto) {
-        if(userMapper.checkExistByPhone(dto.getPhone()) == null){
+        if (userMapper.checkExistByPhone(dto.getPhone()) == null) {
             throw new BusinessRuntimeException("用户不存在");
         }
         UserLogin userLogin = new UserLogin();
         userLogin.setPhone(dto.getPhone());
         userLogin.setPassword(MD5Util.md5Hex(dto.getPassword()));
         User user = userMapper.selectUserByPhoneAndPsd(userLogin);
-        if(user == null) {
+        if (user == null) {
             throw new BusinessRuntimeException("密码错误，请重试");
         }
         UserLoginRe re = new UserLoginRe();

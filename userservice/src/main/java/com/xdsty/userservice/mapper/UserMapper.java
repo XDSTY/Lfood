@@ -11,12 +11,13 @@ import org.springframework.stereotype.Repository;
  * @date 2020/6/16 15:41
  */
 @Repository
-public interface UserMapper  {
+public interface UserMapper {
 
     Integer insertUser(User user);
 
     /**
      * 根据手机号判断是否存在
+     *
      * @param phone 手机号
      * @return 存在返回1  不存在返回null
      */
@@ -24,6 +25,7 @@ public interface UserMapper  {
 
     /**
      * 根据用户名判断是否存在
+     *
      * @param username 用户名
      * @return 存在返回1  不存在返回null
      */
@@ -36,6 +38,7 @@ public interface UserMapper  {
 
     /**
      * 根据id获取用户详细信息
+     *
      * @param userId 用户id
      * @return 详细信息
      */
@@ -43,6 +46,7 @@ public interface UserMapper  {
 
     /**
      * 获取用户当前公司所在城市
+     *
      * @param userId 用户id
      * @return
      */

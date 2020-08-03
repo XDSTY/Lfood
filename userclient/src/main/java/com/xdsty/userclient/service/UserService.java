@@ -15,12 +15,14 @@ public interface UserService {
 
     /**
      * 用户注册
+     *
      * @param dto 用户信息
      */
     void registerUser(UserRegisterDto dto);
 
     /**
      * 用户登录
+     *
      * @param dto 用户登录信息
      * @return 登录成功返回用户信息
      */
@@ -28,6 +30,7 @@ public interface UserService {
 
     /**
      * 获取用户详细信息
+     *
      * @param dto id入参
      * @return 用户信息
      */
@@ -35,6 +38,7 @@ public interface UserService {
 
     /**
      * 获取用户所在公司当前城市
+     *
      * @param userId 用户id
      * @return
      */

@@ -16,6 +16,7 @@ public interface ProductService {
 
     /**
      * 根据id查询商品详情
+     *
      * @param dto dto
      * @return 商品
      */
@@ -23,6 +24,7 @@ public interface ProductService {
 
     /**
      * 商品列表查询
+     *
      * @param dto 查询条件
      * @return 商品列表
      */
@@ -30,6 +32,7 @@ public interface ProductService {
 
     /**
      * 根据商品id列表获取商品信息列表
+     *
      * @param productIdList 商品id列表
      * @return 商品信息列表
      */
@@ -37,6 +40,7 @@ public interface ProductService {
 
     /**
      * 获取购物车附加
+     *
      * @param itemIds id列表
      * @return
      */
@@ -44,6 +48,7 @@ public interface ProductService {
 
     /**
      * 检查商品是否正常
+     *
      * @param dto
      * @return
      */

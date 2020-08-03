@@ -4,30 +4,30 @@
     <insert id="insertOrder">
         INSERT INTO tb_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test ='null != orderId'>
+            <if test='null != orderId'>
                 order_id,
             </if>
-            <if test ='null != userId'>
+            <if test='null != userId'>
                 user_id,
             </if>
-            <if test ='null != totalPrice'>
+            <if test='null != totalPrice'>
                 total_price,
             </if>
-            <if test ='null != status'>
+            <if test='null != status'>
                 status,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test ='null != orderId'>
+            <if test='null != orderId'>
                 #{orderId},
             </if>
-            <if test ='null != userId'>
+            <if test='null != userId'>
                 #{userId},
             </if>
-            <if test ='null != totalPrice'>
+            <if test='null != totalPrice'>
                 #{totalPrice},
             </if>
-            <if test ='null != status'>
+            <if test='null != status'>
                 #{status},
             </if>
         </trim>

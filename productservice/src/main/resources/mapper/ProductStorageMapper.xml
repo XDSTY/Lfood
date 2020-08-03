@@ -4,18 +4,21 @@
     <update id="lockProductStorage">
         UPDATE tb_product_storage
         SET available_qty = available_qty - #{lockedQty},
-            locked_qty = locked_qty + #{lockedQty}
-        WHERE product_id = #{productId} AND available_qty >= #{lockedQty}
+        locked_qty = locked_qty + #{lockedQty}
+        WHERE product_id = #{productId}
+        AND available_qty >= #{lockedQty}
     </update>
     <update id="unlockProductStorage">
         UPDATE tb_product_storage
         SET available_qty = available_qty + #{lockedQty},
-            locked_qty = locked_qty - #{lockedQty}
-        WHERE product_id = #{productId} AND locked_qty >= #{lockedQty}
+        locked_qty = locked_qty - #{lockedQty}
+        WHERE product_id = #{productId}
+        AND locked_qty >= #{lockedQty}
     </update>
     <update id="commitProductStorage">
         UPDATE tb_product_storage
         SET locked_qty = locked_qty - #{lockedQty}
-        WHERE product_id = #{productId} AND locked_qty >= #{lockedQty}
+        WHERE product_id = #{productId}
+        AND locked_qty >= #{lockedQty}
     </update>
 </mapper>

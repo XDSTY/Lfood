@@ -20,12 +20,13 @@ public class JsonUtil {
 
     /**
      * 解析json
-     * @param json json
+     *
+     * @param json  json
      * @param clazz 解析后的对象类型
-     * @param <T> 对象泛型
+     * @param <T>   对象泛型
      * @return 解析后的对象
      */
-    public static <T> T parseJson(String json, Class<T> clazz)  {
+    public static <T> T parseJson(String json, Class<T> clazz) {
         try {
             return mapper.readValue(json, clazz);
         } catch (JsonProcessingException e) {

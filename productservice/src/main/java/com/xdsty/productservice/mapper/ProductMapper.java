@@ -19,6 +19,7 @@ public interface ProductMapper {
 
     /**
      * 根据id查询商品
+     *
      * @param id 商品id
      * @return 商品信息
      */
@@ -26,6 +27,7 @@ public interface ProductMapper {
 
     /**
      * 查询商品的banner图
+     *
      * @param productId 商品id
      * @return
      */
@@ -33,6 +35,7 @@ public interface ProductMapper {
 
     /**
      * 查询商品的详情图
+     *
      * @param productId 商品id
      * @return
      */
@@ -40,6 +43,7 @@ public interface ProductMapper {
 
     /**
      * 查询商品的附加选项
+     *
      * @param productId 商品id
      * @return
      */
@@ -47,12 +51,14 @@ public interface ProductMapper {
 
     /**
      * 查询商品列表
+     *
      * @return
      */
     List<ProductListRe> selectProductList(ProductListQuery query);
 
     /**
-     *根据id集合查询商品列表
+     * 根据id集合查询商品列表
+     *
      * @param productIds id集合
      * @return
      */
@@ -60,6 +66,7 @@ public interface ProductMapper {
 
     /**
      * 根据id集合查询附加值
+     *
      * @param itemIds id列表
      * @return
      */
@@ -67,6 +74,7 @@ public interface ProductMapper {
 
     /**
      * 检查商品是否正常 正常则返回商品id
+     *
      * @param productId 商品Id
      * @return
      */
@@ -74,6 +82,7 @@ public interface ProductMapper {
 
     /**
      * 查询有效的附加数量
+     *
      * @param itemIds 附加id集合
      * @return
      */

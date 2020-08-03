@@ -12,6 +12,7 @@ public interface ProductStorageMapper {
 
     /**
      * 锁定商品库存
+     *
      * @param storage 需要锁定的库存
      * @return
      */
@@ -19,6 +20,7 @@ public interface ProductStorageMapper {
 
     /**
      * 解锁商品库存
+     *
      * @param storage 锁定的库存
      * @return
      */
@@ -26,6 +28,7 @@ public interface ProductStorageMapper {
 
     /**
      * 提交冻结的库存，清空冻结的库存
+     *
      * @param storage 锁定的库存
      * @return
      */

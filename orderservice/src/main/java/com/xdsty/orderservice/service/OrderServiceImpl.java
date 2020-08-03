@@ -1,9 +1,9 @@
 package com.xdsty.orderservice.service;
 
-import com.xdsty.algorderclient.dto.OrderAddDto;
-import com.xdsty.algorderclient.dto.OrderProductAddDto;
-import com.xdsty.algorderclient.service.OrderService;
-import com.xdsty.algorderclient.service.OrderTxService;
+import com.xdsty.orderclient.dto.OrderAddDto;
+import com.xdsty.orderclient.dto.OrderProductAddDto;
+import com.xdsty.orderclient.service.OrderService;
+import com.xdsty.orderclient.service.OrderTxService;
 import com.xdsty.productclient.dto.ProductStorageDto;
 import com.xdsty.productclient.dto.ProductStorageListDto;
 import com.xdsty.productclient.service.StorageTxService;
@@ -38,7 +38,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     public void setStorageTxService(StorageTxService storageTxService) {
-        System.out.println(storageTxService);
         this.storageTxService = storageTxService;
     }
 

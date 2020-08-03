@@ -12,6 +12,7 @@ public interface NacosConfigListener extends Listener {
 
     /**
      * 实现默认的方法
+     *
      * @return 返回空
      */
     @Override

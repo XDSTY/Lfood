@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDetailRe getProductById(ProductIdDto productIdDto) {
         Product product = productMapper.selectOne(productIdDto.getId());
-        if(product == null) {
+        if (product == null) {
             throw new BusinessRuntimeException("商品: " + productIdDto.getId() + "不存在");
         }
         List<AdditionalItem> additionalItems = productMapper.selectAdditionalItem(product.getProductExtendId());
@@ -62,7 +62,7 @@ public class ProductServiceImpl implements ProductService {
         re.setCutOffTime(product.getCutOffTime());
         re.setThumbnail(product.getThumbnail());
 
-        if(!CollectionUtils.isEmpty(additionalItems)) {
+        if (!CollectionUtils.isEmpty(additionalItems)) {
             List<AdditionalItemRe> res = additionalItems.stream().map(this::convert2AdditionalItemRe).collect(Collectors.toList());
             re.setAdditionalItemRes(res);
         }
@@ -88,12 +88,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<CartItemProductRe> getCartItemProductList(List<Long> productIds) {
-        if(CollectionUtils.isEmpty(productIds)) {
+        if (CollectionUtils.isEmpty(productIds)) {
             return Lists.newArrayList();
         }
         // 根据id集合获取对应的商品列表
         List<Product> products = productMapper.selectProductListByIds(productIds);
-        if(CollectionUtils.isEmpty(products)){
+        if (CollectionUtils.isEmpty(products)) {
             return Lists.newArrayList();
         }
         return products.stream().map(this::convert2CartItemProductRe).collect(Collectors.toList());
@@ -110,11 +110,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<AdditionalItemRe> getCartAdditionalItemList(List<Long> itemIds) {
-        if(CollectionUtils.isEmpty(itemIds)) {
-           return Lists.newArrayList();
+        if (CollectionUtils.isEmpty(itemIds)) {
+            return Lists.newArrayList();
         }
         List<AdditionalItem> items = productMapper.selectAdditionalItemByIds(itemIds);
-        if(CollectionUtils.isEmpty(itemIds)) {
+        if (CollectionUtils.isEmpty(itemIds)) {
             return Lists.newArrayList();
         }
         return items.stream().map(this::convert2AdditionalItemRe).collect(Collectors.toList());
@@ -123,12 +123,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductCheckRe checkProductValid(ProductValidDto dto) {
         Long productId = productMapper.selectValidProduct(dto.getProductId());
-        if(productId == null) {
+        if (productId == null) {
             throw new BusinessRuntimeException("商品不存在或已下架");
         }
-        if(!CollectionUtils.isEmpty(dto.getProductAdditionalIds())) {
+        if (!CollectionUtils.isEmpty(dto.getProductAdditionalIds())) {
             Integer count = productMapper.selectValidAdditionalCount(dto.getProductAdditionalIds());
-            if(count == null || dto.getProductAdditionalIds().size() != count) {
+            if (count == null || dto.getProductAdditionalIds().size() != count) {
                 throw new BusinessRuntimeException("附加项不存在");
             }
         }

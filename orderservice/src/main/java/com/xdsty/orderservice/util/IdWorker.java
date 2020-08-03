@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
  * 第二部分：41bit，用于记录时间戳，可保存的时间为（2^41 - 1） / (1000*60*60*24*365) = 69年
  * 第三部分：10bit，可自己定义，这里分为5bit的datacenterId和5bit的workerId，表示当前机器所在的数据中心id和机器id
  * 第四部分：12bit，12bit可以表示的正整数为 [0 ~ 2^12-1] 就是[0, 4095]
+ *
  * @author 张富华
  * @date 2020/7/28 11:24
  */
@@ -31,13 +32,14 @@ public class IdWorker {
 
     /**
      * 获取下一个id
+     *
      * @return
      */
     public static long getNextId() {
         return InnerInstance.idWorker.nextId();
     }
 
-    private IdWorker(long workerId, long datacenterId, long sequence, long twepoch){
+    private IdWorker(long workerId, long datacenterId, long sequence, long twepoch) {
         // maxWorkerId的二进制为 00...011111  为2^5-1
         long maxWorkerId = ~(-1L << workerIdBits);
         if (workerId > maxWorkerId || workerId < 0) {
@@ -124,7 +126,7 @@ public class IdWorker {
         return timestamp;
     }
 
-    private long timeGen(){
+    private long timeGen() {
         return System.currentTimeMillis();
     }
 

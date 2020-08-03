@@ -2,12 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xdsty.userservice.mapper.CompanyMapper">
     <select id="selectCompanyByCityId" resultType="com.xdsty.userservice.entity.Company">
-        SELECT
-            c.id AS companyId,
-            c.full_name AS fullName,
-            c.short_name AS shortName,
-            c.delivery_time AS deliveryTime,
-            c.address AS address
+        SELECT c.id AS companyId,
+        c.full_name AS fullName,
+        c.short_name AS shortName,
+        c.delivery_time AS deliveryTime,
+        c.address AS address
         FROM tb_company c
         WHERE c.city_id = #{cityId}
     </select>

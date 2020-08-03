@@ -10,7 +10,7 @@ import com.xdsty.userservice.entity.City;
  */
 public final class ObjConvert {
 
-    public static CityRe convertCityRe(City city){
+    public static CityRe convertCityRe(City city) {
         CityRe re = new CityRe();
         re.setCityId(city.getCityId());
         re.setCityName(city.getCityName());

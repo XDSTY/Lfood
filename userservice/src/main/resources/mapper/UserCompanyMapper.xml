@@ -3,6 +3,6 @@
 <mapper namespace="com.xdsty.userservice.mapper.UserCompanyMapper">
     <insert id="insert" useGeneratedKeys="true">
         INSERT INTO tb_user_company(user_id, company_id)
-        VALUE(#{userId}, #{companyId})
+        VALUE (#{userId}, #{companyId})
     </insert>
 </mapper>
