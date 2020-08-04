@@ -10,7 +10,7 @@ spring:
       username: root
       password: Zhangfuhua123!
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://119.23.240.184:3306/alguser?characterEncoding=utf-8&useUnicode=true&useSSL=false
+      url: jdbc:mysql://127.0.0.1:3306/alguser?characterEncoding=utf-8&useUnicode=true&useSSL=false
       initial-size: 5
       max-active: 5
       max-wait: 6000
@@ -34,7 +34,7 @@ dubbo:
   application:
     name: user-service-provider
   registry:
-    address: nacos://119.23.240.184:8848
+    address: nacos://127.0.0.1:8848
     register: true
     timeout: 10000
   protocol:
@@ -51,4 +51,4 @@ dubbo:
 # 配置管理
 nacos:
   config:
-    server-addr: 119.23.240.184:8848
+    server-addr: 127.0.0.1:8848

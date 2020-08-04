@@ -15,7 +15,7 @@ dubbo:
   application:
     name: tx-service-provider
   registry:
-    address: nacos://119.23.240.184:8848
+    address: nacos://127.0.0.1:8848
     register: true
     timeout: 10000
   protocol:
@@ -29,10 +29,9 @@ dubbo:
   provider:
     filter: dubboExceptionFilter,-exception
 
-# ≈‰÷√π‹¿Ì
 nacos:
   config:
-    server-addr: 119.23.240.184:8848
+    server-addr: 127.0.0.1:8848
 
 seata:
   service-group-name: tx-service-group
