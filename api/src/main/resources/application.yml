@@ -28,7 +28,7 @@ dubbo:
     name: api-consumer
     id: api-consumer
   registry:
-    address: nacos://119.23.240.184:8848
+    address: nacos://127.0.0.1:8848
     timeout: 10000
   protocol:
     id: dubbo
@@ -36,7 +36,7 @@ dubbo:
 
 nacos:
   discovery:
-    server-addr: 119.23.240.184:8848
+    server-addr: 127.0.0.1:8848
 
 audience:
   clientId: algapi
@@ -44,7 +44,3 @@ audience:
   name: algapi
   accessTokenExpiredMills: 600000
   refreshTokenExpiredMills: 604800000
-
-
-seata:
-  service-group-name: tx-service-group

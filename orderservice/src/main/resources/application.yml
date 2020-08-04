@@ -8,7 +8,7 @@ spring:
   datasource:
     druid:
       username: root
-      password: Zhangfuhua123!
+      password: zhangfuhua123!
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://127.0.0.1:3306/algorder?characterEncoding=utf-8&useUnicode=true&serverTimezone=UTC
       initial-size: 5
