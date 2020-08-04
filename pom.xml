@@ -27,6 +27,7 @@
         <module>productclient</module>
         <module>productservice</module>
         <module>txclient</module>
+        <module>txservice</module>
         <module>userclient</module>
         <module>userservice</module>
     </modules>

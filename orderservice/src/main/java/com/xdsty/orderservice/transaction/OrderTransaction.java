@@ -2,12 +2,14 @@ package com.xdsty.orderservice.transaction;
 
 import java.util.Date;
 
-public class Transaction {
+public class OrderTransaction {
     private Long id;
 
     private String xid;
 
     private Long branchId;
+
+    private Long orderId;
 
     private String argsJson;
 
@@ -17,13 +19,28 @@ public class Transaction {
 
     private Date modifyTime;
 
-    public Transaction() {
+    public OrderTransaction() {
     }
 
-    public Transaction(String xid, Long branchId, Integer status) {
+    public OrderTransaction(String xid, Long branchId, Integer status) {
         this.xid = xid;
         this.branchId = branchId;
         this.status = status;
+    }
+
+    public OrderTransaction(String xid, Long branchId, Integer status, Long orderId) {
+        this.xid = xid;
+        this.branchId = branchId;
+        this.status = status;
+        this.orderId = orderId;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public Long getId() {

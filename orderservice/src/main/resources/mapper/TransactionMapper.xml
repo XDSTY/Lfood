@@ -16,6 +16,9 @@
             <if test='true'>
                 status,
             </if>
+            <if test='null != orderId'>
+                order_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test='null != xid'>
@@ -30,6 +33,9 @@
             <if test='true'>
                 #{status},
             </if>
+          <if test='null != orderId'>
+              #{orderId},
+          </if>
         </trim>
     </insert>
     <update id="updateTransaction">
@@ -39,9 +45,10 @@
         AND branch_id = #{branchId}
     </update>
 
-    <select id="getTransaction" resultType="com.xdsty.orderservice.transaction.Transaction">
+    <select id="getTransaction" resultType="com.xdsty.orderservice.transaction.OrderTransaction">
         SELECT t.id AS id,
-        t.status AS status
+               t.status AS status,
+               t.order_id AS orderId
         FROM tb_branch_transaction t
         WHERE t.xid = #{xid}
         AND t.branch_id = #{branchId}

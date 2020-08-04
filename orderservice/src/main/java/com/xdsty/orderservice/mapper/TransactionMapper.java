@@ -1,6 +1,6 @@
 package com.xdsty.orderservice.mapper;
 
-import com.xdsty.orderservice.transaction.Transaction;
+import com.xdsty.orderservice.transaction.OrderTransaction;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +13,7 @@ public interface TransactionMapper {
      * @param transaction 事务
      * @return
      */
-    int insertTransaction(Transaction transaction);
+    int insertTransaction(OrderTransaction transaction);
 
     /**
      * 修改事务状态  提交或者回滚事务
@@ -21,7 +21,7 @@ public interface TransactionMapper {
      * @param transaction
      * @return
      */
-    int updateTransaction(Transaction transaction);
+    int updateTransaction(OrderTransaction transaction);
 
     /**
      * 查询事务记录
@@ -30,6 +30,6 @@ public interface TransactionMapper {
      * @param branchId 分支事务id
      * @return
      */
-    Transaction getTransaction(@Param("xid") String xid, @Param("branchId") long branchId);
+    OrderTransaction getTransaction(@Param("xid") String xid, @Param("branchId") long branchId);
 
 }
