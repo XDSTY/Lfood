@@ -16,6 +16,15 @@ spring:
       max-wait: 6000
       min-idle: 5
       pool-prepared-statements: false
+  kafka:
+    bootstrap-servers: 119.3.240.184:9092
+    producer:
+      retries: 0
+      batch-size: 1
+      buffer-memory: 10
+      acks: all
+      key-serializer:
+      value-serializer:
 
 mybatis:
   mapper-locations: classpath:mapper/*.xml
@@ -55,3 +64,6 @@ nacos:
 
 seata:
   service-group-name: user-service-group
+
+topic:
+  name: user-integral
