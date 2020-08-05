@@ -19,6 +19,7 @@ public class DubboReferenceConfig {
         bean.setInterface(OrderTxService.class);
         bean.setVersion("1.0");
         bean.setTimeout(3000);
+        bean.setRetries(0);
         return bean;
     }
 
@@ -28,6 +29,7 @@ public class DubboReferenceConfig {
         bean.setInterface(StorageTxService.class);
         bean.setVersion("1.0");
         bean.setTimeout(3000);
+        bean.setRetries(0);
         return bean;
     }
 }

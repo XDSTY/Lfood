@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RestController
 public class OrderController {
 
-    @DubboReference(version = "1.0")
+    @DubboReference(version = "1.0", retries = 0)
     private OrderTransactionService orderTransactionService;
 
     @RequestMapping("placeOrder")
