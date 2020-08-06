@@ -57,4 +57,21 @@ public class ProtobufSerializer implements Serializer {
         return (T)newBody;
     }
 
+
+    private static class InnerInstance {
+        static ProtobufSerializer protobufSerializer = new ProtobufSerializer();
+
+        static ProtobufSerializer getProtobufSerializer() {
+            return protobufSerializer;
+        }
+    }
+
+    public static <T> byte[] serializeToByteArray(T t) {
+        return InnerInstance.getProtobufSerializer().serialize(t);
+    }
+
+    public static <T> T deserializeBytes(byte[] bytes) {
+        return InnerInstance.getProtobufSerializer().deserialize(bytes);
+    }
+
 }

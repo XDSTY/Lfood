@@ -29,4 +29,16 @@ public abstract class AbstractProtobufConvertManager {
     }
 
     public abstract void initProtobufMapInfo();
+
+    protected void putConvertMapItem(String clazzName, PbConvertor convertor){
+        convertorMap.put(clazzName, convertor);
+    }
+
+    protected void putReverseConvertorMapItem(String clazzName, PbConvertor convertor) {
+        reverseConvertorMap.put(clazzName, convertor);
+    }
+
+    protected void putProtoClazzMap(String clazzName, Class clazz) {
+        protoClazzMap.put(clazzName, clazz);
+    }
 }
