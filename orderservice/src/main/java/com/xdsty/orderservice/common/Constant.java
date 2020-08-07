@@ -11,4 +11,9 @@ public final class Constant {
      */
     public static final String CONF_CENTER_GROUPID = "ORDER_SERVICE_GROUP";
 
+    /**
+     * 用户积分mq
+     */
+    public static final String USER_INTEGRAL_TOPIC = "user-integral";
+
 }

@@ -14,7 +14,7 @@ public abstract class AbstractProtobufConvertManager {
 
     private static Map<String, PbConvertor> reverseConvertorMap = new ConcurrentHashMap<>();
 
-    private static Map<String, Class> protoClazzMap = new ConcurrentHashMap<>();
+    private static Map<String, String> parseClassMap = new ConcurrentHashMap<>();
 
     public static PbConvertor fetchConvertor(String clazz) {
         return convertorMap.get(clazz);
@@ -24,8 +24,8 @@ public abstract class AbstractProtobufConvertManager {
         return reverseConvertorMap.get(clazz);
     }
 
-    public static Class fetchProtoClass(String clazz) {
-        return protoClazzMap.get(clazz);
+    public static String fetchParseFormClass(String className) {
+        return parseClassMap.get(className);
     }
 
     public abstract void initProtobufMapInfo();
@@ -38,7 +38,7 @@ public abstract class AbstractProtobufConvertManager {
         reverseConvertorMap.put(clazzName, convertor);
     }
 
-    protected void putProtoClazzMap(String clazzName, Class clazz) {
-        protoClazzMap.put(clazzName, clazz);
+    protected void putParseClassMap(String className, String parseClassName) {
+        parseClassMap.put(className, parseClassName);
     }
 }

@@ -56,3 +56,11 @@ nacos:
 
 seata:
   service-group-name: order-service-group
+
+kafka:
+  bootstrapServers: 119.23.240.184:9092
+  keySerializer: org.apache.kafka.common.serialization.StringSerializer
+  valueSerializer: com.xdsty.orderservice.serializer.KafkaProtobufSerializer
+  acks: all
+  blockOnBufferFull: true
+  retries: 32

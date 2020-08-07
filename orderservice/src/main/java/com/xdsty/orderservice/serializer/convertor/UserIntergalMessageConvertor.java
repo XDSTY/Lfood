@@ -1,9 +1,8 @@
-package com.xdsty.userservice.serializer.convertor;
+package com.xdsty.orderservice.serializer.convertor;
 
 import basecommon.serializer.PbConvertor;
 import com.xdsty.userclient.message.UserIntegralMessage;
 import com.xdsty.userclient.serializer.UserIntegralMessageProto;
-
 import java.util.Date;
 
 /**

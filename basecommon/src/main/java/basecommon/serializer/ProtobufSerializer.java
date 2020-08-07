@@ -49,10 +49,9 @@ public class ProtobufSerializer implements Serializer {
         byte[] body = new byte[bytes.length - clazzNameLength - 4];
         byteBuffer.get(body);
         final String descriptorName = new String(clazzName, UTF8);
-        Class protobufClazz = AbstractProtobufConvertManager.fetchProtoClass(descriptorName);
-        Object protobufObject = ProtobufInnerSerializer.deserializeContent(protobufClazz.getName(), body);
+        Object protobufObject = ProtobufInnerSerializer.deserializeContent(descriptorName, body);
         //translate back to core model
-        final PbConvertor pbConvertor = AbstractProtobufConvertManager.fetchReversedConvertor(protobufClazz.getName());
+        final PbConvertor pbConvertor = AbstractProtobufConvertManager.fetchReversedConvertor(descriptorName);
         Object newBody = pbConvertor.convert2Model(protobufObject);
         return (T)newBody;
     }

@@ -47,7 +47,8 @@ public class ProtobufInnerSerializer {
         if (content == null || content.length == 0) {
             return null;
         }
-        Class clazz = PROTOBUF_HELPER.getPbClass(responseClazz);
+        String targetParseFormClassName = AbstractProtobufConvertManager.fetchParseFormClass(responseClazz);
+        Class clazz = PROTOBUF_HELPER.getPbClass(targetParseFormClassName);
 
         Method method = PROTOBUF_HELPER.parseFromMethodMap.get(clazz);
         if (method == null) {

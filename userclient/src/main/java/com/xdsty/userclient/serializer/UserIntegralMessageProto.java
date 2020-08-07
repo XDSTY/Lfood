@@ -37,19 +37,10 @@ public final class UserIntegralMessageProto {
     int getIntegral();
 
     /**
-     * <code>.google.protobuf.Timestamp createTime = 4;</code>
-     * @return Whether the createTime field is set.
-     */
-    boolean hasCreateTime();
-    /**
-     * <code>.google.protobuf.Timestamp createTime = 4;</code>
+     * <code>int64 createTime = 4;</code>
      * @return The createTime.
      */
-    com.google.protobuf.Timestamp getCreateTime();
-    /**
-     * <code>.google.protobuf.Timestamp createTime = 4;</code>
-     */
-    com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder();
+    long getCreateTime();
   }
   /**
    * Protobuf type {@code UserIntegralMessage}
@@ -111,17 +102,9 @@ public final class UserIntegralMessageProto {
               integral_ = input.readInt32();
               break;
             }
-            case 34: {
-              com.google.protobuf.Timestamp.Builder subBuilder = null;
-              if (createTime_ != null) {
-                subBuilder = createTime_.toBuilder();
-              }
-              createTime_ = input.readMessage(com.google.protobuf.Timestamp.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(createTime_);
-                createTime_ = subBuilder.buildPartial();
-              }
+            case 32: {
 
+              createTime_ = input.readInt64();
               break;
             }
             default: {
@@ -190,29 +173,14 @@ public final class UserIntegralMessageProto {
     }
 
     public static final int CREATETIME_FIELD_NUMBER = 4;
-    private com.google.protobuf.Timestamp createTime_;
+    private long createTime_;
     /**
-     * <code>.google.protobuf.Timestamp createTime = 4;</code>
-     * @return Whether the createTime field is set.
-     */
-    @Override
-    public boolean hasCreateTime() {
-      return createTime_ != null;
-    }
-    /**
-     * <code>.google.protobuf.Timestamp createTime = 4;</code>
+     * <code>int64 createTime = 4;</code>
      * @return The createTime.
      */
     @Override
-    public com.google.protobuf.Timestamp getCreateTime() {
-      return createTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
-    }
-    /**
-     * <code>.google.protobuf.Timestamp createTime = 4;</code>
-     */
-    @Override
-    public com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder() {
-      return getCreateTime();
+    public long getCreateTime() {
+      return createTime_;
     }
 
     private byte memoizedIsInitialized = -1;
@@ -238,8 +206,8 @@ public final class UserIntegralMessageProto {
       if (integral_ != 0) {
         output.writeInt32(3, integral_);
       }
-      if (createTime_ != null) {
-        output.writeMessage(4, getCreateTime());
+      if (createTime_ != 0L) {
+        output.writeInt64(4, createTime_);
       }
       unknownFields.writeTo(output);
     }
@@ -262,9 +230,9 @@ public final class UserIntegralMessageProto {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(3, integral_);
       }
-      if (createTime_ != null) {
+      if (createTime_ != 0L) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getCreateTime());
+          .computeInt64Size(4, createTime_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -287,11 +255,8 @@ public final class UserIntegralMessageProto {
           != other.getOrderId()) return false;
       if (getIntegral()
           != other.getIntegral()) return false;
-      if (hasCreateTime() != other.hasCreateTime()) return false;
-      if (hasCreateTime()) {
-        if (!getCreateTime()
-            .equals(other.getCreateTime())) return false;
-      }
+      if (getCreateTime()
+          != other.getCreateTime()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -311,10 +276,9 @@ public final class UserIntegralMessageProto {
           getOrderId());
       hash = (37 * hash) + INTEGRAL_FIELD_NUMBER;
       hash = (53 * hash) + getIntegral();
-      if (hasCreateTime()) {
-        hash = (37 * hash) + CREATETIME_FIELD_NUMBER;
-        hash = (53 * hash) + getCreateTime().hashCode();
-      }
+      hash = (37 * hash) + CREATETIME_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getCreateTime());
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -454,12 +418,8 @@ public final class UserIntegralMessageProto {
 
         integral_ = 0;
 
-        if (createTimeBuilder_ == null) {
-          createTime_ = null;
-        } else {
-          createTime_ = null;
-          createTimeBuilder_ = null;
-        }
+        createTime_ = 0L;
+
         return this;
       }
 
@@ -489,11 +449,7 @@ public final class UserIntegralMessageProto {
         result.userId_ = userId_;
         result.orderId_ = orderId_;
         result.integral_ = integral_;
-        if (createTimeBuilder_ == null) {
-          result.createTime_ = createTime_;
-        } else {
-          result.createTime_ = createTimeBuilder_.build();
-        }
+        result.createTime_ = createTime_;
         onBuilt();
         return result;
       }
@@ -551,8 +507,8 @@ public final class UserIntegralMessageProto {
         if (other.getIntegral() != 0) {
           setIntegral(other.getIntegral());
         }
-        if (other.hasCreateTime()) {
-          mergeCreateTime(other.getCreateTime());
+        if (other.getCreateTime() != 0L) {
+          setCreateTime(other.getCreateTime());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -676,123 +632,35 @@ public final class UserIntegralMessageProto {
         return this;
       }
 
-      private com.google.protobuf.Timestamp createTime_;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> createTimeBuilder_;
+      private long createTime_ ;
       /**
-       * <code>.google.protobuf.Timestamp createTime = 4;</code>
-       * @return Whether the createTime field is set.
-       */
-      public boolean hasCreateTime() {
-        return createTimeBuilder_ != null || createTime_ != null;
-      }
-      /**
-       * <code>.google.protobuf.Timestamp createTime = 4;</code>
+       * <code>int64 createTime = 4;</code>
        * @return The createTime.
        */
-      public com.google.protobuf.Timestamp getCreateTime() {
-        if (createTimeBuilder_ == null) {
-          return createTime_ == null ? com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
-        } else {
-          return createTimeBuilder_.getMessage();
-        }
+      @Override
+      public long getCreateTime() {
+        return createTime_;
       }
       /**
-       * <code>.google.protobuf.Timestamp createTime = 4;</code>
+       * <code>int64 createTime = 4;</code>
+       * @param value The createTime to set.
+       * @return This builder for chaining.
        */
-      public Builder setCreateTime(com.google.protobuf.Timestamp value) {
-        if (createTimeBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          createTime_ = value;
-          onChanged();
-        } else {
-          createTimeBuilder_.setMessage(value);
-        }
-
+      public Builder setCreateTime(long value) {
+        
+        createTime_ = value;
+        onChanged();
         return this;
       }
       /**
-       * <code>.google.protobuf.Timestamp createTime = 4;</code>
-       */
-      public Builder setCreateTime(
-          com.google.protobuf.Timestamp.Builder builderForValue) {
-        if (createTimeBuilder_ == null) {
-          createTime_ = builderForValue.build();
-          onChanged();
-        } else {
-          createTimeBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Timestamp createTime = 4;</code>
-       */
-      public Builder mergeCreateTime(com.google.protobuf.Timestamp value) {
-        if (createTimeBuilder_ == null) {
-          if (createTime_ != null) {
-            createTime_ =
-              com.google.protobuf.Timestamp.newBuilder(createTime_).mergeFrom(value).buildPartial();
-          } else {
-            createTime_ = value;
-          }
-          onChanged();
-        } else {
-          createTimeBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Timestamp createTime = 4;</code>
+       * <code>int64 createTime = 4;</code>
+       * @return This builder for chaining.
        */
       public Builder clearCreateTime() {
-        if (createTimeBuilder_ == null) {
-          createTime_ = null;
-          onChanged();
-        } else {
-          createTime_ = null;
-          createTimeBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Timestamp createTime = 4;</code>
-       */
-      public com.google.protobuf.Timestamp.Builder getCreateTimeBuilder() {
         
+        createTime_ = 0L;
         onChanged();
-        return getCreateTimeFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>.google.protobuf.Timestamp createTime = 4;</code>
-       */
-      public com.google.protobuf.TimestampOrBuilder getCreateTimeOrBuilder() {
-        if (createTimeBuilder_ != null) {
-          return createTimeBuilder_.getMessageOrBuilder();
-        } else {
-          return createTime_ == null ?
-              com.google.protobuf.Timestamp.getDefaultInstance() : createTime_;
-        }
-      }
-      /**
-       * <code>.google.protobuf.Timestamp createTime = 4;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder> 
-          getCreateTimeFieldBuilder() {
-        if (createTimeBuilder_ == null) {
-          createTimeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.google.protobuf.Timestamp, com.google.protobuf.Timestamp.Builder, com.google.protobuf.TimestampOrBuilder>(
-                  getCreateTime(),
-                  getParentForChildren(),
-                  isClean());
-          createTime_ = null;
-        }
-        return createTimeBuilder_;
+        return this;
       }
       @Override
       public final Builder setUnknownFields(
@@ -861,18 +729,15 @@ public final class UserIntegralMessageProto {
       descriptor;
   static {
     String[] descriptorData = {
-      "\n\031UserIntegralMessage.proto\032\037google/prot" +
-      "obuf/timestamp.proto\"x\n\023UserIntegralMess" +
-      "age\022\016\n\006userId\030\001 \001(\003\022\017\n\007orderId\030\002 \001(\003\022\020\n\010" +
-      "integral\030\003 \001(\005\022.\n\ncreateTime\030\004 \001(\0132\032.goo" +
-      "gle.protobuf.TimestampB;\n\037com.xdsty.user" +
-      "client.serializerB\030UserIntegralMessagePr" +
-      "otoP\000b\006proto3"
+      "\n\031UserIntegralMessage.proto\"\\\n\023UserInteg" +
+      "ralMessage\022\016\n\006userId\030\001 \001(\003\022\017\n\007orderId\030\002 " +
+      "\001(\003\022\020\n\010integral\030\003 \001(\005\022\022\n\ncreateTime\030\004 \001(" +
+      "\003B;\n\037com.xdsty.userclient.serializerB\030Us" +
+      "erIntegralMessageProtob\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          com.google.protobuf.TimestampProto.getDescriptor(),
         });
     internal_static_UserIntegralMessage_descriptor =
       getDescriptor().getMessageTypes().get(0);
@@ -880,7 +745,6 @@ public final class UserIntegralMessageProto {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_UserIntegralMessage_descriptor,
         new String[] { "UserId", "OrderId", "Integral", "CreateTime", });
-    com.google.protobuf.TimestampProto.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

@@ -1,4 +1,4 @@
-package com.xdsty.userservice.serializer;
+package com.xdsty.orderservice.serializer;
 
 import basecommon.serializer.ProtobufSerializer;
 import org.apache.kafka.common.serialization.Serializer;

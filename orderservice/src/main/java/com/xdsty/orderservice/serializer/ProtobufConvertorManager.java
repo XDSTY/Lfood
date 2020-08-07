@@ -1,9 +1,9 @@
-package com.xdsty.userservice.serializer;
+package com.xdsty.orderservice.serializer;
 
 import basecommon.serializer.AbstractProtobufConvertManager;
+import com.xdsty.orderservice.serializer.convertor.UserIntergalMessageConvertor;
 import com.xdsty.userclient.message.UserIntegralMessage;
 import com.xdsty.userclient.serializer.UserIntegralMessageProto;
-import com.xdsty.userservice.serializer.convertor.UserIntergalMessageConvertor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
