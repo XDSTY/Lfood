@@ -16,7 +16,7 @@ public class UserIntergalMessageConvertor implements PbConvertor<UserIntegralMes
         return UserIntegralMessageProto.UserIntegralMessage.newBuilder().setUserId(message.getUserId())
                 .setOrderId(message.getOrderId())
                 .setIntegral(message.getIntegral())
-                .setCreateTime(System.currentTimeMillis()).build();
+                .setId(message.getId()).build();
     }
 
     @Override
@@ -25,7 +25,7 @@ public class UserIntergalMessageConvertor implements PbConvertor<UserIntegralMes
         message.setUserId(userIntegralMessage.getUserId());
         message.setOrderId(userIntegralMessage.getOrderId());
         message.setIntegral(userIntegralMessage.getIntegral());
-        message.setCreateTime(new Date(userIntegralMessage.getCreateTime()));
+        message.setId(userIntegralMessage.getId());
         return message;
     }
 }

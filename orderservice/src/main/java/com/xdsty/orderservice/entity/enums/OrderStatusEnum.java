@@ -1,6 +1,6 @@
 package com.xdsty.orderservice.entity.enums;
 
-public enum OrderStatus {
+public enum OrderStatusEnum {
 
     /**
      * 订单状态
@@ -18,7 +18,7 @@ public enum OrderStatus {
 
     public String desc;
 
-    OrderStatus(Integer status, String desc) {
+    OrderStatusEnum(Integer status, String desc) {
         this.status = status;
         this.desc = desc;
     }

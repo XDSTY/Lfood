@@ -6,7 +6,7 @@ import com.xdsty.orderclient.dto.OrderProductAddDto;
 import com.xdsty.orderclient.service.OrderTxService;
 import com.xdsty.orderservice.entity.Order;
 import com.xdsty.orderservice.entity.OrderProduct;
-import com.xdsty.orderservice.entity.enums.OrderStatus;
+import com.xdsty.orderservice.entity.enums.OrderStatusEnum;
 import com.xdsty.orderservice.mapper.OrderMapper;
 import com.xdsty.orderservice.mapper.OrderProductMapper;
 import com.xdsty.orderservice.mapper.TransactionMapper;
@@ -108,7 +108,7 @@ public class OrderTxServiceImpl implements OrderTxService {
         // 修改订单状态为未付款
         Order order = new Order();
         order.setOrderId(orderId);
-        order.setStatus(OrderStatus.WAIT_PAY.status);
+        order.setStatus(OrderStatusEnum.WAIT_PAY.status);
         if (orderMapper.updateOrder(order) <= 0) {
             throw new RuntimeException("修改订单失败, orderId: " + orderId);
         }
@@ -144,7 +144,7 @@ public class OrderTxServiceImpl implements OrderTxService {
         // 设置订单状态为已失效
         Order order = new Order();
         order.setOrderId(transactionRecord.getOrderId());
-        order.setStatus(OrderStatus.PAY_FAIL.status);
+        order.setStatus(OrderStatusEnum.PAY_FAIL.status);
         if (orderMapper.updateOrder(order) <= 0) {
             throw new RuntimeException("修改订单失败, orderId: " + transactionRecord.getOrderId());
         }

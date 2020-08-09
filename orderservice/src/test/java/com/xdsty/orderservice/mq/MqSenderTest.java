@@ -15,12 +15,6 @@ public class MqSenderTest extends BaseTest {
 
     @Test
     public void send() {
-        UserIntegralMessage message = new UserIntegralMessage();
-        message.setUserId(1L);
-        message.setOrderId(2L);
-        message.setIntegral(1);
-        message.setCreateTime(new Date());
-        MqSender.send(Constant.USER_INTEGRAL_TOPIC, message);
-
+        MqSender.send(Constant.USER_INTEGRAL_TOPIC, "asdfg");
     }
 }

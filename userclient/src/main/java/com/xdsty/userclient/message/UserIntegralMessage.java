@@ -1,19 +1,18 @@
 package com.xdsty.userclient.message;
 
-import java.util.Date;
-
 /**
  * @author 张富华
  * @date 2020/8/6 18:15
  */
 public class UserIntegralMessage {
+
+    private Long id;
+
     private Long userId;
 
     private Long orderId;
 
     private Integer integral;
-
-    private Date createTime;
 
     public Long getUserId() {
         return userId;
@@ -39,11 +38,11 @@ public class UserIntegralMessage {
         this.integral = integral;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Long getId() {
+        return id;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setId(Long id) {
+        this.id = id;
     }
 }

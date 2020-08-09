@@ -1,6 +1,10 @@
 package com.xdsty.orderservice.mapper;
 
+import com.xdsty.orderservice.entity.UserIntegral;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author 张富华
@@ -9,6 +13,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserIntegralRecordMapper {
 
-    long getLastRecord();
+    /**
+     * 获取最新的处于未发送状态的记录
+     * @return
+     */
+    List<UserIntegral> getLastRecord(Long lastId);
+
+    /**
+     * 更新记录的状态
+     * @param id 记录id
+     * @param status 状态
+     * @return
+     */
+    int updateRecord(@Param("id") Long id, @Param("status") Integer status);
 
 }
