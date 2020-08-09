@@ -15,6 +15,5 @@ public class MqSenderTest extends BaseTest {
 
     @Test
     public void send() {
-        MqSender.send(Constant.USER_INTEGRAL_TOPIC, "asdfg");
     }
 }

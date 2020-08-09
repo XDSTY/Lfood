@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xdsty.userservice.mapper.UserIntegralMapper">
+    <insert id="insertList">
+        INSERT INTO tb_user_integral(id, user_id, integral, order_id)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id}, #{item.userId}, #{item.integral}, #{item.orderId})
+        </foreach>
+    </insert>
+    <insert id="insertOne">
+        INSERT INTO tb_user_integral(id,  user_id, integral, order_id)
+        VALUE (#{id},  #{userId}, #{integral}, #{orderId})
+    </insert>
+</mapper>

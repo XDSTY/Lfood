@@ -31,8 +31,7 @@ public class MessageSendCallback implements Callback {
         log.error("发送成功回调");
         // 发送失败则打印日志并重试
         if(e != null) {
-            log.error("发送失败 ", e);
-            MqSender.send(metadata.topic(), record);
+            log.error("发送失败{} ,{}", record, e);
             return;
         }
         // 发送成功则修改该记录状态

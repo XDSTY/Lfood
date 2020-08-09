@@ -67,3 +67,11 @@ seata:
 
 topic:
   name: user-integral
+
+kafka:
+  bootstrapServers: 119.23.240.184:9092
+  groupId: userIntegralConsumerGroup1
+  keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+  valueDeserializer: com.xdsty.userservice.serializer.KafkaProtobufDeserializer
+  topic: user-integral
+  enableAutoCommit: false

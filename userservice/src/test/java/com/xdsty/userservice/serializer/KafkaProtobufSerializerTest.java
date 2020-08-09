@@ -21,7 +21,6 @@ public class KafkaProtobufSerializerTest extends BaseTest {
         message.setUserId(1L);
         message.setOrderId(1L);
         message.setIntegral(1);
-        message.setCreateTime(new Date());
         byte[] bytes = serializer.serialize("", message);
         UserIntegralMessage d = (UserIntegralMessage) deserializer.deserialize("", bytes);
         System.out.println(d);
