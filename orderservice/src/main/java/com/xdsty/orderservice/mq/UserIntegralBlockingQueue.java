@@ -2,14 +2,12 @@ package com.xdsty.orderservice.mq;
 
 import com.xdsty.orderservice.entity.UserIntegral;
 
-import java.util.List;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 用户积分数据集合
  */
-public class UserIntegralSet {
+public class UserIntegralBlockingQueue {
 
     private static int DEFAULT_CAPACITY = 1000;
 
@@ -17,16 +15,8 @@ public class UserIntegralSet {
 
     private static UserIntegral lastIntegral;
 
-    public static void addItem(UserIntegral userIntegral) {
-        userIntegrals.offer(userIntegral);
-    }
-
-    public static UserIntegral poll() {
-        return userIntegrals.poll();
-    }
-
-    public static UserIntegral poll(long time, TimeUnit timeUnit) throws InterruptedException {
-        return userIntegrals.poll(time, timeUnit);
+    public static UserIntegral take() throws InterruptedException {
+        return userIntegrals.take();
     }
 
     public static UserIntegral peekLast() {
@@ -41,8 +31,8 @@ public class UserIntegralSet {
         return userIntegrals.size();
     }
 
-    public static void addAll(List<UserIntegral> userIntegralList) {
-        userIntegrals.addAll(userIntegralList);
+    public static void put(UserIntegral userIntegral) throws InterruptedException {
+        userIntegrals.put(userIntegral);
         lastIntegral = userIntegrals.getLast();
     }
 

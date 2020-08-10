@@ -1,6 +1,10 @@
-package com.xdsty.orderservice.entity.enums;
+package com.xdsty.userservice.entity.enums;
 
-public enum UserIntegralEnum {
+/**
+ * @author 张富华
+ * @date 2020/8/10 10:42
+ */
+public enum  UserIntegralEnum {
     INIT(0, "初始化"),
     SEND(1, "已完成");
 

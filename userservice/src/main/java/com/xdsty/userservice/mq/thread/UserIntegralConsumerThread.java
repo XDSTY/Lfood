@@ -28,7 +28,7 @@ public class UserIntegralConsumerThread implements Runnable {
         while (true) {
             // 获取数据
             ConsumerRecords<String, UserIntegralMessage> records = consumer.poll(duration);
-            System.out.println(records.count());
+            log.error("获取到数据数量: {}", records.count());
             if(records.count() > 0) {
                 List<UserIntegral> list = new ArrayList<>(records.count());
                 for (ConsumerRecord<String, UserIntegralMessage> record : records) {

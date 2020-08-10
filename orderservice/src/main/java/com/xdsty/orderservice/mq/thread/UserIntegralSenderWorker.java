@@ -4,14 +4,12 @@ import com.xdsty.orderservice.common.Constant;
 import com.xdsty.orderservice.entity.UserIntegral;
 import com.xdsty.orderservice.mq.MessageSendCallback;
 import com.xdsty.orderservice.mq.MqSender;
-import com.xdsty.orderservice.mq.UserIntegralSet;
+import com.xdsty.orderservice.mq.UserIntegralBlockingQueue;
 import com.xdsty.userclient.message.UserIntegralMessage;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.TimeUnit;
 
 public class UserIntegralSenderWorker implements Runnable {
 
@@ -20,11 +18,15 @@ public class UserIntegralSenderWorker implements Runnable {
     @Override
     public void run() {
         log.error("发送者线程开始" + Thread.currentThread().getName());
-        UserIntegral userIntegral;
+        UserIntegral userIntegral = null;
         KafkaProducer producer = MqSender.newKafkaProducer();
         while (true) {
             try {
-                userIntegral = UserIntegralSet.poll(1000, TimeUnit.MILLISECONDS);
+                try {
+                    userIntegral = UserIntegralBlockingQueue.take();
+                }catch (InterruptedException e) {
+                    log.error("从积分集合获取数据失败", e);
+                }
                 if(userIntegral != null) {
                     UserIntegralMessage message = convert2UserIntegralMessage(userIntegral);
                     ProducerRecord<String, UserIntegralMessage> record = new ProducerRecord<>(Constant.USER_INTEGRAL_TOPIC, message);

@@ -1,29 +1,26 @@
-package com.xdsty.orderservice.mq.thread;
+package com.xdsty.userservice.task.thread;
 
-import com.xdsty.orderservice.entity.UserIntegral;
-import com.xdsty.orderservice.mapper.UserIntegralRecordMapper;
-import com.xdsty.orderservice.mq.UserIntegralBlockingQueue;
-import com.xdsty.orderservice.util.ApplicationContextHolder;
+import com.xdsty.userservice.entity.UserIntegral;
+import com.xdsty.userservice.mapper.UserIntegralMapper;
+import com.xdsty.userservice.task.set.UserIntegralBlockingQueue;
+import com.xdsty.userservice.util.ApplicationContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
-
 import java.util.List;
 
 /**
- * 读取用户积分信息线程
- * 开启循环一直读取数据库，当读取数据为空时，睡眠一段时间再进行读取
  * @author 张富华
- * @date 2020/8/7 17:47
+ * @date 2020/8/10 9:50
  */
-public class UserIntegralSelectWorker implements Runnable {
+public class UserIntegralSelectThread implements Runnable {
 
-    private static final Logger log = LoggerFactory.getLogger(UserIntegralSelectWorker.class);
+    private static final Logger log = LoggerFactory.getLogger(UserIntegralSelectThread.class);
 
     @Override
     public void run() {
         log.error("查询线程开始" + Thread.currentThread().getName());
-        UserIntegralRecordMapper mapper = (UserIntegralRecordMapper) ApplicationContextHolder.context.getBean("userIntegralRecordMapper");
+        UserIntegralMapper mapper = (UserIntegralMapper) ApplicationContextHolder.context.getBean("userIntegralMapper");
         while (true) {
             // 寻找集合中最后一个记录
             UserIntegral lastUserIntegral = UserIntegralBlockingQueue.peekLast();
