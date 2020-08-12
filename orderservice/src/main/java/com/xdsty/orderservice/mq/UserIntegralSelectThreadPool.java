@@ -12,8 +12,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-@Component
-@Order(1024)
+//@Component
+//@Order(1024)
 public class UserIntegralSelectThreadPool implements ApplicationRunner {
 
     private static ExecutorService pool = new ThreadPoolExecutor(1,

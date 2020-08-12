@@ -60,7 +60,7 @@ public class StorageTxServiceImpl implements StorageTxService {
             ProductStorage productStorage = new ProductStorage(storageDto.getProductId(), storageDto.getProductNum());
             if (productStorageMapper.lockProductStorage(productStorage) <= 0) {
                 log.error("锁定库存失败, xid: {}, branchId: {}", context.getXid(), context.getBranchId());
-                throw new BusinessRuntimeException("锁定库存失败");
+                throw new BusinessRuntimeException("库存不足");
             }
         }
         log.error("prepare success");

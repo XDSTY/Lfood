@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @author 张富华
  * @date 2020/8/10 9:15
  */
-@Component
+//@Component
 public class UserIntegralCalculateThreadPool implements ApplicationRunner {
 
     private static ExecutorService pool = new ThreadPoolExecutor(1,

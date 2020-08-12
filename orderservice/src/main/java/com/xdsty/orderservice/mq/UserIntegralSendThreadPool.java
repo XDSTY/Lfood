@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  * @author 张富华
  * @date 2020/8/7 17:31
  */
-@Component
+//@Component
 @Order(1024)
 public class UserIntegralSendThreadPool implements ApplicationRunner {
 

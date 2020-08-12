@@ -1,5 +1,6 @@
 package com.xdsty.productservice.service;
 
+import basecommon.exception.BusinessRuntimeException;
 import com.xdsty.productclient.dto.ProductStorageDto;
 import com.xdsty.productclient.dto.ProductStorageListDto;
 import com.xdsty.productclient.service.StorageAtTxService;
@@ -35,7 +36,7 @@ public class ProductAtTxServiceImpl implements StorageAtTxService {
         for(ProductStorageDto storage : dto.getProductStorageDtos()) {
             if(productStorageMapper.deductProductStorage(convert2ProductDeductStorage(storage)) <= 0) {
                 log.error("减库存异常{}", dto);
-                throw new RuntimeException("减库存失败");
+                throw new BusinessRuntimeException("库存不足");
             }
         }
     }

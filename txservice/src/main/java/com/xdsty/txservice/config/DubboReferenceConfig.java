@@ -1,6 +1,8 @@
 package com.xdsty.txservice.config;
 
+import com.xdsty.orderclient.service.OrderAtTxService;
 import com.xdsty.orderclient.service.OrderTxService;
+import com.xdsty.productclient.service.StorageAtTxService;
 import com.xdsty.productclient.service.StorageTxService;
 import org.apache.dubbo.config.spring.ReferenceBean;
 import org.springframework.context.annotation.Bean;
@@ -32,4 +34,24 @@ public class DubboReferenceConfig {
         bean.setRetries(0);
         return bean;
     }
+
+//    @Bean
+//    public ReferenceBean<OrderAtTxService> orderAtTxServiceReferenceBean() {
+//        ReferenceBean<OrderAtTxService> bean = new ReferenceBean<>();
+//        bean.setInterface(OrderAtTxService.class);
+//        bean.setVersion("1.0");
+//        bean.setTimeout(3000);
+//        bean.setRetries(0);
+//        return bean;
+//    }
+//
+//    @Bean
+//    public ReferenceBean<StorageAtTxService> storageAtTxServiceReferenceBean() {
+//        ReferenceBean<StorageAtTxService> bean = new ReferenceBean<>();
+//        bean.setInterface(StorageAtTxService.class);
+//        bean.setVersion("1.0");
+//        bean.setTimeout(3000);
+//        bean.setRetries(0);
+//        return bean;
+//    }
 }

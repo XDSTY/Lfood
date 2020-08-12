@@ -75,7 +75,9 @@ public class OrderTxServiceImpl implements OrderTxService {
         if (transactionMapper.insertTransaction(transaction) <= 0) {
             throw new BusinessRuntimeException("新建事务记录失败，xid: " + context.getXid() + ", branchId:" + context.getBranchId());
         }
-        context.getActionContext().put("orderId", orderId);
+        if(1==1) {
+            throw new BusinessRuntimeException("tcc测试回滚");
+        }
         return orderId;
     }
 

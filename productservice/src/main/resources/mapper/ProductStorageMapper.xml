@@ -24,6 +24,6 @@
     <update id="deductProductStorage">
         UPDATE tb_product_storage
         SET available_qty = available_qty - #{storage}
-        WHERE product_id = #{productId}
+        WHERE product_id = #{productId} AND available_qty >= #{storage}
     </update>
 </mapper>
