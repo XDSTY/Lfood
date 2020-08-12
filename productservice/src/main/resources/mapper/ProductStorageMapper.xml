@@ -21,4 +21,9 @@
         WHERE product_id = #{productId}
         AND locked_qty >= #{lockedQty}
     </update>
+    <update id="deductProductStorage">
+        UPDATE tb_product_storage
+        SET available_qty = available_qty - #{storage}
+        WHERE product_id = #{productId}
+    </update>
 </mapper>
