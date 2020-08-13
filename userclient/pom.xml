@@ -3,12 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.2.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.xdsty</groupId>
+        <artifactId>lfood</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath />
     </parent>
-    <groupId>com.xdsty</groupId>
     <artifactId>userclient</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>userclient</name>
@@ -25,13 +24,10 @@
         <dependency>
             <groupId>io.seata</groupId>
             <artifactId>seata-all</artifactId>
-            <version>${seata.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.12.2</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
