@@ -55,9 +55,6 @@ public class OrderAtTxServiceImpl implements OrderAtTxService {
         if (count != products.size()) {
             throw new BusinessRuntimeException("新建订单商品信息失败");
         }
-        if(1 == 1) {
-            throw new BusinessRuntimeException("测试事务回滚");
-        }
         return orderId;
     }
 

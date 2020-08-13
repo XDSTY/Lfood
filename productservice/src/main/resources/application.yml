@@ -5,8 +5,8 @@ server:
   port: 8083
 
 spring:
-  datasource:
-    druid:
+  my:
+    datasource:
       username: root
       password: zhangfuhua123!
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -53,4 +53,4 @@ nacos:
     server-addr: 127.0.0.1:8848
 
 seata:
-  service-group-name: product-service-group
+  service-group-name: tx-service-group
