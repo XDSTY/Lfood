@@ -20,7 +20,7 @@
         <mybatis.springboot.version>2.1.1</mybatis.springboot.version>
         <dubbo.version>2.7.7</dubbo.version>
         <orderclient.version>1.0-SNAPSHOT</orderclient.version>
-        <mysql.connector.version>6.0.6</mysql.connector.version>
+        <mysql.connector.version>8.0.16</mysql.connector.version>
         <junit.version>4.12</junit.version>
         <curator.version>4.3.0</curator.version>
         <basecommon.version>1.0-SNAPSHOT</basecommon.version>
