@@ -7,7 +7,6 @@
         <groupId>com.xdsty</groupId>
         <artifactId>lfood</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath />
     </parent>
     <artifactId>basecommon</artifactId>
     <version>1.0-SNAPSHOT</version>
