@@ -1,4 +1,4 @@
-package com.xdsty.payservice.enums;
+package com.xdsty.payclient.enums;
 
 /**
  * @author 张富华

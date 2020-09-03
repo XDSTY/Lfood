@@ -1,7 +1,7 @@
 #!/bin/bash
 
-project_name=alguserservice
-repository=47.107.99.226:8081
+project_name=userservice
+repository=47.107.99.226:5000
 hostname=$HOSTNAME
 
 # 停止对应的容器

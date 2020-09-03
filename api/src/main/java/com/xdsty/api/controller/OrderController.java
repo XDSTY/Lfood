@@ -3,6 +3,7 @@ package com.xdsty.api.controller;
 import com.xdsty.api.config.annotation.PackageResult;
 import com.xdsty.api.controller.param.OrderAddParam;
 import com.xdsty.api.controller.param.OrderProductAddParam;
+import com.xdsty.api.controller.param.PayOrderParam;
 import com.xdsty.orderclient.dto.OrderAddDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
 import com.xdsty.productclient.dto.ProductStorageDto;
@@ -63,6 +64,15 @@ public class OrderController {
 
         OrderAddDto dto = convert2OrderAddDto(param);
         orderAtTransactionService.placeOrder(dto);
+    }
+
+    @PostMapping("payOrder")
+    public void payOrder(PayOrderParam param) {
+        // 从订单获取价格
+
+        // 计算积分
+
+        // 开启付款分布式事务
     }
 
     private OrderAddDto convert2OrderAddDto(OrderAddParam param) {

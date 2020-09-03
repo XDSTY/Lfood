@@ -37,4 +37,9 @@
         SET status = #{status}
         WHERE order_id = #{orderId}
     </update>
+    <select id="getOrder" resultType="com.xdsty.orderservice.entity.Order">
+        SELECT o.status
+        FROM tb_order o
+        WHERE o.user_id = #{userId} AND o.order_id = #{orderId}
+    </select>
 </mapper>

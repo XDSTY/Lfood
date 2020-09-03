@@ -10,6 +10,13 @@ import org.springframework.stereotype.Repository;
 public interface UserAmountMapper {
 
     /**
+     * 判断用户金额是否足够
+     * @param amount
+     * @return
+     */
+    Integer judgeAmount(UserAmount amount);
+
+    /**
      * 减去用户金额
      * @param amount
      * @return

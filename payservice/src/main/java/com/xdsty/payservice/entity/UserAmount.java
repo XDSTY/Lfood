@@ -13,6 +13,14 @@ public class UserAmount {
 
     private BigDecimal amount;
 
+    public UserAmount() {
+    }
+
+    public UserAmount(Long userId, BigDecimal amount) {
+        this.userId = userId;
+        this.amount = amount;
+    }
+
     public Long getId() {
         return id;
     }

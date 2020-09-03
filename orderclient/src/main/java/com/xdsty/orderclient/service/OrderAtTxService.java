@@ -20,6 +20,6 @@ public interface OrderAtTxService {
      * @param dto
      * @return
      */
-    long payOrder(OrderPayDto dto);
+    void payOrder(OrderPayDto dto);
 
 }

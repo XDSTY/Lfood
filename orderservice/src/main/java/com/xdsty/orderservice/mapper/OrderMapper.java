@@ -1,6 +1,7 @@
 package com.xdsty.orderservice.mapper;
 
 import com.xdsty.orderservice.entity.Order;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -21,5 +22,12 @@ public interface OrderMapper {
      * @return
      */
     int updateOrder(Order order);
+
+    /**
+     * 获取订单
+     * @param orderId
+     * @return
+     */
+    Order getOrder(@Param("userId") Long userId,@Param("orderId") Long orderId);
 
 }

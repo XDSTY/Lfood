@@ -27,4 +27,11 @@ public interface UserIntegralRecordMapper {
      */
     int updateRecord(@Param("id") Long id, @Param("status") Integer status);
 
+    /**
+     * 插入积分记录
+     * @param userIntegral
+     * @return
+     */
+    int insertOne(UserIntegral userIntegral);
+
 }

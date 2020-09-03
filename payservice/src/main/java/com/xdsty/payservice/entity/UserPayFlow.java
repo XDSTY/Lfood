@@ -12,11 +12,21 @@ public class UserPayFlow {
 
     private Long userId;
 
+    private Integer payType;
+
     private Integer type;
 
     private BigDecimal amount;
 
     private Date createTime;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public Long getId() {
         return id;
@@ -34,12 +44,12 @@ public class UserPayFlow {
         this.userId = userId;
     }
 
-    public Integer getType() {
-        return type;
+    public Integer getPayType() {
+        return payType;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setPayType(Integer payType) {
+        this.payType = payType;
     }
 
     public BigDecimal getAmount() {

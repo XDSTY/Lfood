@@ -6,4 +6,9 @@
         SET amount = amount - #{amount}
         WHERE user_id = #{userId} AND amount >= #{amount}
     </update>
+    <select id="judgeAmount" resultType="java.lang.Integer">
+        SELECT 1
+        FROM tb_user_amount
+        WHERE user_id = #{userId} AND amount >= #{amount}
+    </select>
 </mapper>

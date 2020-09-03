@@ -1,14 +1,18 @@
 package com.xdsty.orderservice.service;
 
 import basecommon.exception.BusinessRuntimeException;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import com.xdsty.orderclient.dto.OrderAddDto;
+import com.xdsty.orderclient.dto.OrderPayDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
 import com.xdsty.orderclient.service.OrderAtTxService;
 import com.xdsty.orderservice.entity.Order;
 import com.xdsty.orderservice.entity.OrderProduct;
+import com.xdsty.orderservice.entity.UserIntegral;
 import com.xdsty.orderservice.entity.enums.OrderStatusEnum;
 import com.xdsty.orderservice.mapper.OrderMapper;
 import com.xdsty.orderservice.mapper.OrderProductMapper;
+import com.xdsty.orderservice.mapper.UserIntegralRecordMapper;
 import com.xdsty.orderservice.util.IdWorker;
 import io.seata.core.context.RootContext;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -34,9 +38,12 @@ public class OrderAtTxServiceImpl implements OrderAtTxService {
 
     private OrderProductMapper orderProductMapper;
 
-    public OrderAtTxServiceImpl(OrderMapper orderMapper, OrderProductMapper orderProductMapper) {
+    private UserIntegralRecordMapper userIntegralRecordMapper;
+
+    public OrderAtTxServiceImpl(OrderMapper orderMapper, OrderProductMapper orderProductMapper, UserIntegralRecordMapper userIntegralRecordMapper) {
         this.orderMapper = orderMapper;
         this.orderProductMapper = orderProductMapper;
+        this.userIntegralRecordMapper = userIntegralRecordMapper;
     }
 
     @Override
@@ -56,6 +63,38 @@ public class OrderAtTxServiceImpl implements OrderAtTxService {
             throw new BusinessRuntimeException("新建订单商品信息失败");
         }
         return orderId;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void payOrder(OrderPayDto dto) {
+        if(dto.getOrderId() == null || dto.getUserId() == null) {
+            throw new BusinessRuntimeException("订单id不能为空");
+        }
+        // 判断订单状态
+        Order selectOrder = orderMapper.getOrder(dto.getUserId(), dto.getOrderId());
+        if(!selectOrder.getStatus().equals(OrderStatusEnum.WAIT_PAY.status)) {
+            throw new BusinessRuntimeException("重复付款");
+        }
+        Order order = new Order();
+        order.setOrderId(dto.getOrderId());
+        order.setStatus(OrderStatusEnum.SUCCESS.status);
+        // 修改订单状态
+        int count = orderMapper.updateOrder(order);
+        if(count < 1) {
+            throw new BusinessRuntimeException("修改订单失败");
+        }
+
+        //插入积分
+        UserIntegral integral = new UserIntegral();
+        integral.setType(1);
+        integral.setIntegral(dto.getIntegral());
+        integral.setUserId(dto.getUserId());
+        integral.setOrderId(dto.getOrderId());
+        count = userIntegralRecordMapper.insertOne(integral);
+        if(count < 1) {
+            throw new BusinessRuntimeException("插入积分失败");
+        }
     }
 
     private Order convert2Order(OrderAddDto dto, long orderId) {

@@ -18,6 +18,7 @@
         <orderclient.version>1.0-SNAPSHOT</orderclient.version>
         <userclient.version>1.0-SNAPSHOT</userclient.version>
         <txclient.version>1.0-SNAPSHOT</txclient.version>
+        <payclient.version>1.0-SNAPSHOT</payclient.version>
     </properties>
 
     <dependencies>
@@ -64,6 +65,11 @@
             <groupId>com.xdsty</groupId>
             <artifactId>txclient</artifactId>
             <version>${txclient.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.xdsty</groupId>
+            <artifactId>payclient</artifactId>
+            <version>${payclient.version}</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba.boot</groupId>
