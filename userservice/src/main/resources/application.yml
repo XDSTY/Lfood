@@ -7,10 +7,10 @@ server:
 spring:
   datasource:
     druid:
-      username: root
-      password: zhangfuhua123!
+      username: '@jdbc.name@'
+      password: '@jdbc.password@'
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/alguser?characterEncoding=utf-8&useUnicode=true&useSSL=false&serverTimezone=UTC
+      url: '@jdbc.url@'
       initial-size: 5
       max-active: 5
       max-wait: 6000
@@ -43,7 +43,7 @@ dubbo:
   application:
     name: user-service-provider
   registry:
-    address: nacos://127.0.0.1:8848
+    address: '@dubbo.address@'
     register: true
     timeout: 10000
   protocol:
@@ -60,7 +60,7 @@ dubbo:
 # 配置管理
 nacos:
   config:
-    server-addr: 127.0.0.1:8848
+    server-addr: '@nacos.address@'
 
 seata:
   service-group-name: user-service-group
@@ -69,7 +69,7 @@ topic:
   name: user-integral
 
 kafka:
-  bootstrapServers: 119.23.240.184:9092
+  bootstrapServers: '@kafka.servers@'
   groupId: userIntegralConsumerGroup1
   keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
   valueDeserializer: com.xdsty.userservice.serializer.KafkaProtobufDeserializer

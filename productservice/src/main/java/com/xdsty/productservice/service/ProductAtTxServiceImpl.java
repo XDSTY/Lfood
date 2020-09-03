@@ -7,6 +7,7 @@ import com.xdsty.productclient.service.StorageAtTxService;
 import com.xdsty.productservice.entity.ProductDeductStorage;
 import com.xdsty.productservice.mapper.ProductStorageMapper;
 import io.seata.core.context.RootContext;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,7 @@ public class ProductAtTxServiceImpl implements StorageAtTxService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @GlobalTransactional
     public void deduct(ProductStorageListDto dto) {
         log.error("减库存: {}, 事务xid: {}", dto, RootContext.getXID());
         for(ProductStorageDto storage : dto.getProductStorageDtos()) {

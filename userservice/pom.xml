@@ -105,6 +105,20 @@
     </dependencies>
 
     <build>
+        <filters>
+            <filter>src/main/resources/filters/${env}</filter>
+        </filters>
+        <finalName>${project.artifactId}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <!-- 排除filters下面的文件夹 以免重复引用-->
+                <excludes>
+                    <exclude>filters/**/*</exclude>
+                </excludes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

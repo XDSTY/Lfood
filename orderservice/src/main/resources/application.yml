@@ -7,10 +7,10 @@ server:
 spring:
   my:
    datasource:
-      username: root
-      password: zhangfuhua123!
+      username: '@jdbc.name@'
+      password: '@jdbc.password@'
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/algorder?characterEncoding=utf-8&useUnicode=true&serverTimezone=UTC
+      url: '@jdbc.url@'
       initial-size: 5
       max-active: 5
       max-wait: 6000
@@ -34,7 +34,7 @@ dubbo:
   application:
     name: order-service-provider
   registry:
-    address: nacos://127.0.0.1:8848
+    address: '@dubbo.address@'
     register: true
     timeout: 10000
   protocol:
@@ -52,13 +52,13 @@ dubbo:
 # 配置管理
 nacos:
   config:
-    server-addr: 127.0.0.1:8848
+    server-addr: '@nacos.address@'
 
 seata:
   service-group-name: tx-service-group
 
 kafka:
-  bootstrapServers: 119.23.240.184:9092
+  bootstrapServers: '@kafka.servers@'
   keySerializer: org.apache.kafka.common.serialization.StringSerializer
   valueSerializer: com.xdsty.orderservice.serializer.KafkaProtobufSerializer
   acks: 1
