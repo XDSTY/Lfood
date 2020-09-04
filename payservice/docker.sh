@@ -13,4 +13,4 @@ docker rm $(docker ps -a -q)
 docker rmi `docker image ls | grep "${project_name}" | awk '{print $1}'`
 
 docker pull ${repository}/${project_name}
-docker run -d -v /etc/hosts:/etc/hosts --hostname ${hostname} -v /home/workspace/${project_name}/log:/log -p 8086:8086 -p 20882:20882  ${repository}/${project_name}
+docker run -d -v /etc/hosts:/etc/hosts --hostname ${hostname} -v /home/workspace/${project_name}/log:/log -p 8086:8086 -p 20884:20884  ${repository}/${project_name}

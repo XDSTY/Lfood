@@ -22,17 +22,20 @@ public class PayOrderTransactionServiceImpl implements PayOrderTransactionServic
     @Override
     @GlobalTransactional
     public void payOrder(PayOrderDto dto) {
+        // 支付订单，并扣款
         PayDto payDto = new PayDto();
         payDto.setUserId(dto.getUserId());
         payDto.setOrderId(dto.getOrderId());
         payDto.setPayType(dto.getPayType());
         payDto.setTotalAmount(dto.getTotalAmount());
+        payDto.setType(dto.getType());
         payTxService.pay(payDto);
 
+        // 修改订单状态
         OrderPayDto orderPayDto = new OrderPayDto();
         orderPayDto.setUserId(dto.getUserId());
         orderPayDto.setIntegral(dto.getIntegral());
-        orderPayDto.setUserId(dto.getUserId());
+        orderPayDto.setOrderId(dto.getOrderId());
         orderAtTxService.payOrder(orderPayDto);
     }
 }

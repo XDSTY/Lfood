@@ -1,1 +1,1 @@
-dubboExceptionFilter=com.xdsty.orderservice.config.DubboExceptionFilter
+dubboExceptionFilter=com.xdsty.payservice.config.DubboExceptionFilter

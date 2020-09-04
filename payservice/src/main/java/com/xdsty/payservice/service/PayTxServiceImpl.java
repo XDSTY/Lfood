@@ -28,7 +28,7 @@ public class PayTxServiceImpl implements PayTxService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void pay(PayDto payDto) {
         if(payDto.getUserId() == null || payDto.getTotalAmount() == null) {
             throw new BusinessRuntimeException("支付人或者金额不能为空");
