@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xdsty.orderservice.mapper.OrderAdditionalMapper">
+    <insert id="insertOrderProductAdditional">
+        INSERT INTO tb_order_additional(order_product_id, additional_id, order_id,  num, price)
+        VALUES 
+        <foreach collection="orderAdditionals" item="item" separator=",">
+            (#{item.orderProductId}, #{item.additionalId}, #{item.orderId} , #{item.num}, #{item.price})
+        </foreach>
+    </insert>
+    <select id="getOrderAdditionals" resultType="com.xdsty.orderservice.entity.OrderAdditional">
+        SELECT oa.order_product_id AS orderProductId,
+               oa.num AS num,
+               oa.price AS price
+        FROM tb_order_additional oa
+        WHERE oa.order_id = #{orderId}
+    </select>
+</mapper>

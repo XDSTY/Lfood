@@ -3,10 +3,13 @@ package com.xdsty.orderservice.service;
 import basecommon.exception.BusinessRuntimeException;
 import com.xdsty.orderclient.dto.OrderAddDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
+import com.xdsty.orderclient.dto.OrderProductAdditionalDto;
 import com.xdsty.orderclient.service.OrderTxService;
 import com.xdsty.orderservice.entity.Order;
+import com.xdsty.orderservice.entity.OrderAdditional;
 import com.xdsty.orderservice.entity.OrderProduct;
 import com.xdsty.orderservice.entity.enums.OrderStatusEnum;
+import com.xdsty.orderservice.mapper.OrderAdditionalMapper;
 import com.xdsty.orderservice.mapper.OrderMapper;
 import com.xdsty.orderservice.mapper.OrderProductMapper;
 import com.xdsty.orderservice.mapper.TransactionMapper;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,10 +44,13 @@ public class OrderTxServiceImpl implements OrderTxService {
 
     private TransactionMapper transactionMapper;
 
-    public OrderTxServiceImpl(OrderMapper orderMapper, OrderProductMapper orderProductMapper, TransactionMapper transactionMapper) {
+    private OrderAdditionalMapper orderAdditionalMapper;
+
+    public OrderTxServiceImpl(OrderMapper orderMapper, OrderProductMapper orderProductMapper, TransactionMapper transactionMapper, OrderAdditionalMapper orderAdditionalMapper) {
         this.orderMapper = orderMapper;
         this.orderProductMapper = orderProductMapper;
         this.transactionMapper = transactionMapper;
+        this.orderAdditionalMapper = orderAdditionalMapper;
     }
 
     @Override
@@ -71,11 +78,41 @@ public class OrderTxServiceImpl implements OrderTxService {
         if (count != products.size()) {
             throw new BusinessRuntimeException("新建订单商品信息失败");
         }
+        // 订单附加项插入
+        List<OrderAdditional> orderAdditionals = initOrderAdditionalList(products);
+        if(!CollectionUtils.isEmpty(orderAdditionals)) {
+            count = orderAdditionalMapper.insertOrderProductAdditional(orderAdditionals);
+            if(count != orderAdditionals.size()) {
+                throw new BusinessRuntimeException("新建订单失败");
+            }
+        }
+
         OrderTransaction transaction = new OrderTransaction(context.getXid(), context.getBranchId(), TransactionEnum.INIT.status, orderId);
         if (transactionMapper.insertTransaction(transaction) <= 0) {
             throw new BusinessRuntimeException("新建事务记录失败，xid: " + context.getXid() + ", branchId:" + context.getBranchId());
         }
         return orderId;
+    }
+
+    /**
+     * 获取订单商品对应的附加项列表
+     * @param products
+     * @return
+     */
+    private List<OrderAdditional> initOrderAdditionalList(List<OrderProduct> products) {
+        List<OrderProduct> availProducts = products.stream().filter(e -> !CollectionUtils.isEmpty(e.getOrderAdditionals())).collect(Collectors.toList());
+        int totalSize = availProducts.stream().map(e -> e.getOrderAdditionals().size()).reduce(Integer::sum).orElse(0);
+        if(totalSize == 0) {
+            return null;
+        }
+        List<OrderAdditional> orderAdditionals = new ArrayList<>(totalSize);
+        for(OrderProduct product : availProducts) {
+            for(OrderAdditional additional : product.getOrderAdditionals()) {
+                additional.setOrderProductId(product.getId());
+            }
+            orderAdditionals.addAll(product.getOrderAdditionals());
+        }
+        return orderAdditionals;
     }
 
     private Order convert2Order(OrderAddDto dto, long orderId) {
@@ -86,13 +123,26 @@ public class OrderTxServiceImpl implements OrderTxService {
         return order;
     }
 
-    private OrderProduct convert2OrderProduct(OrderProductAddDto dto, long orderId) {
+    private OrderProduct convert2OrderProduct(OrderProductAddDto dto, Long orderId) {
         OrderProduct product = new OrderProduct();
         product.setOrderId(orderId);
         product.setProductId(dto.getProductId());
         product.setProductNum(dto.getProductNum());
         product.setProductPrice(dto.getProductPrice());
+        if(!CollectionUtils.isEmpty(dto.getOrderProductAdditionals())) {
+            List<OrderAdditional> orderAdditionals = dto.getOrderProductAdditionals().stream().map(e -> convert2OrderAdditional(e, orderId)).collect(Collectors.toList());
+            product.setOrderAdditionals(orderAdditionals);
+        }
         return product;
+    }
+
+    private OrderAdditional convert2OrderAdditional(OrderProductAdditionalDto dto, Long orderId) {
+        OrderAdditional additional = new OrderAdditional();
+        additional.setAdditionalId(dto.getAdditionalId());
+        additional.setNum(dto.getNum());
+        additional.setPrice(dto.getPrice());
+        additional.setOrderId(orderId);
+        return additional;
     }
 
     @Override

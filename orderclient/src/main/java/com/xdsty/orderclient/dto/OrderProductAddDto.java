@@ -2,6 +2,7 @@ package com.xdsty.orderclient.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author 张富华
@@ -14,6 +15,16 @@ public class OrderProductAddDto implements Serializable {
     private Integer productNum;
 
     private BigDecimal productPrice;
+
+    private List<OrderProductAdditionalDto> orderProductAdditionals;
+
+    public List<OrderProductAdditionalDto> getOrderProductAdditionals() {
+        return orderProductAdditionals;
+    }
+
+    public void setOrderProductAdditionals(List<OrderProductAdditionalDto> orderProductAdditionals) {
+        this.orderProductAdditionals = orderProductAdditionals;
+    }
 
     public Long getProductId() {
         return productId;

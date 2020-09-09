@@ -3,10 +3,9 @@ package com.xdsty.api.controller;
 import com.xdsty.api.config.annotation.PackageResult;
 import com.xdsty.api.controller.param.OrderAddParam;
 import com.xdsty.api.controller.param.OrderProductAddParam;
-import com.xdsty.api.controller.param.PayOrderParam;
+import com.xdsty.api.controller.param.order.PayOrderParam;
 import com.xdsty.orderclient.dto.OrderAddDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
-import com.xdsty.productclient.dto.ProductStorageDto;
 import com.xdsty.txclient.service.OrderAtTransactionService;
 import com.xdsty.txclient.service.OrderTransactionService;
 import org.apache.dubbo.config.annotation.DubboReference;
@@ -66,6 +65,18 @@ public class OrderController {
         orderAtTransactionService.placeOrder(dto);
     }
 
+    /**
+     * 订单支付页
+     */
+    @PostMapping("payOrderPage")
+    public void payOrderPage() {
+
+    }
+
+    /**
+     * 支付订单并添加积分
+     * @param param
+     */
     @PostMapping("payOrder")
     public void payOrder(PayOrderParam param) {
         // 从订单获取价格
@@ -73,6 +84,7 @@ public class OrderController {
         // 计算积分
 
         // 开启付款分布式事务
+
     }
 
     private OrderAddDto convert2OrderAddDto(OrderAddParam param) {

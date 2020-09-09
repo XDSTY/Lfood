@@ -28,6 +28,5 @@ public interface OrderMapper {
      * @param orderId
      * @return
      */
-    Order getOrder(@Param("userId") Long userId,@Param("orderId") Long orderId);
-
+    Order getOrder(@Param("userId") Long userId, @Param("orderId") Long orderId);
 }

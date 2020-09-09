@@ -1,6 +1,6 @@
 package com.xdsty.orderclient.service;
 
-import com.xdsty.orderclient.dto.OrderAddDto;
+import java.math.BigDecimal;
 
 /**
  * @author 张富华
@@ -8,6 +8,11 @@ import com.xdsty.orderclient.dto.OrderAddDto;
  */
 public interface OrderService {
 
-    void placeOrder(OrderAddDto dto);
+    /**
+     * 获取订单总价
+     * @param orderId
+     * @return
+     */
+    BigDecimal getOrderTotalPrice(Long orderId);
 
 }

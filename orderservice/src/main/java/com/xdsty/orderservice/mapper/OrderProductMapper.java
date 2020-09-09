@@ -12,10 +12,15 @@ public interface OrderProductMapper {
 
     /**
      * 添加订单商品
-     *
      * @param products 商品列表
      * @return 成功添加的条数
      */
     int addOrderProduct(@Param("products") List<OrderProduct> products);
+
+    /**
+     * 获取订单的商品
+     * @return
+     */
+    List<OrderProduct> getOrderProduct(Long orderId);
 
 }

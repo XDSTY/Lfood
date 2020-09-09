@@ -1,8 +1,11 @@
 package com.xdsty.orderservice.entity;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class OrderProduct {
+
+    private Long id;
 
     private Long orderId;
 
@@ -11,6 +14,16 @@ public class OrderProduct {
     private Integer productNum;
 
     private BigDecimal productPrice;
+
+    private List<OrderAdditional> orderAdditionals;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getOrderId() {
         return orderId;
@@ -42,5 +55,13 @@ public class OrderProduct {
 
     public void setProductPrice(BigDecimal productPrice) {
         this.productPrice = productPrice;
+    }
+
+    public List<OrderAdditional> getOrderAdditionals() {
+        return orderAdditionals;
+    }
+
+    public void setOrderAdditionals(List<OrderAdditional> orderAdditionals) {
+        this.orderAdditionals = orderAdditionals;
     }
 }
