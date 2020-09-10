@@ -1,5 +1,6 @@
 package com.xdsty.orderservice.service;
 
+import basecommon.util.PriceCalculateUtil;
 import com.xdsty.orderclient.service.OrderService;
 import com.xdsty.orderservice.entity.OrderAdditional;
 import com.xdsty.orderservice.entity.OrderProduct;
@@ -32,8 +33,27 @@ public class OrderServiceImpl implements OrderService {
         List<OrderAdditional> orderAdditionals = orderAdditionalMapper.getOrderAdditionals(orderId);
         BigDecimal totalPrice = new BigDecimal("0");
         // 计算商品的价格
-        if(!CollectionUtils.isEmpty(orderProducts)) {
-            orderProducts.stream().forEach(e -> totalPrice.add(e.getProductPrice().multiply(new BigDecimal(e.getProductNum()))));
+        for (OrderProduct orderProduct : orderProducts) {
+            totalPrice = PriceCalculateUtil.add(totalPrice, PriceCalculateUtil.multiply(orderProduct.getProductPrice(), orderProduct.getProductNum()));
         }
+        if(!CollectionUtils.isEmpty(orderAdditionals)) {
+            for (OrderAdditional orderAdditional : orderAdditionals) {
+                // 单个商品下的附加项价格
+                BigDecimal orderAddItemPrice = PriceCalculateUtil.multiply(orderAdditional.getNum(), orderAdditional.getPrice());
+                // 计算多个商品附加项价格
+                Integer productNum = getProductNum(orderProducts, orderAdditional.getNum());
+                orderAddItemPrice = PriceCalculateUtil.multiply(productNum, orderAddItemPrice);
+                totalPrice = PriceCalculateUtil.add(totalPrice, orderAddItemPrice);
+            }
+        }
+        return totalPrice;
+    }
+
+    private Integer getProductNum(List<OrderProduct> orderProducts, int orderProductId) {
+        OrderProduct orderProduct = orderProducts.stream().filter(o -> orderProductId == o.getId()).findFirst().orElse(null);
+        if(orderProduct != null) {
+            return orderProduct.getProductNum();
+        }
+        return null;
     }
 }
