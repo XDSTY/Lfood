@@ -19,8 +19,9 @@ public interface OrderProductMapper {
 
     /**
      * 获取订单的商品
+     * @param orderId 订单id
      * @return
      */
-    List<OrderProduct> getOrderProduct(Long orderId);
+    List<OrderProduct> getOrderProductList(Long orderId);
 
 }

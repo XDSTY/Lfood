@@ -3,7 +3,8 @@ package com.xdsty.api.controller;
 import basecommon.util.PageUtil;
 import com.google.common.collect.Lists;
 import com.xdsty.api.config.annotation.PackageResult;
-import com.xdsty.api.controller.content.*;
+import com.xdsty.api.controller.content.cart.CartAdditionalItemContent;
+import com.xdsty.api.controller.content.cart.CartItemContent;
 import com.xdsty.api.controller.param.*;
 import com.xdsty.api.util.PriceUtil;
 import com.xdsty.api.util.SessionUtil;
@@ -80,30 +81,46 @@ public class CartController {
             List<CartAdditionalItemRe> cartAdditionalItemRes = cartListRe.getCartAdditionalItemRes();
             List<Long> additionalIds = cartAdditionalItemRes.stream().map(CartAdditionalItemRe::getAdditionalId).collect(Collectors.toList());
             List<AdditionalItemRe> additionalItemRes = productService.getCartAdditionalItemList(additionalIds);
-            // 调整为 cartId - list<AdditionalId>
-            Map<Long, List<Long>> cartIdMap = cartAdditionalItemRes.stream()
-                    .collect(Collectors.groupingBy(CartAdditionalItemRe::getCartId, Collectors.mapping(CartAdditionalItemRe::getAdditionalId, Collectors.toList())));
-            return cartItemRes.stream().map(e -> convert2CartItemContent(e, getProductRe(productRes, e.getProductId()), cartIdMap, additionalItemRes)).collect(Collectors.toList());
+            // 调整为 cartId - list<AdditionalItem>
+//            Map<Long, List<Long>> cartIdMap = cartAdditionalItemRes.stream()
+//                    .collect(Collectors.groupingBy(CartAdditionalItemRe::getCartId, Collectors.mapping(CartAdditionalItemRe::getAdditionalId, Collectors.toList())));
+            Map<Long, List<CartAdditionalItemRe>> cartAddItemMap = cartAdditionalItemRes.stream()
+                    .collect(Collectors.groupingBy(CartAdditionalItemRe::getCartId, Collectors.toList()));
+            return cartItemRes.stream().map(e -> convert2CartItemContent(e, getProductRe(productRes, e.getProductId()), cartAddItemMap, additionalItemRes)).collect(Collectors.toList());
         }
         return Lists.newArrayList();
     }
 
+    /**
+     * 组合成CartItemContent
+     * @param cartItemRe 购物车商品信息
+     * @param productRe 商品详细信息
+     * @param cartAddItemMap cartId -> List<AdditionalItemRe> map
+     * @param additialItemRes 附加项的详细信息
+     * @return
+     */
     private CartItemContent convert2CartItemContent(CartItemRe cartItemRe, CartItemProductRe productRe,
-                                                    Map<Long, List<Long>> cartIdMap, List<AdditionalItemRe> additialItemRes) {
+                                                    Map<Long, List<CartAdditionalItemRe>> cartAddItemMap, List<AdditionalItemRe> additialItemRes) {
+        // 设置购物车商品信息
         CartItemContent content = convert2CartItemContent(cartItemRe, productRe);
-        List<Long> additionalIds = cartIdMap.get(cartItemRe.getCartId());
-        if (content == null || CollectionUtils.isEmpty(additionalIds)) {
+        // 获取购物车对应的附加项列表
+        List<CartAdditionalItemRe> additionalItems = cartAddItemMap.get(cartItemRe.getCartId());
+        if (content == null || CollectionUtils.isEmpty(additionalItems)) {
             return content;
         }
+        // 计算购物车商品总价
         BigDecimal price = productRe.getProductPrice();
         StringBuilder productName = new StringBuilder(content.getProductName());
-        List<AdditionalItemRe> validAdditionalRes = additionalIds.stream().map(e -> getAdditionalItemRe(additialItemRes, e)).collect(Collectors.toList());
+        // 附加项转换
+        List<CartAdditionalItemContent> validAdditionalRes = additionalItems.stream().map(e -> getAdditionalItemRe(additialItemRes, e)).collect(Collectors.toList());
+        // 拼接购物车商品名
         if (!CollectionUtils.isEmpty(validAdditionalRes)) {
             productName.append("(");
-            for (AdditionalItemRe re : validAdditionalRes) {
-                price = price.add(re.getPrice());
+            for (CartAdditionalItemContent re : validAdditionalRes) {
+                price = price.add(new BigDecimal(re.getPrice()));
                 productName.append(re.getName()).append("、");
             }
+            content.setCartAdditionalItems(validAdditionalRes);
         }
         BigDecimal totalPrice = price.multiply(BigDecimal.valueOf(cartItemRe.getProductNum()));
         productName.setCharAt(productName.length() - 1, ')');
@@ -113,8 +130,17 @@ public class CartController {
         return content;
     }
 
-    private AdditionalItemRe getAdditionalItemRe(List<AdditionalItemRe> additionalItemRes, Long id) {
-        return additionalItemRes.stream().filter(e -> e.getId().equals(id)).findFirst().orElse(null);
+    private CartAdditionalItemContent getAdditionalItemRe(List<AdditionalItemRe> additionalItemRes, CartAdditionalItemRe cartAddItemRe) {
+        AdditionalItemRe re = additionalItemRes.stream().filter(e -> e.getId().equals(cartAddItemRe.getAdditionalId())).findFirst().orElse(null);
+        if(re == null) {
+            return null;
+        }
+        CartAdditionalItemContent cartAddItem = new CartAdditionalItemContent();
+        cartAddItem.setId(re.getId());
+        cartAddItem.setName(re.getName());
+        cartAddItem.setPrice(PriceUtil.formatMoney(re.getPrice()));
+        cartAddItem.setNum(cartAddItemRe.getNum());
+        return cartAddItem;
     }
 
     private CartItemProductRe getProductRe(List<CartItemProductRe> productRes, Long productId) {

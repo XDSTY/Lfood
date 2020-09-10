@@ -1,5 +1,6 @@
 package com.xdsty.orderservice.util;
 
+import com.xdsty.orderservice.common.Constant;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -15,6 +16,10 @@ public final class AmountUtil {
      */
     public static boolean equalAmount(BigDecimal p1, BigDecimal p2) {
         return p1.setScale(2, RoundingMode.HALF_UP).equals(p2.setScale(2, RoundingMode.HALF_UP));
+    }
+
+    public static BigDecimal add(BigDecimal p1, BigDecimal p2) {
+        return p1.add(p2).setScale(2, Constant.PRICE_MODE);
     }
 
 }

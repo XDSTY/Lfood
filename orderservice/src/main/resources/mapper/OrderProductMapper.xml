@@ -8,7 +8,7 @@
             (#{product.orderId}, #{product.productId}, #{product.productNum}, #{product.productPrice})
         </foreach>
     </insert>
-    <select id="getOrderProduct" resultType="com.xdsty.orderservice.entity.OrderProduct">
+    <select id="getOrderProductList" resultType="com.xdsty.orderservice.entity.OrderProduct">
         SELECT op.id AS id,
                op.product_price productPrice,
                op.product_num productNum

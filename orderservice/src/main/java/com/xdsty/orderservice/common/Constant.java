@@ -1,5 +1,8 @@
 package com.xdsty.orderservice.common;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * @author 张富华
  * @date 2020/7/28 16:05
@@ -15,5 +18,16 @@ public final class Constant {
      * 用户积分mq
      */
     public static final String USER_INTEGRAL_TOPIC = "user-integral";
+
+    /**
+     * 价格计算默认模式
+     */
+    public static final RoundingMode PRICE_MODE = RoundingMode.HALF_UP;
+
+    /**
+     * 价格2位小数
+     */
+    public static final int SCALE = 2;
+
 
 }

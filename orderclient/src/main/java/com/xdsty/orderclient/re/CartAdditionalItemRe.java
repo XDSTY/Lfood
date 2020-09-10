@@ -8,6 +8,16 @@ public class CartAdditionalItemRe implements Serializable {
 
     private Long cartId;
 
+    private Integer num;
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
+
     public Long getAdditionalId() {
         return additionalId;
     }

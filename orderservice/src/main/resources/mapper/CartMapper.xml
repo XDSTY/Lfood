@@ -63,7 +63,8 @@
     <select id="getCartAdditionalByCartIds" resultType="com.xdsty.orderservice.entity.CartAdditional">
         SELECT ca.id AS id,
         ca.additional_id AS additionalId,
-        ca.cart_id AS cartId
+        ca.cart_id AS cartId,
+        ca.num AS num
         FROM tb_cart_additional ca
         WHERE ca.cart_id IN
         <foreach collection="cartIds" item="id" open="(" close=")" separator=",">
