@@ -18,19 +18,19 @@ public class PayDto implements Serializable {
     /**
      * 支付方式
      */
-    private Integer payType;
+    private Integer payChannel;
 
     /**
      * 支付的类型 下单
      */
-    private Integer type;
+    private Integer payType;
 
-    public Integer getType() {
-        return type;
+    public Integer getPayChannel() {
+        return payChannel;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setPayChannel(Integer payChannel) {
+        this.payChannel = payChannel;
     }
 
     public Integer getPayType() {

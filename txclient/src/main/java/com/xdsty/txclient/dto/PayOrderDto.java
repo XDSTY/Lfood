@@ -3,6 +3,9 @@ package com.xdsty.txclient.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+/**
+ * 订单付款dto
+ */
 public class PayOrderDto implements Serializable {
 
     private Long orderId;
@@ -14,12 +17,12 @@ public class PayOrderDto implements Serializable {
     /**
      * 支付方式
      */
-    private Integer payType;
+    private Integer payChannel;
 
     /**
      * 支付的类型 下单
      */
-    private Integer type;
+    private Integer payType;
 
     private Integer integral;
 
@@ -47,20 +50,20 @@ public class PayOrderDto implements Serializable {
         this.userId = userId;
     }
 
+    public Integer getPayChannel() {
+        return payChannel;
+    }
+
+    public void setPayChannel(Integer payChannel) {
+        this.payChannel = payChannel;
+    }
+
     public Integer getPayType() {
         return payType;
     }
 
     public void setPayType(Integer payType) {
         this.payType = payType;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
     }
 
     public Integer getIntegral() {

@@ -21,7 +21,7 @@ public class IntegralCalculateService {
      * @param amount
      * @return
      */
-    public Integer calculateIntegral(BigDecimal amount) {
+    public int calculateIntegral(BigDecimal amount) {
         String amountToIntegral = ConfigCenter.getConfigValue(ConfigKeyEnum.INTEGRAL_CONFIG.dataId);
         BigDecimal aToIntegral = DEFAULT_AMOUNT_TO_INTEGRAL;
         if(amountToIntegral != null) {

@@ -6,14 +6,16 @@ import com.xdsty.api.config.annotation.PackageResult;
 import com.xdsty.api.controller.param.OrderAddParam;
 import com.xdsty.api.controller.param.OrderProductAddParam;
 import com.xdsty.api.controller.param.order.PayOrderParam;
+import com.xdsty.api.service.IntegralCalculateService;
 import com.xdsty.api.util.SessionUtil;
 import com.xdsty.orderclient.dto.OrderAddDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
 import com.xdsty.orderclient.service.OrderService;
-import com.xdsty.txclient.service.OrderAtTransactionService;
+import com.xdsty.txclient.dto.PayOrderDto;
 import com.xdsty.txclient.service.OrderTransactionService;
+import com.xdsty.txclient.service.PayOrderTransactionService;
+import javax.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,10 +33,13 @@ public class OrderController {
     private OrderTransactionService orderTransactionService;
 
     @DubboReference(version = "1.0", retries = 0)
-    private OrderAtTransactionService orderAtTransactionService;
+    private OrderService orderService;
 
     @DubboReference(version = "1.0", retries = 0)
-    private OrderService orderService;
+    private PayOrderTransactionService payOrderTransactionService;
+
+    @Resource
+    private IntegralCalculateService integralCalculateService;
 
     @PostMapping("placeOrder")
     public void placeOrder() {
@@ -53,24 +58,6 @@ public class OrderController {
         OrderAddDto dto = convert2OrderAddDto(param);
 
         orderTransactionService.placeOrder(dto);
-    }
-
-    @PostMapping("placeOrderWithAtMode")
-    public void placeOrderWithAtMode() {
-        OrderAddParam param = new OrderAddParam();
-        param.setTotalPrice(BigDecimal.valueOf(10.0));
-        param.setUserId(1L);
-
-        List<OrderProductAddParam> orderProductAddParams = new ArrayList<>();
-        OrderProductAddParam productAddParam = new OrderProductAddParam();
-        productAddParam.setProductId(1L);
-        productAddParam.setProductNum(1);
-        productAddParam.setProductPrice(BigDecimal.valueOf(10.0));
-        orderProductAddParams.add(productAddParam);
-        param.setOrderProductAdds(orderProductAddParams);
-
-        OrderAddDto dto = convert2OrderAddDto(param);
-        orderAtTransactionService.placeOrder(dto);
     }
 
     /**
@@ -96,10 +83,19 @@ public class OrderController {
         if(!PriceCalculateUtil.equals(orderPrice, param.getTotalPrice())) {
             throw new BusinessRuntimeException("订单价格变化，清重新支付");
         }
+
         // 计算积分
+        int integral = integralCalculateService.calculateIntegral(param.getTotalPrice());
 
         // 开启付款分布式事务
-
+        PayOrderDto dto = new PayOrderDto();
+        dto.setUserId(memberId);
+        dto.setOrderId(param.getOrderId());
+        dto.setTotalAmount(param.getTotalPrice());
+        dto.setPayType(param.getPayType());
+        dto.setPayChannel(param.getPayChannel());
+        dto.setIntegral(integral);
+        payOrderTransactionService.payOrder(dto);
     }
 
     private OrderAddDto convert2OrderAddDto(OrderAddParam param) {

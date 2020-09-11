@@ -14,18 +14,18 @@ public class UserPayFlow {
 
     private Integer payType;
 
-    private Integer type;
+    private Integer payChannel;
 
     private BigDecimal amount;
 
     private Date createTime;
 
-    public Integer getType() {
-        return type;
+    public Integer getPayChannel() {
+        return payChannel;
     }
 
-    public void setType(Integer type) {
-        this.type = type;
+    public void setPayChannel(Integer payChannel) {
+        this.payChannel = payChannel;
     }
 
     public Long getId() {

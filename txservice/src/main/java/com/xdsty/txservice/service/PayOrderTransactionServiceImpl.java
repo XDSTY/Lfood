@@ -10,6 +10,9 @@ import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 
+/**
+ * 订单支付类
+ */
 @DubboService(version = "1.0")
 public class PayOrderTransactionServiceImpl implements PayOrderTransactionService {
 
@@ -28,7 +31,7 @@ public class PayOrderTransactionServiceImpl implements PayOrderTransactionServic
         payDto.setOrderId(dto.getOrderId());
         payDto.setPayType(dto.getPayType());
         payDto.setTotalAmount(dto.getTotalAmount());
-        payDto.setType(dto.getType());
+        payDto.setPayChannel(dto.getPayChannel());
         payTxService.pay(payDto);
 
         // 修改订单状态

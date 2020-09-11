@@ -48,7 +48,7 @@ public class PayTxServiceImpl implements PayTxService {
         flow.setUserId(payDto.getUserId());
         flow.setPayType(payDto.getPayType());
         flow.setAmount(payDto.getTotalAmount());
-        flow.setType(payDto.getType());
+        flow.setPayChannel(payDto.getPayChannel());
         count = userPayFlowMapper.insertOne(flow);
         if(count < 1) {
             throw new BusinessRuntimeException("支付失败");
