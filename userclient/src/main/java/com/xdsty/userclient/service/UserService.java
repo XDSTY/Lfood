@@ -2,9 +2,11 @@ package com.xdsty.userclient.service;
 
 
 import com.xdsty.userclient.dto.UserDetailDto;
+import com.xdsty.userclient.dto.UserIdDto;
 import com.xdsty.userclient.dto.UserLoginDto;
 import com.xdsty.userclient.dto.UserRegisterDto;
 import com.xdsty.userclient.re.CityRe;
+import com.xdsty.userclient.re.UserCompanyInfoRe;
 import com.xdsty.userclient.re.UserDetailRe;
 import com.xdsty.userclient.re.UserLoginRe;
 
@@ -43,5 +45,13 @@ public interface UserService {
      * @return
      */
     CityRe getUserNowCity(Long userId);
+
+
+    /**
+     * 获取用户的所在公司信息
+     * @param dto
+     * @return
+     */
+    UserCompanyInfoRe getUserCompanyInfo(UserIdDto dto);
 
 }

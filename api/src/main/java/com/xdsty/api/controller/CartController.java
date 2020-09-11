@@ -1,6 +1,7 @@
 package com.xdsty.api.controller;
 
 import basecommon.util.PageUtil;
+import basecommon.util.PriceCalculateUtil;
 import com.google.common.collect.Lists;
 import com.xdsty.api.config.annotation.PackageResult;
 import com.xdsty.api.controller.content.cart.CartAdditionalItemContent;
@@ -75,7 +76,7 @@ public class CartController {
             if (CollectionUtils.isEmpty(cartListRe.getCartAdditionalItemRes())) {
                 return cartItemRes.stream()
                         .map(e -> convert2CartItemContent(e, getProductRe(productRes, e.getProductId())))
-                        .filter(Objects::isNull).collect(Collectors.toList());
+                        .filter(Objects::nonNull).collect(Collectors.toList());
             }
             // 获取购物车商品的附加
             List<CartAdditionalItemRe> cartAdditionalItemRes = cartListRe.getCartAdditionalItemRes();
@@ -157,7 +158,8 @@ public class CartController {
         content.setNum(cartItemRe.getProductNum());
         content.setProductName(productRe.getProductName());
         content.setThumbnail(productRe.getThumbnail());
-        content.setTotalPrice(PriceUtil.formatMoney(productRe.getProductPrice().multiply(BigDecimal.valueOf(cartItemRe.getProductNum()))));
+        content.setPrice(PriceUtil.formatMoney(productRe.getProductPrice()));
+        content.setTotalPrice(PriceUtil.formatMoney(PriceCalculateUtil.multiply(productRe.getProductPrice(), cartItemRe.getProductNum())));
         return content;
     }
 

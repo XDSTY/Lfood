@@ -51,4 +51,6 @@ public interface UserMapper {
      * @return
      */
     City selectUserNowCity(Long userId);
+
+
 }

@@ -10,6 +10,7 @@ import com.xdsty.api.config.jwt.JwtTokenUtil;
 import com.xdsty.api.controller.content.CityContent;
 import com.xdsty.api.controller.content.TokenContent;
 import com.xdsty.api.controller.content.UserLoginContent;
+import com.xdsty.api.controller.content.user.UserCompanyAddressContent;
 import com.xdsty.api.controller.param.TokenParam;
 import com.xdsty.api.controller.param.UserLoginParam;
 import com.xdsty.api.controller.param.UserRegisterParam;
@@ -19,8 +20,10 @@ import com.xdsty.api.util.RedisUtil;
 import com.xdsty.api.util.RequestUtil;
 import com.xdsty.api.util.SessionUtil;
 import com.xdsty.userclient.dto.UserDetailDto;
+import com.xdsty.userclient.dto.UserIdDto;
 import com.xdsty.userclient.dto.UserLoginDto;
 import com.xdsty.userclient.dto.UserRegisterDto;
+import com.xdsty.userclient.re.UserCompanyInfoRe;
 import com.xdsty.userclient.re.UserDetailRe;
 import com.xdsty.userclient.re.UserLoginRe;
 import com.xdsty.userclient.service.UserService;
@@ -175,6 +178,22 @@ public class UserController {
         cityContent.setCityId(userSession.getCityId());
         cityContent.setCityName(userSession.getCityName());
         return cityContent;
+    }
+
+    @GetMapping("companyInfo")
+    public UserCompanyAddressContent getUserCompanyAddr() {
+        UserSession session = SessionUtil.getUserSession();
+        UserIdDto dto = new UserIdDto();
+        dto.setUserId(session.getUserId());
+        UserCompanyInfoRe re = userService.getUserCompanyInfo(dto);
+
+        UserCompanyAddressContent content = new UserCompanyAddressContent();
+        content.setCompanyAddr(re.getCompanyAddr());
+        content.setCompanyId(re.getCompanyId());
+        content.setCompanyName(re.getCompanyName());
+        content.setPhone(session.getLinkPhone());
+        content.setUsername(session.getUsername());
+        return content;
     }
 
 }

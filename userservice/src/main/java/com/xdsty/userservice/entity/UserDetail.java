@@ -25,4 +25,7 @@ public class UserDetail implements Serializable {
 
     private String cityName;
 
+    private String companyName;
+
+    private String companyAddr;
 }

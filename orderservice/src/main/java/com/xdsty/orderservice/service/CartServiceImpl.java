@@ -35,17 +35,19 @@ public class CartServiceImpl implements CartService {
         if (!CollectionUtils.isEmpty(cartIds)) {
             for (Long cartId : cartIds) {
                 List<Long> additionalItemIds = cartMapper.getAdditionalIdsByCartId(cartId);
+                // 该商品已在购物车中
+                if(CollectionUtils.isEmpty(additionalItemIds) && CollectionUtils.isEmpty(cartItemDto.getAdditionalList())) {
+                    CartItem cartItem = getCartItem(cartId, cartItemDto);
+                    cartMapper.incrCartItemNum(cartItem);
+                    return new CartItemAddRe();
+                }
                 List<Long> additionalItemIdsDto = null;
                 if (!CollectionUtils.isEmpty(cartItemDto.getAdditionalList())) {
                     additionalItemIdsDto = cartItemDto.getAdditionalList().stream().map(CartAdditionalItem::getId).collect(Collectors.toList());
                 }
                 // 新加入的商品已经在用户的购物车中
                 if (ListUtil.equals(additionalItemIds, additionalItemIdsDto)) {
-                    CartItem cartItem = new CartItem();
-                    cartItem.setId(cartId);
-                    cartItem.setProductExtendId(cartItemDto.getProductId());
-                    cartItem.setProductNum(cartItemDto.getProductNum());
-                    cartItem.setUserId(cartItemDto.getUserId());
+                    CartItem cartItem = getCartItem(cartId, cartItemDto);
                     cartMapper.incrCartItemNum(cartItem);
                     return new CartItemAddRe();
                 }
@@ -63,6 +65,15 @@ public class CartServiceImpl implements CartService {
             cartMapper.insertCartAdditional(additionals);
         }
         return new CartItemAddRe();
+    }
+
+    private CartItem getCartItem(Long cartId, CartItemDto cartItemDto) {
+        CartItem cartItem = new CartItem();
+        cartItem.setId(cartId);
+        cartItem.setProductExtendId(cartItemDto.getProductId());
+        cartItem.setProductNum(cartItemDto.getProductNum());
+        cartItem.setUserId(cartItemDto.getUserId());
+        return cartItem;
     }
 
     private CartAdditional convert2CartAdditional(CartAdditionalItem additionalItem, Long cartId) {

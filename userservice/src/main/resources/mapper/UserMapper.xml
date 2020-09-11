@@ -27,6 +27,7 @@
         t.link_phone AS linkPhone,
         t.company_id AS companyId,
         c.short_name AS shortName,
+        t.address AS companyAddr,
         c2.id AS cityId,
         c2.city_name AS cityName
         FROM tb_user t

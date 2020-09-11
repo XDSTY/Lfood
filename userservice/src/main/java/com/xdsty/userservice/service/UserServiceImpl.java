@@ -2,9 +2,11 @@ package com.xdsty.userservice.service;
 
 import basecommon.exception.BusinessRuntimeException;
 import com.xdsty.userclient.dto.UserDetailDto;
+import com.xdsty.userclient.dto.UserIdDto;
 import com.xdsty.userclient.dto.UserLoginDto;
 import com.xdsty.userclient.dto.UserRegisterDto;
 import com.xdsty.userclient.re.CityRe;
+import com.xdsty.userclient.re.UserCompanyInfoRe;
 import com.xdsty.userclient.re.UserDetailRe;
 import com.xdsty.userclient.re.UserLoginRe;
 import com.xdsty.userclient.service.UserService;
@@ -13,6 +15,7 @@ import com.xdsty.userservice.mapper.UserCompanyMapper;
 import com.xdsty.userservice.mapper.UserMapper;
 import com.xdsty.userservice.util.MD5Util;
 import com.xdsty.userservice.util.ObjConvert;
+import javax.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,19 +33,11 @@ public class UserServiceImpl implements UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
 
+    @Resource
     private UserMapper userMapper;
 
+    @Resource
     private UserCompanyMapper userCompanyMapper;
-
-    @Autowired
-    public void setUserMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
-
-    @Autowired
-    public void setUserCompanyMapper(UserCompanyMapper userCompanyMapper) {
-        this.userCompanyMapper = userCompanyMapper;
-    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -108,5 +103,15 @@ public class UserServiceImpl implements UserService {
     public CityRe getUserNowCity(Long userId) {
         City city = userMapper.selectUserNowCity(userId);
         return ObjConvert.convertCityRe(city);
+    }
+
+    @Override
+    public UserCompanyInfoRe getUserCompanyInfo(UserIdDto dto) {
+        UserCompanyInfoRe re = new UserCompanyInfoRe();
+        UserDetail userDetail = userMapper.getUserDetail(dto.getUserId());
+        re.setCompanyAddr(userDetail.getCompanyAddr());
+        re.setCompanyId(userDetail.getCompanyId());
+        re.setCompanyName(userDetail.getShortName());
+        return re;
     }
 }
