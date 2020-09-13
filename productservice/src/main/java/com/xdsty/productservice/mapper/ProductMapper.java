@@ -65,7 +65,7 @@ public interface ProductMapper {
     List<Product> selectProductListByIds(@Param("productIds") List<Long> productIds);
 
     /**
-     * 根据id集合查询附加值
+     * 根据id集合查询附加项
      *
      * @param itemIds id列表
      * @return

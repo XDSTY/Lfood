@@ -31,7 +31,7 @@ public class IntegralCalculateService {
             return 0;
         }
         String is = amount.divide(aToIntegral, RoundingMode.DOWN).setScale(0, RoundingMode.DOWN).toString();
-        return Integer.valueOf(is);
+        return Integer.parseInt(is);
     }
 
 }

@@ -159,6 +159,7 @@ public class CartController {
         content.setProductName(productRe.getProductName());
         content.setThumbnail(productRe.getThumbnail());
         content.setPrice(PriceUtil.formatMoney(productRe.getProductPrice()));
+        content.setProductPrice(PriceUtil.formatMoney(productRe.getProductPrice()));
         content.setTotalPrice(PriceUtil.formatMoney(PriceCalculateUtil.multiply(productRe.getProductPrice(), cartItemRe.getProductNum())));
         return content;
     }

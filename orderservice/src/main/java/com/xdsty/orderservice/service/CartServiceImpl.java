@@ -108,6 +108,7 @@ public class CartServiceImpl implements CartService {
         CartAdditionalItemRe itemRe = new CartAdditionalItemRe();
         itemRe.setCartId(cartAdditional.getCartId());
         itemRe.setAdditionalId(cartAdditional.getAdditionalId());
+        itemRe.setNum(cartAdditional.getNum());
         return itemRe;
     }
 

@@ -180,6 +180,10 @@ public class UserController {
         return cityContent;
     }
 
+    /**
+     * 获取用户当前公司的地址等信息
+     * @return
+     */
     @GetMapping("companyInfo")
     public UserCompanyAddressContent getUserCompanyAddr() {
         UserSession session = SessionUtil.getUserSession();

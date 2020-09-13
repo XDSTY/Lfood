@@ -1,4 +1,4 @@
-package com.xdsty.api.controller.param;
+package com.xdsty.api.controller.param.order;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,10 +9,14 @@ import java.util.List;
 @Setter
 public class OrderAddParam {
 
-    private Long userId;
-
+    /**
+     * 订单总价
+     */
     private BigDecimal totalPrice;
 
-    private List<OrderProductAddParam> orderProductAdds;
+    /**
+     * 订单中商品
+     */
+    private List<OrderProductParam> orderProductAdds;
 
 }

@@ -1,6 +1,7 @@
 package com.xdsty.productclient.service;
 
 
+import com.xdsty.productclient.dto.OrderProductDto;
 import com.xdsty.productclient.dto.ProductIdDto;
 import com.xdsty.productclient.dto.ProductQueryDto;
 import com.xdsty.productclient.dto.ProductValidDto;
@@ -52,5 +53,12 @@ public interface ProductService {
      * @param dto
      * @return
      */
-    ProductCheckRe checkProductValid(ProductValidDto dto);
+    void checkProductValid(ProductValidDto dto);
+
+    /**
+     * 检验商品的价格和传入的是否相同
+     * @param orderProductDtos
+     * @return
+     */
+    void checkOrderProduct(List<OrderProductDto> orderProductDtos);
 }
