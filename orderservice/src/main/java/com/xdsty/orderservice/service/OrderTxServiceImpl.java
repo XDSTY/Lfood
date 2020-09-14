@@ -5,6 +5,7 @@ import com.xdsty.orderclient.dto.OrderAddDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
 import com.xdsty.orderclient.dto.OrderProductAdditionalDto;
 import com.xdsty.orderclient.service.OrderTxService;
+import com.xdsty.orderservice.common.Constant;
 import com.xdsty.orderservice.entity.Order;
 import com.xdsty.orderservice.entity.OrderAdditional;
 import com.xdsty.orderservice.entity.OrderProduct;
@@ -13,6 +14,8 @@ import com.xdsty.orderservice.mapper.OrderAdditionalMapper;
 import com.xdsty.orderservice.mapper.OrderMapper;
 import com.xdsty.orderservice.mapper.OrderProductMapper;
 import com.xdsty.orderservice.mapper.TransactionMapper;
+import com.xdsty.orderservice.nacos.ConfigCenter;
+import com.xdsty.orderservice.nacos.ConfigKeyEnum;
 import com.xdsty.orderservice.transaction.OrderTransaction;
 import com.xdsty.orderservice.transaction.TransactionEnum;
 import com.xdsty.orderservice.util.IdWorker;
@@ -25,7 +28,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -120,6 +125,15 @@ public class OrderTxServiceImpl implements OrderTxService {
         order.setOrderId(orderId);
         order.setUserId(dto.getUserId());
         order.setTotalPrice(dto.getTotalPrice());
+        // 设置订单的下单时间和支付结束时间
+        Date now = new Date();
+        order.setCreateTime(now);
+        order.setPayEndTime(new Date(now.getTime() + Constant.DEFAULT_ORDER_WAIT_TIME));
+        //从配置中心获取待支付订单维持时间
+        String configTme = ConfigCenter.getConfigValue(ConfigKeyEnum.ORDER_WAIT_PAY_TIME.dataId);
+        if(Objects.nonNull(configTme)) {
+            order.setPayEndTime(new Date(now.getTime() + Long.valueOf(configTme)));
+        }
         return order;
     }
 

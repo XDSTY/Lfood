@@ -12,7 +12,12 @@ public enum ConfigKeyEnum {
     /**
      * 雪花算法的开始的时间戳
      */
-    SNOW_FLACK_TIMESTAMP("snow.flake.start.timestamp", Constant.CONF_CENTER_GROUPID);
+    SNOW_FLACK_TIMESTAMP("snow.flake.start.timestamp", Constant.CONF_CENTER_GROUPID),
+
+    /**
+     * 待支付订单持续时间
+     */
+    ORDER_WAIT_PAY_TIME("order.wait.pay.time", Constant.CONF_CENTER_GROUPID);
 
     public String dataId;
 

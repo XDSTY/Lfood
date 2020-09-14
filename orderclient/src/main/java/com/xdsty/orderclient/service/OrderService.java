@@ -1,5 +1,7 @@
 package com.xdsty.orderclient.service;
 
+import com.xdsty.orderclient.dto.OrderIdDto;
+import com.xdsty.orderclient.re.OrderPayPageRe;
 import java.math.BigDecimal;
 
 /**
@@ -14,5 +16,12 @@ public interface OrderService {
      * @return
      */
     BigDecimal getOrderTotalPrice(Long orderId);
+
+    /**
+     * 获取代付款订单的付款信息
+     * @param dto
+     * @return
+     */
+    OrderPayPageRe getOrderPayInfo(OrderIdDto dto);
 
 }

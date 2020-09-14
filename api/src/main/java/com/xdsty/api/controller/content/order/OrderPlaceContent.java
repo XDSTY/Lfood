@@ -1,8 +1,9 @@
-package com.xdsty.api.controller.content;
+package com.xdsty.api.controller.content.order;
 
 import lombok.Getter;
 import lombok.Setter;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * @author 张富华
@@ -13,5 +14,7 @@ import java.io.Serializable;
 public class OrderPlaceContent implements Serializable {
 
     private Long orderId;
+
+    private BigDecimal totalPrice;
 
 }

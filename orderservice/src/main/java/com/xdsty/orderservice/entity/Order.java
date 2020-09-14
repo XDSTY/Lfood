@@ -1,6 +1,7 @@
 package com.xdsty.orderservice.entity;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class Order {
 
@@ -11,6 +12,26 @@ public class Order {
     private BigDecimal totalPrice;
 
     private Integer status;
+
+    private Date createTime;
+
+    private Date payEndTime;
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getPayEndTime() {
+        return payEndTime;
+    }
+
+    public void setPayEndTime(Date payEndTime) {
+        this.payEndTime = payEndTime;
+    }
 
     public Long getOrderId() {
         return orderId;

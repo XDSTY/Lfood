@@ -1,10 +1,15 @@
 package com.xdsty.orderservice.service;
 
 import basecommon.util.PriceCalculateUtil;
+import com.xdsty.orderclient.dto.OrderIdDto;
+import com.xdsty.orderclient.re.OrderPayPageRe;
 import com.xdsty.orderclient.service.OrderService;
+import com.xdsty.orderservice.entity.Order;
 import com.xdsty.orderservice.entity.OrderAdditional;
 import com.xdsty.orderservice.entity.OrderProduct;
+import com.xdsty.orderservice.entity.enums.OrderStatusEnum;
 import com.xdsty.orderservice.mapper.OrderAdditionalMapper;
+import com.xdsty.orderservice.mapper.OrderMapper;
 import com.xdsty.orderservice.mapper.OrderProductMapper;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
@@ -21,9 +26,12 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderAdditionalMapper orderAdditionalMapper;
 
-    public OrderServiceImpl(OrderProductMapper orderProductMapper, OrderAdditionalMapper orderAdditionalMapper) {
+    private OrderMapper orderMapper;
+
+    public OrderServiceImpl(OrderProductMapper orderProductMapper, OrderAdditionalMapper orderAdditionalMapper, OrderMapper orderMapper) {
         this.orderProductMapper = orderProductMapper;
         this.orderAdditionalMapper = orderAdditionalMapper;
+        this.orderMapper = orderMapper;
     }
 
     @Override
@@ -55,5 +63,17 @@ public class OrderServiceImpl implements OrderService {
             return orderProduct.getProductNum();
         }
         return null;
+    }
+
+    @Override
+    public OrderPayPageRe getOrderPayInfo(OrderIdDto dto) {
+        Order order = orderMapper.getOrder(dto.getUserId(), dto.getOrderId());
+
+        OrderPayPageRe re = new OrderPayPageRe();
+        re.setShouldPayPrice(order.getTotalPrice());
+        re.setCreateTime(order.getCreateTime());
+        re.setEndTime(order.getPayEndTime());
+        re.setStatus(order.getStatus());
+        return re;
     }
 }
