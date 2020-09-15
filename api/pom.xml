@@ -20,6 +20,7 @@
         <orderclient.version>1.0-SNAPSHOT</orderclient.version>
         <basecommon.version>1.0-SNAPSHOT</basecommon.version>
         <txclient.version>1.0-SNAPSHOT</txclient.version>
+        <payclient.version>1.0-SNAPSHOT</payclient.version>
         <junit.version>4.12</junit.version>
         <curator.version>4.3.0</curator.version>
         <commons.lang.version>2.6</commons.lang.version>
@@ -158,6 +159,12 @@
             <groupId>com.xdsty</groupId>
             <artifactId>txclient</artifactId>
             <version>${txclient.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xdsty</groupId>
+            <artifactId>payclient</artifactId>
+            <version>${payclient.version}</version>
         </dependency>
 
     </dependencies>

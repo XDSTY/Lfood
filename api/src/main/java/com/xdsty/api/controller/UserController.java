@@ -9,7 +9,8 @@ import com.xdsty.api.config.annotation.PackageResult;
 import com.xdsty.api.config.jwt.JwtTokenUtil;
 import com.xdsty.api.controller.content.CityContent;
 import com.xdsty.api.controller.content.TokenContent;
-import com.xdsty.api.controller.content.UserLoginContent;
+import com.xdsty.api.controller.content.user.UserInfoContent;
+import com.xdsty.api.controller.content.user.UserLoginContent;
 import com.xdsty.api.controller.content.user.UserCompanyAddressContent;
 import com.xdsty.api.controller.param.TokenParam;
 import com.xdsty.api.controller.param.UserLoginParam;
@@ -25,6 +26,7 @@ import com.xdsty.userclient.dto.UserLoginDto;
 import com.xdsty.userclient.dto.UserRegisterDto;
 import com.xdsty.userclient.re.UserCompanyInfoRe;
 import com.xdsty.userclient.re.UserDetailRe;
+import com.xdsty.userclient.re.UserIntegralRe;
 import com.xdsty.userclient.re.UserLoginRe;
 import com.xdsty.userclient.service.UserService;
 import io.jsonwebtoken.Claims;
@@ -198,6 +200,33 @@ public class UserController {
         content.setPhone(session.getLinkPhone());
         content.setUsername(session.getUsername());
         return content;
+    }
+
+
+    /**
+     * 获取用户信息
+     * @return
+     */
+    @GetMapping("info")
+    public UserInfoContent getUserInfo() {
+        Long userId = SessionUtil.getUserId();
+        UserInfoContent content = new UserInfoContent();
+
+        // 获取用户信息
+        UserDetailDto detailDto = new UserDetailDto();
+        detailDto.setUserId(userId);
+        UserDetailRe detailRe = userService.getUserDetail(detailDto);
+        content.setUsername(detailRe.getUsername());
+        content.setProfilePic(detailRe.getProfilePic());
+
+        // 获取用户积分
+        UserIdDto userIdDto = new UserIdDto();
+        userIdDto.setUserId(userId);
+        UserIntegralRe integralRe = userService.getUserIntegral(userIdDto);
+        content.setIntegral(integralRe.getIntegral());
+
+        // 获取用户余额
+
     }
 
 }

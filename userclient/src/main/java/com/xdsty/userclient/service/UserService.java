@@ -8,6 +8,7 @@ import com.xdsty.userclient.dto.UserRegisterDto;
 import com.xdsty.userclient.re.CityRe;
 import com.xdsty.userclient.re.UserCompanyInfoRe;
 import com.xdsty.userclient.re.UserDetailRe;
+import com.xdsty.userclient.re.UserIntegralRe;
 import com.xdsty.userclient.re.UserLoginRe;
 
 /**
@@ -54,4 +55,10 @@ public interface UserService {
      */
     UserCompanyInfoRe getUserCompanyInfo(UserIdDto dto);
 
+    /**
+     * 获取用户的积分
+     * @param dto
+     * @return
+     */
+    UserIntegralRe getUserIntegral(UserIdDto dto);
 }

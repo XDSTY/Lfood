@@ -8,10 +8,12 @@ import com.xdsty.userclient.dto.UserRegisterDto;
 import com.xdsty.userclient.re.CityRe;
 import com.xdsty.userclient.re.UserCompanyInfoRe;
 import com.xdsty.userclient.re.UserDetailRe;
+import com.xdsty.userclient.re.UserIntegralRe;
 import com.xdsty.userclient.re.UserLoginRe;
 import com.xdsty.userclient.service.UserService;
 import com.xdsty.userservice.entity.*;
 import com.xdsty.userservice.mapper.UserCompanyMapper;
+import com.xdsty.userservice.mapper.UserIntegralRecordMapper;
 import com.xdsty.userservice.mapper.UserMapper;
 import com.xdsty.userservice.util.MD5Util;
 import com.xdsty.userservice.util.ObjConvert;
@@ -38,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private UserCompanyMapper userCompanyMapper;
+
+    @Resource
+    private UserIntegralRecordMapper recordMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -112,6 +117,14 @@ public class UserServiceImpl implements UserService {
         re.setCompanyAddr(userDetail.getCompanyAddr());
         re.setCompanyId(userDetail.getCompanyId());
         re.setCompanyName(userDetail.getShortName());
+        return re;
+    }
+
+    @Override
+    public UserIntegralRe getUserIntegral(UserIdDto dto) {
+        UserIntegralRecord record = recordMapper.getOneByUserId(dto.getUserId());
+        UserIntegralRe re = new UserIntegralRe();
+        re.setIntegral(record.getIntegral());
         return re;
     }
 }

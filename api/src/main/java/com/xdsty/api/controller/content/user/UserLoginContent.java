@@ -1,4 +1,4 @@
-package com.xdsty.api.controller.content;
+package com.xdsty.api.controller.content.user;
 
 import lombok.Getter;
 import lombok.Setter;
