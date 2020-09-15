@@ -11,4 +11,9 @@
         FROM tb_user_amount
         WHERE user_id = #{userId} AND amount >= #{amount}
     </select>
+    <select id="getUserAmount" resultType="com.xdsty.payservice.entity.UserAmount">
+        SELECT ua.amount
+        FROM tb_user_amount ua
+        WHERE ua.user_id = #{userId}
+    </select>
 </mapper>

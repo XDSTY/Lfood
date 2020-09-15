@@ -1,9 +1,13 @@
 package com.xdsty.orderclient.service;
 
 import com.xdsty.orderclient.dto.OrderIdDto;
+import com.xdsty.orderclient.dto.OrderModuleDto;
 import com.xdsty.orderclient.dto.OrderValidDto;
+import com.xdsty.orderclient.re.OrderModuleRe;
 import com.xdsty.orderclient.re.OrderPayPageRe;
 import com.xdsty.orderclient.re.OrderValidRe;
+
+import java.util.List;
 
 /**
  * @author 张富华
@@ -23,5 +27,12 @@ public interface OrderService {
      * @param dto
      */
     OrderValidRe checkOrderValid(OrderValidDto dto);
+
+    /**
+     * 获取订单模块
+     * @param orderModuleDto
+     * @return
+     */
+    List<OrderModuleRe> getOrderModules(OrderModuleDto orderModuleDto);
 
 }

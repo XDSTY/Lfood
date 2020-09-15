@@ -1,7 +1,11 @@
 package com.xdsty.orderservice.common;
 
+import com.google.common.collect.Lists;
+import com.xdsty.orderclient.enums.OrderStatusEnum;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 /**
  * @author 张富华
@@ -33,6 +37,11 @@ public final class Constant {
      * 待支付订单维持时间，默认15分钟
      */
     public static final long DEFAULT_ORDER_WAIT_TIME = 900000;
+
+    /**
+     * 订单模块显示数量的状态
+     */
+    public static final List<Integer> ORDER_MODULE_STATUS = Lists.newArrayList(OrderStatusEnum.WAIT_PAY.getStatus(), OrderStatusEnum.SUCCESS.getStatus());
 
 
 }

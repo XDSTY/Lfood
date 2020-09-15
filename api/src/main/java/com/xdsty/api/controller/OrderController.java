@@ -1,8 +1,8 @@
 package com.xdsty.api.controller;
 
 import basecommon.exception.BusinessRuntimeException;
-import basecommon.util.PriceCalculateUtil;
 import com.xdsty.api.config.annotation.PackageResult;
+import com.xdsty.api.controller.content.OrderModuleContent;
 import com.xdsty.api.controller.content.order.OrderPayPageContent;
 import com.xdsty.api.controller.content.order.OrderPlaceContent;
 import com.xdsty.api.controller.content.order.PayOrderContent;
@@ -14,12 +14,9 @@ import com.xdsty.api.controller.param.order.PayOrderParam;
 import com.xdsty.api.service.IntegralCalculateService;
 import com.xdsty.api.service.OrderCheckService;
 import com.xdsty.api.util.SessionUtil;
-import com.xdsty.orderclient.dto.OrderAddDto;
-import com.xdsty.orderclient.dto.OrderIdDto;
-import com.xdsty.orderclient.dto.OrderProductAddDto;
-import com.xdsty.orderclient.dto.OrderProductAdditionalDto;
-import com.xdsty.orderclient.dto.OrderValidDto;
+import com.xdsty.orderclient.dto.*;
 import com.xdsty.orderclient.enums.OrderStatusEnum;
+import com.xdsty.orderclient.re.OrderModuleRe;
 import com.xdsty.orderclient.re.OrderPayPageRe;
 import com.xdsty.orderclient.re.OrderValidRe;
 import com.xdsty.orderclient.service.OrderService;
@@ -29,12 +26,10 @@ import com.xdsty.txclient.service.PayOrderTransactionService;
 import javax.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import java.math.BigDecimal;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @PackageResult
@@ -152,6 +147,21 @@ public class OrderController {
 
         content.setSuccess(true);
         return content;
+    }
+
+    /**
+     * 获取订单模块
+     * @return
+     */
+    @GetMapping("modules")
+    public List<OrderModuleContent> getUserOrderModule() {
+        Long userId = SessionUtil.getUserId();
+        // 获取module
+        OrderModuleDto dto = new OrderModuleDto();
+        dto.setUserId(userId);
+        List<OrderModuleRe> moduleRes = orderService.getOrderModules(dto);
+
+        // 转化数据
     }
 
     private OrderAddDto convert2OrderAddDto(OrderAddParam param) {

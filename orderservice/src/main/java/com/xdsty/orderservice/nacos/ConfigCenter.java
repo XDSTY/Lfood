@@ -39,7 +39,7 @@ public class ConfigCenter implements ApplicationRunner {
         for (ConfigKeyEnum config : ConfigKeyEnum.values()) {
             ConfigManager.addConfigListener(config.dataId, config.groupId, (value) -> {
                 log.error("配置中心改动, dataId: {}, groupId: {}, 改动后值: {}", config.dataId, config.groupId, value);
-                setConfigKeyValue(config.dataId, config.groupId);
+                setConfigKeyValue(config.dataId, value);
             });
         }
     }

@@ -23,4 +23,11 @@ public interface UserAmountMapper {
      */
     int deductAmount(UserAmount amount);
 
+    /**
+     * 获取用户的余额
+     * @param userId
+     * @return
+     */
+    UserAmount getUserAmount(long userId);
+
 }

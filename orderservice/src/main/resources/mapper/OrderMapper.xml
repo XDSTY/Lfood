@@ -57,4 +57,13 @@
         FROM tb_order o
         WHERE o.user_id = #{userId} AND o.order_id = #{orderId}
     </select>
+    <select id="getOrderListByUserAndStatus" resultType="com.xdsty.orderservice.entity.Order">
+        SELECT o.order_id AS orderId,
+               o.status AS status
+        FROM tb_order o
+        WHERE o.user_id = #{userId} AND o.status IN
+        <foreach collection="statusList" item="status" separator="," open="(" close=")">
+            #{status}
+        </foreach>
+    </select>
 </mapper>

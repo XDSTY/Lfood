@@ -13,7 +13,7 @@
     <select id="getOneByUserId" resultType="com.xdsty.userservice.entity.UserIntegralRecord">
         SELECT
                t.id AS id,
-               t.user_id AS userId
+               t.integral AS integral
         FROM tb_user_integral_record t
         WHERE t.user_id = #{userId}
     </select>

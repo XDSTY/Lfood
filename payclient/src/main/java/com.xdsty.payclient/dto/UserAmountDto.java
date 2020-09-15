@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @author 张富华
  * @date 2020/9/15 18:07
  */
-public class UserIdDto implements Serializable {
+public class UserAmountDto implements Serializable {
 
     private Long userId;
 

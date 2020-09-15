@@ -20,6 +20,9 @@ import com.xdsty.api.util.Base64Util;
 import com.xdsty.api.util.RedisUtil;
 import com.xdsty.api.util.RequestUtil;
 import com.xdsty.api.util.SessionUtil;
+import com.xdsty.payclient.dto.UserAmountDto;
+import com.xdsty.payclient.re.UserAmountRe;
+import com.xdsty.payclient.service.PayService;
 import com.xdsty.userclient.dto.UserDetailDto;
 import com.xdsty.userclient.dto.UserIdDto;
 import com.xdsty.userclient.dto.UserLoginDto;
@@ -56,6 +59,9 @@ public class UserController {
 
     @DubboReference(version = "1.0")
     private UserService userService;
+
+    @DubboReference(version = "1.0")
+    private PayService payService;
 
     /**
      * 登录接口
@@ -226,7 +232,11 @@ public class UserController {
         content.setIntegral(integralRe.getIntegral());
 
         // 获取用户余额
-
+        UserAmountDto amountDto = new UserAmountDto();
+        amountDto.setUserId(userId);
+        UserAmountRe re = payService.getUserAmount(amountDto);
+        content.setAmount(re.getAmount());
+        return content;
     }
 
 }

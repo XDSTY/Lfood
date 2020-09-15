@@ -2,12 +2,16 @@ package com.xdsty.orderservice.service;
 
 import basecommon.util.PriceCalculateUtil;
 import com.xdsty.orderclient.dto.OrderIdDto;
+import com.xdsty.orderclient.dto.OrderModuleDto;
 import com.xdsty.orderclient.dto.OrderValidDto;
+import com.xdsty.orderclient.enums.OrderModuleEnum;
 import com.xdsty.orderclient.enums.OrderStatusEnum;
 import com.xdsty.orderclient.enums.OrderValidEnum;
+import com.xdsty.orderclient.re.OrderModuleRe;
 import com.xdsty.orderclient.re.OrderPayPageRe;
 import com.xdsty.orderclient.re.OrderValidRe;
 import com.xdsty.orderclient.service.OrderService;
+import com.xdsty.orderservice.common.Constant;
 import com.xdsty.orderservice.entity.Order;
 import com.xdsty.orderservice.entity.OrderAdditional;
 import com.xdsty.orderservice.entity.OrderProduct;
@@ -19,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -87,7 +92,69 @@ public class OrderServiceImpl implements OrderService {
         return re;
     }
 
-    public BigDecimal getOrderTotalPrice(Long orderId) {
+    @Override
+    public List<OrderModuleRe> getOrderModules(OrderModuleDto dto) {
+        Long userId = dto.getUserId();
+        // 获取代付款和待配送module
+        List<OrderModuleRe> orderModuleRes = getOrderWaitPayAndDeliveryModule(userId);
+        // 获取已完成和退款module
+        orderModuleRes.addAll(getFinishAndRefundModule());
+        return orderModuleRes;
+    }
+
+    /**
+     * 获取代付款和待配送module
+     * @param userId
+     * @return
+     */
+    private List<OrderModuleRe> getOrderWaitPayAndDeliveryModule(Long userId) {
+        List<OrderModuleRe> res = new ArrayList<>(4);
+        // 获取代付款和代配送的订单
+        List<Order> orders = orderMapper.getOrderListByUserAndStatus(userId, Constant.ORDER_MODULE_STATUS);
+        int waitPay = 0, waitDelivery = 0;
+        if(!CollectionUtils.isEmpty(orders)) {
+            // 计算等待付款和待配送的有多少
+            for(Order o : orders) {
+                if(o.getStatus().equals(OrderStatusEnum.WAIT_PAY.getStatus())) {
+                    waitPay ++;
+                } else {
+                    waitDelivery ++;
+                }
+            }
+        }
+        // 代付款module
+        OrderModuleRe waitPayModule = new OrderModuleRe();
+        waitPayModule.setModuleType(OrderModuleEnum.WAIT_PAY.getStatus());
+        waitPayModule.setNum(waitPay > 0 ? waitPay : null);
+        waitPayModule.setStatus(OrderStatusEnum.WAIT_PAY.getStatus());
+        res.add(waitPayModule);
+
+        // 代配送module
+        OrderModuleRe waitDeliveryModule = new OrderModuleRe();
+        waitDeliveryModule.setModuleType(OrderModuleEnum.WAIT_DELIVER.getStatus());
+        waitDeliveryModule.setNum(waitDelivery > 0 ? waitDelivery : null);
+        waitDeliveryModule.setStatus(OrderStatusEnum.SUCCESS.getStatus());
+        res.add(waitDeliveryModule);
+        return res;
+    }
+
+    private List<OrderModuleRe> getFinishAndRefundModule() {
+        List<OrderModuleRe> res = new ArrayList<>(2);
+        // 已完成module
+        OrderModuleRe finishModule = new OrderModuleRe();
+        finishModule.setModuleType(OrderModuleEnum.FINISH.getStatus());
+        finishModule.setStatus(OrderStatusEnum.FINISH.getStatus());
+        res.add(finishModule);
+
+        // 退款module
+        OrderModuleRe refundModule = new OrderModuleRe();
+        refundModule.setModuleType(OrderModuleEnum.REFUND.getStatus());
+        refundModule.setStatus(OrderStatusEnum.REFUND.getStatus());
+        res.add(refundModule);
+        return res;
+    }
+
+    private BigDecimal getOrderTotalPrice(Long orderId) {
         // 获取订单的商品和附加项价格信息
         List<OrderProduct> orderProducts = orderProductMapper.getOrderProductList(orderId);
         List<OrderAdditional> orderAdditionals = orderAdditionalMapper.getOrderAdditionals(orderId);
