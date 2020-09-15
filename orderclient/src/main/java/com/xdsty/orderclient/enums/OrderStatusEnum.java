@@ -16,8 +16,8 @@ public enum OrderStatusEnum {
     WAIT_PAY(2, "未付款"),
     PAY_FAIL(3, "付款失败"),
     SUCCESS(4, "付款成功"),
-    ORDER_OVERTIME(5, "超时未付款取消")
-    ;
+    ORDER_OVERTIME(5, "超时未付款取消"),
+    CANCELED(6, "取消");
 
     private Integer status;
 

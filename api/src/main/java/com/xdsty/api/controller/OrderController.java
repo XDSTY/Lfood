@@ -5,6 +5,7 @@ import basecommon.util.PriceCalculateUtil;
 import com.xdsty.api.config.annotation.PackageResult;
 import com.xdsty.api.controller.content.order.OrderPayPageContent;
 import com.xdsty.api.controller.content.order.OrderPlaceContent;
+import com.xdsty.api.controller.content.order.PayOrderContent;
 import com.xdsty.api.controller.param.order.OrderAddParam;
 import com.xdsty.api.controller.param.order.OrderPayPageParam;
 import com.xdsty.api.controller.param.order.OrderProductAdditionalParam;
@@ -17,8 +18,10 @@ import com.xdsty.orderclient.dto.OrderAddDto;
 import com.xdsty.orderclient.dto.OrderIdDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
 import com.xdsty.orderclient.dto.OrderProductAdditionalDto;
+import com.xdsty.orderclient.dto.OrderValidDto;
 import com.xdsty.orderclient.enums.OrderStatusEnum;
 import com.xdsty.orderclient.re.OrderPayPageRe;
+import com.xdsty.orderclient.re.OrderValidRe;
 import com.xdsty.orderclient.service.OrderService;
 import com.xdsty.txclient.dto.PayOrderDto;
 import com.xdsty.txclient.service.OrderTransactionService;
@@ -114,15 +117,24 @@ public class OrderController {
      * @param param
      */
     @PostMapping("payOrder")
-    public void payOrder(PayOrderParam param) {
+    public PayOrderContent payOrder(@RequestBody PayOrderParam param) {
         if(param.getOrderId() == null || param.getTotalPrice() == null) {
             throw new BusinessRuntimeException("入参错误");
         }
+
+        PayOrderContent content = new PayOrderContent();
+
         Long memberId = SessionUtil.getUserId();
-        // 从订单获取价格
-        BigDecimal orderPrice = orderService.getOrderTotalPrice(param.getOrderId());
-        if(!PriceCalculateUtil.equals(orderPrice, param.getTotalPrice())) {
-            throw new BusinessRuntimeException("订单价格变化，清重新支付");
+        // 校验订单是否未付款且订单状态正常
+        OrderValidDto validDto = new OrderValidDto();
+        validDto.setOrderId(param.getOrderId());
+        validDto.setTotalPrice(param.getTotalPrice());
+        validDto.setUserId(memberId);
+        OrderValidRe re = orderService.checkOrderValid(validDto);
+        if(re.getCode() != null) {
+            content.setSuccess(false);
+            content.setMsg(re.getMsg());
+            return content;
         }
 
         // 计算积分
@@ -137,6 +149,9 @@ public class OrderController {
         dto.setPayChannel(param.getPayChannel());
         dto.setIntegral(integral);
         payOrderTransactionService.payOrder(dto);
+
+        content.setSuccess(true);
+        return content;
     }
 
     private OrderAddDto convert2OrderAddDto(OrderAddParam param) {

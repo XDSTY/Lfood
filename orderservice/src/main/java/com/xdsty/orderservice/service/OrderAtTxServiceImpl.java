@@ -1,15 +1,14 @@
 package com.xdsty.orderservice.service;
 
 import basecommon.exception.BusinessRuntimeException;
-import com.sun.org.apache.xpath.internal.operations.Or;
 import com.xdsty.orderclient.dto.OrderAddDto;
 import com.xdsty.orderclient.dto.OrderPayDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
+import com.xdsty.orderclient.enums.OrderStatusEnum;
 import com.xdsty.orderclient.service.OrderAtTxService;
 import com.xdsty.orderservice.entity.Order;
 import com.xdsty.orderservice.entity.OrderProduct;
 import com.xdsty.orderservice.entity.UserIntegral;
-import com.xdsty.orderservice.entity.enums.OrderStatusEnum;
 import com.xdsty.orderservice.mapper.OrderMapper;
 import com.xdsty.orderservice.mapper.OrderProductMapper;
 import com.xdsty.orderservice.mapper.UserIntegralRecordMapper;
@@ -73,12 +72,12 @@ public class OrderAtTxServiceImpl implements OrderAtTxService {
         }
         // 判断订单状态
         Order selectOrder = orderMapper.getOrder(dto.getUserId(), dto.getOrderId());
-        if(!selectOrder.getStatus().equals(OrderStatusEnum.WAIT_PAY.status)) {
+        if(!selectOrder.getStatus().equals(OrderStatusEnum.WAIT_PAY.getStatus())) {
             throw new BusinessRuntimeException("重复付款");
         }
         Order order = new Order();
         order.setOrderId(dto.getOrderId());
-        order.setStatus(OrderStatusEnum.SUCCESS.status);
+        order.setStatus(OrderStatusEnum.SUCCESS.getStatus());
         // 修改订单状态
         int count = orderMapper.updateOrder(order);
         if(count < 1) {
@@ -102,7 +101,7 @@ public class OrderAtTxServiceImpl implements OrderAtTxService {
         order.setOrderId(orderId);
         order.setUserId(dto.getUserId());
         order.setTotalPrice(dto.getTotalPrice());
-        order.setStatus(OrderStatusEnum.WAIT_PAY.status);
+        order.setStatus(OrderStatusEnum.WAIT_PAY.getStatus());
         return order;
     }
 
