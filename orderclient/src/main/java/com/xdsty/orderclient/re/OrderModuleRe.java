@@ -10,22 +10,14 @@ public class OrderModuleRe implements Serializable {
     private Integer moduleType;
 
     /**
-     * 模块订单状态
-     */
-    private Integer status;
-
-    /**
      * 模块订单数量 已完成和退款不显示
      */
     private Integer num;
 
-    public Integer getModuleType() {
-        return moduleType;
-    }
-
-    public void setModuleType(Integer moduleType) {
-        this.moduleType = moduleType;
-    }
+    /**
+     * 订单状态
+     */
+    private Integer status;
 
     public Integer getStatus() {
         return status;
@@ -33,6 +25,14 @@ public class OrderModuleRe implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getModuleType() {
+        return moduleType;
+    }
+
+    public void setModuleType(Integer moduleType) {
+        this.moduleType = moduleType;
     }
 
     public Integer getNum() {

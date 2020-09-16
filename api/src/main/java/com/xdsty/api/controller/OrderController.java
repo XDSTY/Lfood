@@ -2,10 +2,13 @@ package com.xdsty.api.controller;
 
 import basecommon.exception.BusinessRuntimeException;
 import com.xdsty.api.config.annotation.PackageResult;
-import com.xdsty.api.controller.content.OrderModuleContent;
+import com.xdsty.api.config.nacos.ConfigCenter;
+import com.xdsty.api.config.nacos.ConfigKeyEnum;
+import com.xdsty.api.controller.content.order.OrderModuleContent;
 import com.xdsty.api.controller.content.order.OrderPayPageContent;
 import com.xdsty.api.controller.content.order.OrderPlaceContent;
 import com.xdsty.api.controller.content.order.PayOrderContent;
+import com.xdsty.api.controller.entity.OrderModule;
 import com.xdsty.api.controller.param.order.OrderAddParam;
 import com.xdsty.api.controller.param.order.OrderPayPageParam;
 import com.xdsty.api.controller.param.order.OrderProductAdditionalParam;
@@ -13,6 +16,7 @@ import com.xdsty.api.controller.param.order.OrderProductParam;
 import com.xdsty.api.controller.param.order.PayOrderParam;
 import com.xdsty.api.service.IntegralCalculateService;
 import com.xdsty.api.service.OrderCheckService;
+import com.xdsty.api.util.JsonUtil;
 import com.xdsty.api.util.SessionUtil;
 import com.xdsty.orderclient.dto.*;
 import com.xdsty.orderclient.enums.OrderStatusEnum;
@@ -28,6 +32,8 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -156,12 +162,35 @@ public class OrderController {
     @GetMapping("modules")
     public List<OrderModuleContent> getUserOrderModule() {
         Long userId = SessionUtil.getUserId();
+        List<OrderModuleContent> contents = new ArrayList<>();
         // 获取module
-        OrderModuleDto dto = new OrderModuleDto();
-        dto.setUserId(userId);
-        List<OrderModuleRe> moduleRes = orderService.getOrderModules(dto);
+        List<OrderModule> modules = JsonUtil.parseArrJson(ConfigCenter.getConfigValue(ConfigKeyEnum.ORDER_MODULE_LIST.dataId), OrderModule.class);
+        if(!CollectionUtils.isEmpty(modules)) {
+            // 对module进行排序
+            modules = modules.stream().sorted(Comparator.comparingInt(OrderModule::getModuleOrder)).collect(Collectors.toList());
 
-        // 转化数据
+            // 筛选出需要查询数量的module并获取对应的数量
+            List<Integer> showNumModuleTypes = modules.stream().filter(OrderModule::isShowNum).map(OrderModule::getModuleType).collect(Collectors.toList());
+            OrderModuleDto dto = new OrderModuleDto();
+            dto.setUserId(userId);
+            dto.setModuleType(showNumModuleTypes);
+            List<OrderModuleRe> moduleNums = orderService.getOrderModules(dto);
+
+            for(OrderModule orderModule : modules) {
+                OrderModuleContent moduleContent = new OrderModuleContent();
+                moduleContent.setStatus(orderModule.getStatus());
+                moduleContent.setIcon(orderModule.getIcon());
+                moduleContent.setModuleName(orderModule.getModuleName());
+                moduleContent.setModuleType(orderModule.getModuleType());
+                moduleContent.setShowNum(orderModule.isShowNum());
+                if(moduleContent.isShowNum()) {
+                    Integer num = moduleNums.stream().filter(e -> e.getStatus().equals(moduleContent.getStatus())).findFirst().get().getNum();
+                    moduleContent.setNum(num);
+                }
+                contents.add(moduleContent);
+            }
+        }
+        return contents;
     }
 
     private OrderAddDto convert2OrderAddDto(OrderAddParam param) {

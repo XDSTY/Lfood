@@ -12,7 +12,12 @@ public enum ConfigKeyEnum {
     /**
      * 多少金额 = 1积分
      */
-    INTEGRAL_CONFIG("integral.config", Constant.CONF_CENTER_GROUPID);
+    INTEGRAL_CONFIG("integral.config", Constant.CONF_CENTER_GROUPID),
+
+    /**
+     * 订单模块
+     */
+    ORDER_MODULE_LIST("order.modules.list", Constant.CONF_CENTER_GROUPID);
 
     public String dataId;
 

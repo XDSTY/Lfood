@@ -25,7 +25,9 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @DubboService(version = "1.0")
 @Service
@@ -94,63 +96,45 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderModuleRe> getOrderModules(OrderModuleDto dto) {
-        Long userId = dto.getUserId();
-        // 获取代付款和待配送module
-        List<OrderModuleRe> orderModuleRes = getOrderWaitPayAndDeliveryModule(userId);
-        // 获取已完成和退款module
-        orderModuleRes.addAll(getFinishAndRefundModule());
-        return orderModuleRes;
+        // 根据moduleType获取需要查询的订单状态
+        List<OrderModuleRe> moduleRes = initByModuleType(dto.getModuleType());
+        // 将模块分成status -> module，方便统计各个订单数量
+        Map<Integer, OrderModuleRe> moduleReMap = moduleRes.stream().collect(Collectors.toMap(OrderModuleRe::getStatus, e -> e));
+        // 获取需要查询的订单状态
+        List<Integer> statusList = moduleRes.stream().map(OrderModuleRe::getStatus).collect(Collectors.toList());
+        List<Order> orders = orderMapper.getOrderListByUserAndStatus(dto.getUserId(), statusList);
+        // 统计各个状态订单的数量
+        calculateOrderNum(orders, moduleReMap);
+        return moduleRes;
     }
 
     /**
-     * 获取代付款和待配送module
-     * @param userId
-     * @return
+     * 统计各个状态订单的数量
+     * @param orders
+     * @param moduleReMap
      */
-    private List<OrderModuleRe> getOrderWaitPayAndDeliveryModule(Long userId) {
-        List<OrderModuleRe> res = new ArrayList<>(4);
-        // 获取代付款和代配送的订单
-        List<Order> orders = orderMapper.getOrderListByUserAndStatus(userId, Constant.ORDER_MODULE_STATUS);
-        int waitPay = 0, waitDelivery = 0;
-        if(!CollectionUtils.isEmpty(orders)) {
-            // 计算等待付款和待配送的有多少
-            for(Order o : orders) {
-                if(o.getStatus().equals(OrderStatusEnum.WAIT_PAY.getStatus())) {
-                    waitPay ++;
-                } else {
-                    waitDelivery ++;
-                }
-            }
+    private void calculateOrderNum(List<Order> orders, Map<Integer, OrderModuleRe> moduleReMap) {
+        for(Order order : orders) {
+            OrderModuleRe re = moduleReMap.get(order.getStatus());
+            re.setNum(re.getNum() + 1);
         }
-        // 代付款module
-        OrderModuleRe waitPayModule = new OrderModuleRe();
-        waitPayModule.setModuleType(OrderModuleEnum.WAIT_PAY.getStatus());
-        waitPayModule.setNum(waitPay > 0 ? waitPay : null);
-        waitPayModule.setStatus(OrderStatusEnum.WAIT_PAY.getStatus());
-        res.add(waitPayModule);
-
-        // 代配送module
-        OrderModuleRe waitDeliveryModule = new OrderModuleRe();
-        waitDeliveryModule.setModuleType(OrderModuleEnum.WAIT_DELIVER.getStatus());
-        waitDeliveryModule.setNum(waitDelivery > 0 ? waitDelivery : null);
-        waitDeliveryModule.setStatus(OrderStatusEnum.SUCCESS.getStatus());
-        res.add(waitDeliveryModule);
-        return res;
     }
 
-    private List<OrderModuleRe> getFinishAndRefundModule() {
-        List<OrderModuleRe> res = new ArrayList<>(2);
-        // 已完成module
-        OrderModuleRe finishModule = new OrderModuleRe();
-        finishModule.setModuleType(OrderModuleEnum.FINISH.getStatus());
-        finishModule.setStatus(OrderStatusEnum.FINISH.getStatus());
-        res.add(finishModule);
-
-        // 退款module
-        OrderModuleRe refundModule = new OrderModuleRe();
-        refundModule.setModuleType(OrderModuleEnum.REFUND.getStatus());
-        refundModule.setStatus(OrderStatusEnum.REFUND.getStatus());
-        res.add(refundModule);
+    /**
+     * 从枚举中获取各个模块
+     * @param moduleTypes
+     * @return
+     */
+    private List<OrderModuleRe> initByModuleType(List<Integer> moduleTypes) {
+        List<OrderModuleRe> res = new ArrayList<>(moduleTypes.size());
+        moduleTypes.forEach(e -> {
+            OrderModuleEnum moduleEnum = OrderModuleEnum.getEnumByType(e);
+            OrderModuleRe re = new OrderModuleRe();
+            re.setModuleType(e);
+            re.setStatus(moduleEnum.getStatus());
+            re.setNum(0);
+            res.add(re);
+        });
         return res;
     }
 
