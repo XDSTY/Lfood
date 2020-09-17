@@ -25,4 +25,6 @@ public class OrderListProductContent {
      * 商品数量
      */
     private Integer productNum;
+
+    private String thumbnail;
 }

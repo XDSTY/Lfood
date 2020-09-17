@@ -46,6 +46,6 @@ public interface OrderMapper {
      * @param orderQuery
      * @return
      */
-    List<Order> getOrderPage(@Param("query") OrderQuery orderQuery);
+    List<Order> getOrderPage(OrderQuery orderQuery);
 
 }

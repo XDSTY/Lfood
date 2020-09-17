@@ -213,7 +213,7 @@ public class OrderController {
      * @param param
      * @return
      */
-    @PostMapping("/list")
+    @PostMapping("list")
     public List<OrderListInfoContent> getProductList(@RequestBody OrderListQueryParam param) {
         Long userId = SessionUtil.getUserId();
         // 查询订单
@@ -264,8 +264,11 @@ public class OrderController {
                 productContent.setProductId(productRe.getProductId());
                 productContent.setProductNum(productRe.getNum());
                 productContent.setTotalPrice(productRe.getTotalPrice());
+                // 商品服务获取到的商品信息
+                OrderProductRe orderProductRe = productReMap.get(productRe.getProductId());
+                productContent.setThumbnail(orderProductRe.getThumbnail());
                 // 构建商品名
-                StringBuilder productName = new StringBuilder(productReMap.get(productRe.getProductId()).getProductName());
+                StringBuilder productName = new StringBuilder(orderProductRe.getProductName());
                 if(!CollectionUtils.isEmpty(productRe.getAdditionalIds())) {
                     productName.append("(");
                     productRe.getAdditionalIds().forEach(e -> productName.append(additionalItemReMap.get(e).getName()).append(","));

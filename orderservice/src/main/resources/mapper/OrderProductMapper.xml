@@ -18,9 +18,11 @@
     </select>
     <select id="getOrderProductByOrderSet" resultType="com.xdsty.orderservice.entity.OrderProduct">
         SELECT op.id AS id,
+               op.order_id AS orderId,
                op.product_price productPrice,
                op.product_num productNum,
-               op.total_price totalPrice
+               op.total_price totalPrice,
+               op.product_id AS productId
         FROM tb_order_product op
         WHERE op.order_id IN 
         <foreach collection="orderIds" item="id" separator="," open="(" close=")">

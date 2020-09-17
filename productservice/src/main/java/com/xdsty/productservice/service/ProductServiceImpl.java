@@ -178,7 +178,7 @@ public class ProductServiceImpl implements ProductService {
         if(!CollectionUtils.isEmpty(productIds)) {
             return products.stream().map(e -> {
                 OrderProductRe re = new OrderProductRe();
-                re.setProductId(e.getProductId());
+                re.setProductId(e.getProductExtendId());
                 re.setProductName(e.getProductName());
                 re.setThumbnail(e.getThumbnail());
                 return re;

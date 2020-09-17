@@ -71,7 +71,7 @@
                o.total_price AS totalPrice,
                o.status AS status
         FROM tb_order o
-        WHERE user_id = #{userId}
+        WHERE user_id = #{userId} AND status = #{status}
         LIMIT #{offset}, #{pageSize}
     </select>
 </mapper>
