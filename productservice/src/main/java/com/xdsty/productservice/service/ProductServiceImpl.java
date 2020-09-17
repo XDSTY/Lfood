@@ -106,11 +106,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<AdditionalItemRe> getCartAdditionalItemList(List<Long> itemIds) {
+    public List<AdditionalItemRe> getAdditionalItemList(AdditionalListDto dto) {
+        List<Long> itemIds = dto.getItemIds();
         if (CollectionUtils.isEmpty(itemIds)) {
             return Lists.newArrayList();
         }
-        List<AdditionalItem> items = productMapper.selectAdditionalItemByIds(itemIds);
+        List<AdditionalItem> items = productMapper.selectAdditionalItemByIds(itemIds, dto.isValid());
         if (CollectionUtils.isEmpty(itemIds)) {
             return Lists.newArrayList();
         }
@@ -160,7 +161,7 @@ public class ProductServiceImpl implements ProductService {
             return;
         }
         List<Long> additionalIds = productAdditionals.stream().map(OrderProductAdditionalDto::getAdditionalId).collect(Collectors.toList());
-        List<AdditionalItem> additionalItems = productMapper.selectAdditionalItemByIds(additionalIds);
+        List<AdditionalItem> additionalItems = productMapper.selectAdditionalItemByIds(additionalIds, true);
         if(additionalIds.size() != additionalItems.size()) {
             throw new BusinessRuntimeException("商品的附加被下架，请重新下单");
         }
@@ -169,5 +170,20 @@ public class ProductServiceImpl implements ProductService {
                 throw new BusinessRuntimeException("商品的附加项价格发生变化，请重新下单");
             }
         }
+    }
+
+    @Override
+    public List<OrderProductRe> getOrderProducts(List<Long> productIds) {
+        List<Product> products = productMapper.selectOrderProductListByIds(productIds);
+        if(!CollectionUtils.isEmpty(productIds)) {
+            return products.stream().map(e -> {
+                OrderProductRe re = new OrderProductRe();
+                re.setProductId(e.getProductId());
+                re.setProductName(e.getProductName());
+                re.setThumbnail(e.getThumbnail());
+                return re;
+            }).collect(Collectors.toList());
+        }
+        return Lists.newArrayList();
     }
 }

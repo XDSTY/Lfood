@@ -68,9 +68,10 @@ public interface ProductMapper {
      * 根据id集合查询附加项
      *
      * @param itemIds id列表
+     * @param valid 是否只查询有效的记录
      * @return
      */
-    List<AdditionalItem> selectAdditionalItemByIds(@Param("itemIds") List<Long> itemIds);
+    List<AdditionalItem> selectAdditionalItemByIds(@Param("itemIds") List<Long> itemIds, @Param("valid") boolean valid);
 
     /**
      * 检查商品是否正常 正常则返回商品id
@@ -87,5 +88,13 @@ public interface ProductMapper {
      * @return
      */
     Integer selectValidAdditionalCount(@Param("itemIds") List<Long> itemIds);
+
+    /**
+     * 根据id集合查询商品列表，不校验商品状态
+     *
+     * @param productIds id集合
+     * @return
+     */
+    List<Product> selectOrderProductListByIds(@Param("productIds") List<Long> productIds);
 
 }

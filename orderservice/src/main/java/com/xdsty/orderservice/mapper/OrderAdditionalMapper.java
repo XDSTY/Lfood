@@ -23,4 +23,11 @@ public interface OrderAdditionalMapper {
      */
     List<OrderAdditional> getOrderAdditionals(Long orderId);
 
+    /**
+     * 根据订单集合获取订单商品附加
+     * @param orderIds
+     * @return
+     */
+    List<OrderAdditional> getOrderAdditionalByOrderSet(@Param("orderIds") List<Long> orderIds);
+
 }

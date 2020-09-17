@@ -1,29 +1,36 @@
 package com.xdsty.orderservice.service;
 
+import basecommon.util.PageUtil;
 import basecommon.util.PriceCalculateUtil;
+import com.google.common.collect.Lists;
 import com.xdsty.orderclient.dto.OrderIdDto;
+import com.xdsty.orderclient.dto.OrderListQueryDto;
 import com.xdsty.orderclient.dto.OrderModuleDto;
 import com.xdsty.orderclient.dto.OrderValidDto;
 import com.xdsty.orderclient.enums.OrderModuleEnum;
 import com.xdsty.orderclient.enums.OrderStatusEnum;
 import com.xdsty.orderclient.enums.OrderValidEnum;
+import com.xdsty.orderclient.re.OrderListProductRe;
+import com.xdsty.orderclient.re.OrderListRe;
 import com.xdsty.orderclient.re.OrderModuleRe;
 import com.xdsty.orderclient.re.OrderPayPageRe;
 import com.xdsty.orderclient.re.OrderValidRe;
 import com.xdsty.orderclient.service.OrderService;
-import com.xdsty.orderservice.common.Constant;
 import com.xdsty.orderservice.entity.Order;
 import com.xdsty.orderservice.entity.OrderAdditional;
 import com.xdsty.orderservice.entity.OrderProduct;
+import com.xdsty.orderservice.entity.OrderQuery;
 import com.xdsty.orderservice.mapper.OrderAdditionalMapper;
 import com.xdsty.orderservice.mapper.OrderMapper;
 import com.xdsty.orderservice.mapper.OrderProductMapper;
+import javax.annotation.Resource;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -33,17 +40,14 @@ import java.util.stream.Collectors;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    @Resource
     private OrderProductMapper orderProductMapper;
 
-    private OrderAdditionalMapper orderAdditionalMapper;
-
+    @Resource
     private OrderMapper orderMapper;
 
-    public OrderServiceImpl(OrderProductMapper orderProductMapper, OrderAdditionalMapper orderAdditionalMapper, OrderMapper orderMapper) {
-        this.orderProductMapper = orderProductMapper;
-        this.orderAdditionalMapper = orderAdditionalMapper;
-        this.orderMapper = orderMapper;
-    }
+    @Resource
+    private OrderAdditionalMapper orderAdditionalMapper;
 
     @Override
     public OrderPayPageRe getOrderPayInfo(OrderIdDto dto) {
@@ -108,6 +112,61 @@ public class OrderServiceImpl implements OrderService {
         return moduleRes;
     }
 
+    @Override
+    public List<OrderListRe> getOrderList(OrderListQueryDto dto) {
+        // 获取查询参数
+        OrderQuery orderQuery = new OrderQuery();
+        orderQuery.setUserId(dto.getUserId());
+        orderQuery.setStatus(dto.getStatus());
+        PageUtil.initPageInfo(orderQuery, dto);
+
+        // 获取对应订单
+        List<Order> orders = orderMapper.getOrderPage(orderQuery);
+        if(CollectionUtils.isEmpty(orders)) {
+            return Lists.newArrayList();
+        }
+        List<OrderListRe> res = new ArrayList<>(orders.size());
+
+        // 根据订单获取订单中商品和商品价格
+        List<Long> orderIds = orders.stream().map(Order::getOrderId).collect(Collectors.toList());
+        List<OrderProduct> orderProducts = orderProductMapper.getOrderProductByOrderSet(orderIds);
+
+        // 根据订单id获取订单商品的附加
+        List<OrderAdditional> orderAdditionals = orderAdditionalMapper.getOrderAdditionalByOrderSet(orderIds);
+        // orderProductId --> additionalIds
+        Map<Long, List<OrderAdditional>> additionalMap = new HashMap<>(8);
+        if(!CollectionUtils.isEmpty(orderAdditionals)) {
+            additionalMap = orderAdditionals.stream().collect(Collectors.groupingBy(OrderAdditional::getOrderProductId, Collectors.toList()));
+        }
+
+        // 组合订单和订单商品以及商品的附加
+        Map<Long, List<OrderProduct>> orderProductMap = orderProducts.stream()
+                .collect(Collectors.groupingBy(OrderProduct::getOrderId, Collectors.toList()));
+        for(Order order : orders) {
+            OrderListRe re = new OrderListRe();
+            re.setOrderId(order.getOrderId());
+            re.setStatus(order.getStatus());
+            re.setTotalPrice(order.getTotalPrice());
+            // 订单下的商品
+            Map<Long, List<OrderAdditional>> finalAdditionalMap = additionalMap;
+            List<OrderListProductRe> productRes = orderProductMap.get(order.getOrderId()).stream().map(e -> {
+                OrderListProductRe productRe = new OrderListProductRe();
+                productRe.setTotalPrice(e.getTotalPrice());
+                productRe.setNum(e.getProductNum());
+                productRe.setProductId(e.getProductId());
+                // 获取商品的附加
+                List<OrderAdditional> additionals = finalAdditionalMap.get(e.getId());
+                if(!CollectionUtils.isEmpty(additionals)) {
+                    productRe.setAdditionalIds(additionals.stream().map(OrderAdditional::getAdditionalId).collect(Collectors.toList()));
+                }
+                return productRe;
+            }).collect(Collectors.toList());
+            re.setProducts(productRes);
+            res.add(re);
+        }
+        return res;
+    }
+
     /**
      * 统计各个状态订单的数量
      * @param orders
@@ -141,30 +200,12 @@ public class OrderServiceImpl implements OrderService {
     private BigDecimal getOrderTotalPrice(Long orderId) {
         // 获取订单的商品和附加项价格信息
         List<OrderProduct> orderProducts = orderProductMapper.getOrderProductList(orderId);
-        List<OrderAdditional> orderAdditionals = orderAdditionalMapper.getOrderAdditionals(orderId);
         BigDecimal totalPrice = new BigDecimal("0");
         // 计算商品的价格
         for (OrderProduct orderProduct : orderProducts) {
-            totalPrice = PriceCalculateUtil.add(totalPrice, PriceCalculateUtil.multiply(orderProduct.getProductPrice(), orderProduct.getProductNum()));
-        }
-        if(!CollectionUtils.isEmpty(orderAdditionals)) {
-            for (OrderAdditional orderAdditional : orderAdditionals) {
-                // 单个商品下的附加项价格
-                BigDecimal orderAddItemPrice = PriceCalculateUtil.multiply(orderAdditional.getNum(), orderAdditional.getPrice());
-                // 计算多个商品附加项价格
-                Integer productNum = getProductNum(orderProducts, orderAdditional.getOrderProductId());
-                orderAddItemPrice = PriceCalculateUtil.multiply(productNum, orderAddItemPrice);
-                totalPrice = PriceCalculateUtil.add(totalPrice, orderAddItemPrice);
-            }
+            totalPrice = PriceCalculateUtil.add(totalPrice, PriceCalculateUtil.multiply(orderProduct.getTotalPrice(), orderProduct.getProductNum()));
         }
         return totalPrice;
     }
 
-    private Integer getProductNum(List<OrderProduct> orderProducts, long orderProductId) {
-        OrderProduct orderProduct = orderProducts.stream().filter(o -> orderProductId == o.getId()).findFirst().orElse(null);
-        if(orderProduct != null) {
-            return orderProduct.getProductNum();
-        }
-        return null;
-    }
 }

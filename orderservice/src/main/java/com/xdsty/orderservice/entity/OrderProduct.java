@@ -7,14 +7,34 @@ public class OrderProduct {
 
     private Long id;
 
+    /**
+     * 订单id
+     */
     private Long orderId;
 
+    /**
+     * 商品id
+     */
     private Long productId;
 
+    /**
+     * 商品数量
+     */
     private Integer productNum;
 
+    /**
+     * 商品单价
+     */
     private BigDecimal productPrice;
 
+    /**
+     * 商品+附加项价格
+     */
+    private BigDecimal totalPrice;
+
+    /**
+     * 商品附加项
+     */
     private List<OrderAdditional> orderAdditionals;
 
     public Long getId() {
@@ -51,6 +71,14 @@ public class OrderProduct {
 
     public BigDecimal getProductPrice() {
         return productPrice;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public void setProductPrice(BigDecimal productPrice) {

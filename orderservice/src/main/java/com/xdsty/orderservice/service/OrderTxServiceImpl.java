@@ -1,6 +1,7 @@
 package com.xdsty.orderservice.service;
 
 import basecommon.exception.BusinessRuntimeException;
+import basecommon.util.PriceCalculateUtil;
 import com.xdsty.orderclient.dto.OrderAddDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
 import com.xdsty.orderclient.dto.OrderProductAdditionalDto;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -143,10 +145,17 @@ public class OrderTxServiceImpl implements OrderTxService {
         product.setProductId(dto.getProductId());
         product.setProductNum(dto.getProductNum());
         product.setProductPrice(dto.getProductPrice());
+        BigDecimal totoalPrice = product.getProductPrice();
         if(!CollectionUtils.isEmpty(dto.getOrderProductAdditionals())) {
-            List<OrderAdditional> orderAdditionals = dto.getOrderProductAdditionals().stream().map(e -> convert2OrderAdditional(e, orderId)).collect(Collectors.toList());
+            // 统计商品+附加项的总价
+            List<OrderAdditional> orderAdditionals = new ArrayList<>(dto.getOrderProductAdditionals().size());
+            for(OrderProductAdditionalDto additionalDto : dto.getOrderProductAdditionals()) {
+                orderAdditionals.add(convert2OrderAdditional(additionalDto, orderId));
+                totoalPrice = PriceCalculateUtil.add(totoalPrice, PriceCalculateUtil.multiply(additionalDto.getNum(), additionalDto.getPrice()));
+            }
             product.setOrderAdditionals(orderAdditionals);
         }
+        product.setTotalPrice(totoalPrice);
         return product;
     }
 

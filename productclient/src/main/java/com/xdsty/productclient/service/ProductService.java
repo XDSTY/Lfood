@@ -1,6 +1,7 @@
 package com.xdsty.productclient.service;
 
 
+import com.xdsty.productclient.dto.AdditionalListDto;
 import com.xdsty.productclient.dto.OrderProductDto;
 import com.xdsty.productclient.dto.ProductIdDto;
 import com.xdsty.productclient.dto.ProductQueryDto;
@@ -32,7 +33,7 @@ public interface ProductService {
     List<ProductListRe> getProductList(ProductQueryDto dto);
 
     /**
-     * 根据商品id列表获取商品信息列表
+     * 根据商品id列表获取商品信息列表 只返回正常状态的附加项
      *
      * @param productIdList 商品id列表
      * @return 商品信息列表
@@ -40,12 +41,12 @@ public interface ProductService {
     List<CartItemProductRe> getCartItemProductList(List<Long> productIdList);
 
     /**
-     * 获取购物车附加
+     * 根据附加项id获取附加项 只返回正常状态的附加项
      *
-     * @param itemIds id列表
+     * @param dto id列表
      * @return
      */
-    List<AdditionalItemRe> getCartAdditionalItemList(List<Long> itemIds);
+    List<AdditionalItemRe> getAdditionalItemList(AdditionalListDto dto);
 
     /**
      * 检查商品是否正常
@@ -61,4 +62,13 @@ public interface ProductService {
      * @return
      */
     void checkOrderProduct(List<OrderProductDto> orderProductDtos);
+
+    /**
+     * 获取订单商品信息，下架的商品的信息也会获取到
+     * @param productIds
+     * @return
+     */
+    List<OrderProductRe> getOrderProducts(List<Long> productIds);
+
+
 }

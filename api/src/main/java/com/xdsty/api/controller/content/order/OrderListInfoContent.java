@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class OrderListInfoRe {
+public class OrderListInfoContent {
 
     /**
      * 订单号
@@ -21,7 +21,12 @@ public class OrderListInfoRe {
     private BigDecimal totalPrice;
 
     /**
+     * 订单状态
+     */
+    private Integer status;
+
+    /**
      * 订单中商品
      */
-    private List<OrderListProductRe> orderListProductRes;
+    private List<OrderListProductContent> products;
 }

@@ -24,7 +24,6 @@
         <junit.version>4.12</junit.version>
         <curator.version>4.3.0</curator.version>
         <basecommon.version>1.0-SNAPSHOT</basecommon.version>
-        <productclient.version>1.0-SNAPSHOT</productclient.version>
         <txclient.version>1.0-SNAPSHOT</txclient.version>
         <nacos.starter.version>0.2.7</nacos.starter.version>
         <nacos.discovery.version>0.2.7</nacos.discovery.version>

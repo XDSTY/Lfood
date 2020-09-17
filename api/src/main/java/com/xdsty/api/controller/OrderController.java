@@ -1,15 +1,20 @@
 package com.xdsty.api.controller;
 
 import basecommon.exception.BusinessRuntimeException;
+import basecommon.util.PageUtil;
+import com.google.common.collect.Lists;
 import com.xdsty.api.config.annotation.PackageResult;
 import com.xdsty.api.config.nacos.ConfigCenter;
 import com.xdsty.api.config.nacos.ConfigKeyEnum;
+import com.xdsty.api.controller.content.order.OrderListInfoContent;
+import com.xdsty.api.controller.content.order.OrderListProductContent;
 import com.xdsty.api.controller.content.order.OrderModuleContent;
 import com.xdsty.api.controller.content.order.OrderPayPageContent;
 import com.xdsty.api.controller.content.order.OrderPlaceContent;
 import com.xdsty.api.controller.content.order.PayOrderContent;
 import com.xdsty.api.controller.entity.OrderModule;
 import com.xdsty.api.controller.param.order.OrderAddParam;
+import com.xdsty.api.controller.param.order.OrderListQueryParam;
 import com.xdsty.api.controller.param.order.OrderPayPageParam;
 import com.xdsty.api.controller.param.order.OrderProductAdditionalParam;
 import com.xdsty.api.controller.param.order.OrderProductParam;
@@ -20,10 +25,16 @@ import com.xdsty.api.util.JsonUtil;
 import com.xdsty.api.util.SessionUtil;
 import com.xdsty.orderclient.dto.*;
 import com.xdsty.orderclient.enums.OrderStatusEnum;
+import com.xdsty.orderclient.re.OrderListProductRe;
+import com.xdsty.orderclient.re.OrderListRe;
 import com.xdsty.orderclient.re.OrderModuleRe;
 import com.xdsty.orderclient.re.OrderPayPageRe;
 import com.xdsty.orderclient.re.OrderValidRe;
 import com.xdsty.orderclient.service.OrderService;
+import com.xdsty.productclient.dto.AdditionalListDto;
+import com.xdsty.productclient.re.AdditionalItemRe;
+import com.xdsty.productclient.re.OrderProductRe;
+import com.xdsty.productclient.service.ProductService;
 import com.xdsty.txclient.dto.PayOrderDto;
 import com.xdsty.txclient.service.OrderTransactionService;
 import com.xdsty.txclient.service.PayOrderTransactionService;
@@ -36,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @PackageResult
@@ -51,6 +63,9 @@ public class OrderController {
 
     @DubboReference(version = "1.0", retries = 0)
     private PayOrderTransactionService payOrderTransactionService;
+
+    @DubboReference(version = "1.0", retries = 0)
+    private ProductService productService;
 
     @Resource
     private IntegralCalculateService integralCalculateService;
@@ -191,6 +206,78 @@ public class OrderController {
             }
         }
         return contents;
+    }
+
+    /**
+     * 获取订单列表
+     * @param param
+     * @return
+     */
+    @PostMapping("/list")
+    public List<OrderListInfoContent> getProductList(@RequestBody OrderListQueryParam param) {
+        Long userId = SessionUtil.getUserId();
+        // 查询订单
+        OrderListQueryDto queryDto = new OrderListQueryDto();
+        PageUtil.initPageInfo(queryDto, param);
+        queryDto.setUserId(userId);
+        queryDto.setStatus(param.getStatus());
+        List<OrderListRe> orderList = orderService.getOrderList(queryDto);
+        if(CollectionUtils.isEmpty(orderList)) {
+            return Lists.newArrayList();
+        }
+
+        // 查询订单下的商品信息
+        List<OrderListProductRe> orderListProductRes = orderList.stream().flatMap(e -> e.getProducts().stream()).collect(Collectors.toList());
+        List<Long> productIds = orderListProductRes.stream().map(OrderListProductRe::getProductId).collect(Collectors.toList());
+        List<OrderProductRe> productRes = productService.getOrderProducts(productIds);
+
+        // 查询订单商品下的附加项信息
+        List<Long> additionalIds = orderListProductRes.stream()
+                .filter(e -> !CollectionUtils.isEmpty(e.getAdditionalIds()))
+                .flatMap(e -> e.getAdditionalIds().stream()).collect(Collectors.toList());
+        List<AdditionalItemRe> additionalItemRes = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(additionalIds)) {
+            AdditionalListDto additionalListDto = new AdditionalListDto();
+            additionalListDto.setItemIds(additionalIds);
+            additionalListDto.setValid(false);
+            additionalItemRes = productService.getAdditionalItemList(additionalListDto);
+        }
+
+        // 组装数据
+        return assemblyOrderInfo(orderList, productRes, additionalItemRes);
+    }
+
+    private List<OrderListInfoContent> assemblyOrderInfo(List<OrderListRe> orderList, List<OrderProductRe> productRes, List<AdditionalItemRe> additionalItemRes) {
+        List<OrderListInfoContent> orderListContents = new ArrayList<>(orderList.size());
+        // 将数据改为map形式
+        Map<Long, OrderProductRe> productReMap = productRes.stream().collect(Collectors.toMap(OrderProductRe::getProductId, e -> e));
+        Map<Long, AdditionalItemRe> additionalItemReMap = additionalItemRes.stream().collect(Collectors.toMap(AdditionalItemRe::getId, e -> e));
+        for(OrderListRe order : orderList) {
+            OrderListInfoContent content = new OrderListInfoContent();
+            content.setOrderId(order.getOrderId());
+            content.setStatus(order.getStatus());
+            content.setTotalPrice(order.getTotalPrice());
+            List<OrderListProductContent> productContents = new ArrayList<>(order.getProducts().size());
+            // 组装商品
+            for(OrderListProductRe productRe : order.getProducts()) {
+                OrderListProductContent productContent = new OrderListProductContent();
+                productContent.setProductId(productRe.getProductId());
+                productContent.setProductNum(productRe.getNum());
+                productContent.setTotalPrice(productRe.getTotalPrice());
+                // 构建商品名
+                StringBuilder productName = new StringBuilder(productReMap.get(productRe.getProductId()).getProductName());
+                if(!CollectionUtils.isEmpty(productRe.getAdditionalIds())) {
+                    productName.append("(");
+                    productRe.getAdditionalIds().forEach(e -> productName.append(additionalItemReMap.get(e).getName()).append(","));
+                    productName.setCharAt(productName.length() - 1, ')');
+                }
+                productContent.setProductName(productName.toString());
+                productContents.add(productContent);
+            }
+            content.setProducts(productContents);
+            orderListContents.add(content);
+        }
+        return orderListContents;
     }
 
     private OrderAddDto convert2OrderAddDto(OrderAddParam param) {

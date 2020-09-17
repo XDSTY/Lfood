@@ -61,6 +61,9 @@
         <foreach collection="itemIds" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
+        <if test="valid = true">
+            AND pa.status = 1
+        </if>
         ORDER BY pa.id
     </select>
     <select id="selectValidProduct" resultType="java.lang.Long">
@@ -76,5 +79,17 @@
         <foreach collection="itemIds" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
+    </select>
+    <select id="selectOrderProductListByIds" resultType="com.xdsty.productservice.entity.Product">
+        SELECT pe.id AS productExtendId,
+        pe.price AS price,
+        p.product_name AS productName,
+        p.thumbnail AS thumbnail
+        FROM tb_product_extend pe JOIN tb_product p ON pe.product_id = p.id
+        WHERE pe.id IN
+        <foreach collection="productIds" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        ORDER BY pe.id
     </select>
 </mapper>

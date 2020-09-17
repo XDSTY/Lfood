@@ -15,4 +15,15 @@
         FROM tb_order_additional oa
         WHERE oa.order_id = #{orderId}
     </select>
+    <select id="getOrderAdditionalByOrderSet" resultType="com.xdsty.orderservice.entity.OrderAdditional">
+        SELECT oa.order_product_id AS orderProductId,
+               oa.num AS num,
+               oa.price AS price,
+               oa.additional_id AS additionalId
+        FROM tb_order_additional oa
+        WHERE oa.order_id IN
+        <foreach collection="orderIds" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
 </mapper>

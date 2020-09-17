@@ -18,6 +18,7 @@ import com.xdsty.orderclient.re.CartAdditionalItemRe;
 import com.xdsty.orderclient.re.CartItemRe;
 import com.xdsty.orderclient.re.CartListRe;
 import com.xdsty.orderclient.service.CartService;
+import com.xdsty.productclient.dto.AdditionalListDto;
 import com.xdsty.productclient.dto.ProductValidDto;
 import com.xdsty.productclient.re.AdditionalItemRe;
 import com.xdsty.productclient.re.CartItemProductRe;
@@ -81,10 +82,11 @@ public class CartController {
             // 获取购物车商品的附加
             List<CartAdditionalItemRe> cartAdditionalItemRes = cartListRe.getCartAdditionalItemRes();
             List<Long> additionalIds = cartAdditionalItemRes.stream().map(CartAdditionalItemRe::getAdditionalId).collect(Collectors.toList());
-            List<AdditionalItemRe> additionalItemRes = productService.getCartAdditionalItemList(additionalIds);
+            AdditionalListDto dto = new AdditionalListDto();
+            dto.setItemIds(additionalIds);
+            dto.setValid(true);
+            List<AdditionalItemRe> additionalItemRes = productService.getAdditionalItemList(dto);
             // 调整为 cartId - list<AdditionalItem>
-//            Map<Long, List<Long>> cartIdMap = cartAdditionalItemRes.stream()
-//                    .collect(Collectors.groupingBy(CartAdditionalItemRe::getCartId, Collectors.mapping(CartAdditionalItemRe::getAdditionalId, Collectors.toList())));
             Map<Long, List<CartAdditionalItemRe>> cartAddItemMap = cartAdditionalItemRes.stream()
                     .collect(Collectors.groupingBy(CartAdditionalItemRe::getCartId, Collectors.toList()));
             return cartItemRes.stream().map(e -> convert2CartItemContent(e, getProductRe(productRes, e.getProductId()), cartAddItemMap, additionalItemRes)).collect(Collectors.toList());

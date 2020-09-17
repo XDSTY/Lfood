@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class OrderListProductRe {
+public class OrderListProductContent {
 
     private Long productId;
 
@@ -21,4 +21,8 @@ public class OrderListProductRe {
      */
     private BigDecimal totalPrice;
 
+    /**
+     * 商品数量
+     */
+    private Integer productNum;
 }

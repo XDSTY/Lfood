@@ -1,8 +1,11 @@
 package com.xdsty.orderclient.service;
 
 import com.xdsty.orderclient.dto.OrderIdDto;
+import com.xdsty.orderclient.dto.OrderListQueryDto;
 import com.xdsty.orderclient.dto.OrderModuleDto;
 import com.xdsty.orderclient.dto.OrderValidDto;
+import com.xdsty.orderclient.re.OrderListProductRe;
+import com.xdsty.orderclient.re.OrderListRe;
 import com.xdsty.orderclient.re.OrderModuleRe;
 import com.xdsty.orderclient.re.OrderPayPageRe;
 import com.xdsty.orderclient.re.OrderValidRe;
@@ -25,6 +28,7 @@ public interface OrderService {
     /**
      * 校验订单状态
      * @param dto
+     * @return
      */
     OrderValidRe checkOrderValid(OrderValidDto dto);
 
@@ -34,5 +38,12 @@ public interface OrderService {
      * @return
      */
     List<OrderModuleRe> getOrderModules(OrderModuleDto orderModuleDto);
+
+    /**
+     * 查询订单列表
+     * @param dto
+     * @return
+     */
+    List<OrderListRe> getOrderList(OrderListQueryDto dto);
 
 }

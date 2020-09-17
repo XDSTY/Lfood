@@ -66,4 +66,12 @@
             #{status}
         </foreach>
     </select>
+    <select id="getOrderPage" resultType="com.xdsty.orderservice.entity.Order">
+        SELECT o.order_id AS orderId,
+               o.total_price AS totalPrice,
+               o.status AS status
+        FROM tb_order o
+        WHERE user_id = #{userId}
+        LIMIT #{offset}, #{pageSize}
+    </select>
 </mapper>

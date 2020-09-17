@@ -24,4 +24,11 @@ public interface OrderProductMapper {
      */
     List<OrderProduct> getOrderProductList(Long orderId);
 
+    /**
+     * 根据订单集合查询订单商品
+     * @param orderIds
+     * @return
+     */
+    List<OrderProduct> getOrderProductByOrderSet(@Param("orderIds") List<Long> orderIds);
+
 }

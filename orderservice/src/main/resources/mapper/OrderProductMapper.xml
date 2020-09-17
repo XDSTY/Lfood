@@ -2,17 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xdsty.orderservice.mapper.OrderProductMapper">
     <insert id="addOrderProduct" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-        INSERT INTO tb_order_product(order_id, product_id, product_num, product_price)
+        INSERT INTO tb_order_product(order_id, product_id, product_num, product_price, total_price)
         VALUES
         <foreach collection="products" item="product" separator=",">
-            (#{product.orderId}, #{product.productId}, #{product.productNum}, #{product.productPrice})
+            (#{product.orderId}, #{product.productId}, #{product.productNum}, #{product.productPrice}, #{product.totalPrice})
         </foreach>
     </insert>
     <select id="getOrderProductList" resultType="com.xdsty.orderservice.entity.OrderProduct">
         SELECT op.id AS id,
                op.product_price productPrice,
-               op.product_num productNum
+               op.product_num productNum,
+               op.total_price totalPrice
         FROM tb_order_product op
         WHERE op.order_id = #{orderId}
+    </select>
+    <select id="getOrderProductByOrderSet" resultType="com.xdsty.orderservice.entity.OrderProduct">
+        SELECT op.id AS id,
+               op.product_price productPrice,
+               op.product_num productNum,
+               op.total_price totalPrice
+        FROM tb_order_product op
+        WHERE op.order_id IN 
+        <foreach collection="orderIds" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
     </select>
 </mapper>
