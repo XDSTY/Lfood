@@ -41,6 +41,7 @@
         <module>userservice</module>
         <module>payservice</module>
         <module>payclient</module>
+        <module>orderbackservice</module>
     </modules>
 
     <dependencyManagement>

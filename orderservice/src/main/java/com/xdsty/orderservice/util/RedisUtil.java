@@ -1,10 +1,10 @@
-package com.xdsty.api.util;
+package com.xdsty.orderservice.util;
 
-import com.xdsty.api.common.ApplicationContextHolder;
-import com.xdsty.api.common.exceptions.ApiRuntimeException;
-import com.xdsty.api.config.redis.AlgRedisTemplate;
+import basecommon.exception.BusinessRuntimeException;
+import com.xdsty.orderservice.config.redis.AlgRedisTemplate;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -38,7 +38,7 @@ public final class RedisUtil {
 
     public static long getExpireTime(String key) {
         if (StringUtils.isEmpty(key)) {
-            throw new ApiRuntimeException("redis key不能为空");
+            throw new BusinessRuntimeException("redis key不能为空");
         }
         Long val = redisTemplate.getExpire(key, TimeUnit.MILLISECONDS);
         return Optional.ofNullable(val).orElse(-1L);

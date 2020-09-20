@@ -43,5 +43,18 @@ public final class Constant {
      */
     public static final List<Integer> ORDER_MODULE_STATUS = Lists.newArrayList(OrderStatusEnum.WAIT_PAY.getStatus(), OrderStatusEnum.SUCCESS.getStatus());
 
+    /**
+     * 公共配置命名空间
+     */
+    public static String COMMON_CENTER_GROUPID = "COMMON_CONF_GROUP";
 
+    /**
+     * 代付款订单数据保存时间 20分钟
+     */
+    public static final long ORDER_BACK_TTL = 20 * 60 * 1000;
+
+    /**
+     * 代付款订单保存到数据库中的前缀  order_back_{orderId}
+     */
+    public static final String ORDER_BACK_PREFIX = "order_back_";
 }

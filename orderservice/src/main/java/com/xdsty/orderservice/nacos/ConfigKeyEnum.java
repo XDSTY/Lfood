@@ -15,6 +15,11 @@ public enum ConfigKeyEnum {
     SNOW_FLACK_TIMESTAMP("snow.flake.start.timestamp", Constant.CONF_CENTER_GROUPID),
 
     /**
+     * 订单回退的zset列表
+     */
+    ORDER_BACK_ZSET_LIST_CONFIG("redis.zset.list", Constant.COMMON_CENTER_GROUPID),
+
+    /**
      * 待支付订单持续时间
      */
     ORDER_WAIT_PAY_TIME("order.wait.pay.time", Constant.CONF_CENTER_GROUPID);

@@ -189,6 +189,8 @@ public class OrderTxServiceImpl implements OrderTxService {
             throw new BusinessRuntimeException("提交失败，orderId: " + orderId);
         }
         log.error("order commit success");
+        // 将待付款订单数据放入redis中
+
         return true;
     }
 
