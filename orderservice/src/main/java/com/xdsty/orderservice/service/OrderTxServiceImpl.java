@@ -2,6 +2,7 @@ package com.xdsty.orderservice.service;
 
 import basecommon.exception.BusinessRuntimeException;
 import basecommon.util.PriceCalculateUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.xdsty.orderclient.dto.OrderAddDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
 import com.xdsty.orderclient.dto.OrderProductAdditionalDto;
@@ -19,11 +20,10 @@ import com.xdsty.orderservice.nacos.ConfigCenter;
 import com.xdsty.orderservice.nacos.ConfigKeyEnum;
 import com.xdsty.orderservice.orderback.OrderRollBackInfo;
 import com.xdsty.orderservice.orderback.OrderRollbackProduct;
-import com.xdsty.orderservice.orderback.OrderRollbackTask;
-import com.xdsty.orderservice.orderback.OrderRollbackThreadPool;
 import com.xdsty.orderservice.transaction.OrderTransaction;
 import com.xdsty.orderservice.transaction.TransactionEnum;
 import com.xdsty.orderservice.util.IdWorker;
+import com.xdsty.orderservice.util.JsonUtil;
 import com.xdsty.orderservice.util.RedisUtil;
 import com.xdsty.orderservice.util.ZSetListUtil;
 import io.seata.rm.tcc.api.BusinessActionContext;
@@ -199,20 +199,22 @@ public class OrderTxServiceImpl implements OrderTxService {
         OrderRollBackInfo orderRollBackInfo = constructOrderBackInfo(orderId, context);
         // 随机获取zset
         String zsetKey = ZSetListUtil.random();
-        RedisUtil.set(Constant.ORDER_BACK_PREFIX + orderRollBackInfo.getOrderId(), orderRollBackInfo, Constant.ORDER_BACK_TTL);
+        RedisUtil.set(Constant.ORDER_BACK_PREFIX + orderRollBackInfo.getOrderId(), JsonUtil.toJson(orderRollBackInfo), Constant.ORDER_BACK_TTL);
         RedisUtil.zadd(zsetKey, orderRollBackInfo.getOrderId(), orderRollBackInfo.getEndTime());
         return true;
     }
 
     private OrderRollBackInfo constructOrderBackInfo(long orderId, BusinessActionContext context) {
-        OrderAddDto dto = (OrderAddDto) context.getActionContext("orderAddDto");
+        JSONObject jsonObject = (JSONObject) context.getActionContext("orderAddDto");
+        OrderAddDto dto = jsonObject.toJavaObject(OrderAddDto.class);
+        log.error("入参{}", dto);
         OrderRollBackInfo orderRollBackInfo = new OrderRollBackInfo();
         orderRollBackInfo.setOrderId(orderId);
         orderRollBackInfo.setStatus(OrderStatusEnum.WAIT_PAY.getStatus());
         Date now = new Date();
         orderRollBackInfo.setCreateTime(now.getTime());
         // 设置代付款订单截止时间
-        long orderOverTime = Long.valueOf(ConfigCenter.getConfigValue(ConfigKeyEnum.ORDER_WAIT_PAY_TIME.dataId));
+        long orderOverTime = Long.parseLong(ConfigCenter.getConfigValue(ConfigKeyEnum.ORDER_WAIT_PAY_TIME.dataId));
         orderRollBackInfo.setEndTime(now.getTime() + orderOverTime);
         // 设置订单的商品和商品的数量
         orderRollBackInfo.setProductList(dto.getProductDtos().stream().map(e -> {

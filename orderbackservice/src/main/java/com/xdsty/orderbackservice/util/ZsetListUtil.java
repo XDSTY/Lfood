@@ -2,6 +2,8 @@ package com.xdsty.orderbackservice.util;
 
 import com.xdsty.orderbackservice.config.nacos.ConfigCenter;
 import com.xdsty.orderbackservice.config.nacos.ConfigKeyEnum;
+import org.springframework.util.CollectionUtils;
+
 import java.util.List;
 
 /**
@@ -22,6 +24,9 @@ public class ZsetListUtil {
      */
     public static String random() {
         // TODO 并发问题
+        if(CollectionUtils.isEmpty(zsetList)) {
+            return null;
+        }
         return zsetList.get((int) (Math.random() * zsetList.size()));
     }
 }

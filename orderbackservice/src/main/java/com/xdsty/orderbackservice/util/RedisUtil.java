@@ -51,8 +51,8 @@ public final class RedisUtil {
         redisTemplate.opsForValue().set(key, val, time, TimeUnit.MILLISECONDS);
     }
 
-    public static Object get(String key) {
-        return redisTemplate.opsForValue().get(key);
+    public static String get(String key) {
+        return (String) redisTemplate.opsForValue().get(key);
     }
 
     public static Object hget(String key, String item) {

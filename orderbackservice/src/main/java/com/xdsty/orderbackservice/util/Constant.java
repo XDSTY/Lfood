@@ -12,4 +12,9 @@ public final class Constant {
      */
     public static final String ORDER_BACK_PREFIX = "order_back_";
 
+    /**
+     * redis分布式锁前缀
+     */
+    public static final String REDIS_LOCK_PREFIX = "redis_lock_prefix";
+
 }
