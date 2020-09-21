@@ -17,9 +17,15 @@ import com.xdsty.orderservice.mapper.OrderProductMapper;
 import com.xdsty.orderservice.mapper.TransactionMapper;
 import com.xdsty.orderservice.nacos.ConfigCenter;
 import com.xdsty.orderservice.nacos.ConfigKeyEnum;
+import com.xdsty.orderservice.orderback.OrderRollBackInfo;
+import com.xdsty.orderservice.orderback.OrderRollbackProduct;
+import com.xdsty.orderservice.orderback.OrderRollbackTask;
+import com.xdsty.orderservice.orderback.OrderRollbackThreadPool;
 import com.xdsty.orderservice.transaction.OrderTransaction;
 import com.xdsty.orderservice.transaction.TransactionEnum;
 import com.xdsty.orderservice.util.IdWorker;
+import com.xdsty.orderservice.util.RedisUtil;
+import com.xdsty.orderservice.util.ZSetListUtil;
 import io.seata.rm.tcc.api.BusinessActionContext;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.slf4j.Logger;
@@ -190,8 +196,32 @@ public class OrderTxServiceImpl implements OrderTxService {
         }
         log.error("order commit success");
         // 将待付款订单数据放入redis中
-
+        OrderRollBackInfo orderRollBackInfo = constructOrderBackInfo(orderId, context);
+        // 随机获取zset
+        String zsetKey = ZSetListUtil.random();
+        RedisUtil.set(Constant.ORDER_BACK_PREFIX + orderRollBackInfo.getOrderId(), orderRollBackInfo, Constant.ORDER_BACK_TTL);
+        RedisUtil.zadd(zsetKey, orderRollBackInfo.getOrderId(), orderRollBackInfo.getEndTime());
         return true;
+    }
+
+    private OrderRollBackInfo constructOrderBackInfo(long orderId, BusinessActionContext context) {
+        OrderAddDto dto = (OrderAddDto) context.getActionContext("orderAddDto");
+        OrderRollBackInfo orderRollBackInfo = new OrderRollBackInfo();
+        orderRollBackInfo.setOrderId(orderId);
+        orderRollBackInfo.setStatus(OrderStatusEnum.WAIT_PAY.getStatus());
+        Date now = new Date();
+        orderRollBackInfo.setCreateTime(now.getTime());
+        // 设置代付款订单截止时间
+        long orderOverTime = Long.valueOf(ConfigCenter.getConfigValue(ConfigKeyEnum.ORDER_WAIT_PAY_TIME.dataId));
+        orderRollBackInfo.setEndTime(now.getTime() + orderOverTime);
+        // 设置订单的商品和商品的数量
+        orderRollBackInfo.setProductList(dto.getProductDtos().stream().map(e -> {
+            OrderRollbackProduct product = new OrderRollbackProduct();
+            product.setProductId(e.getProductId());
+            product.setProductNum(e.getProductNum());
+            return product;
+        }).collect(Collectors.toList()));
+        return orderRollBackInfo;
     }
 
     @Override

@@ -1,15 +1,17 @@
-package com.xdsty.orderservice.orderback;
+package com.xdsty.orderbackservice.service;
 
-
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 订单15分钟回滚线程池
+ * @author 张富华
+ * @date 2020/9/21 10:43
  */
-public class OrderRollbackThreadPool{
+public class OrderBackThreadPool implements ApplicationRunner {
 
     private static ExecutorService pool = new ThreadPoolExecutor(1,
             1,
@@ -18,7 +20,8 @@ public class OrderRollbackThreadPool{
             new LinkedBlockingQueue<>(),
             new OrderRollbackThreadFactory());
 
-    public static void addTask(OrderRollbackTask task){
-        pool.submit(task);
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        pool.submit(new OrderBackWorker());
     }
 }

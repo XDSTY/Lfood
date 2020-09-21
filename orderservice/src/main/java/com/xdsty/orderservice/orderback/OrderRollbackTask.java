@@ -12,6 +12,10 @@ public class OrderRollbackTask implements Runnable{
 
     private OrderRollBackInfo orderRollBackInfo;
 
+    public OrderRollbackTask(OrderRollBackInfo orderRollBackInfo) {
+        this.orderRollBackInfo = orderRollBackInfo;
+    }
+
     @Override
     public void run() {
         String zsetKey = ZSetListUtil.random();

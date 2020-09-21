@@ -43,7 +43,6 @@ public final class RedisUtil {
         return Optional.ofNullable(val).orElse(-1L);
     }
 
-
     public static void set(String key, Object val) {
         redisTemplate.opsForValue().set(key, val);
     }
@@ -58,6 +57,19 @@ public final class RedisUtil {
 
     public static Object hget(String key, String item) {
         return redisTemplate.opsForHash().get(key, item);
+    }
+
+    /**
+     * 不存在则加锁，可以作为简单的redis分布式锁
+     * @param key
+     * @param value
+     * @param time
+     * @param timeUnit
+     * @return
+     */
+    public static boolean setnx(String key, String value, long time, TimeUnit timeUnit) {
+        Boolean res = redisTemplate.opsForValue().setIfAbsent(key, value, time, timeUnit);
+        return Optional.ofNullable(res).orElse(false);
     }
 
     /**
@@ -131,7 +143,7 @@ public final class RedisUtil {
      * @param count
      * @return
      */
-    public static Set<Object> range(String key, double min, double max, long offset, long count) {
+    public static Set<Object> zrangeByScore(String key, double min, double max, long offset, long count) {
         return redisTemplate.opsForZSet().rangeByScore(key, min, max, offset, count);
     }
 

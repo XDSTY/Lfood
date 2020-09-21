@@ -46,5 +46,4 @@ public class ConfigManager {
             log.error("获取配置中心失败, dataId: {}", dataId, e);
         }
     }
-
 }

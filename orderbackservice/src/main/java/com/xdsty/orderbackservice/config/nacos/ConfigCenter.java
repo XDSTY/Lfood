@@ -6,6 +6,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,6 +19,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConfigCenter implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(ConfigCenter.class);
+
+    private static List<Hook> hookList = new ArrayList<>();
+
+    public static void addHook(Hook hook) {
+        hookList.add(hook);
+    }
 
     /**
      * 存放对应的配置
@@ -40,7 +48,11 @@ public class ConfigCenter implements ApplicationRunner {
             ConfigManager.addConfigListener(config.dataId, config.groupId, (value) -> {
                 log.error("配置中心改动, dataId: {}, groupId: {}, 改动后值: {}", config.dataId, config.groupId, value);
                 setConfigKeyValue(config.dataId, value);
+                for (Hook hook : hookList) {
+                    hook.hook(config.dataId, value);
+                }
             });
         }
     }
+
 }
