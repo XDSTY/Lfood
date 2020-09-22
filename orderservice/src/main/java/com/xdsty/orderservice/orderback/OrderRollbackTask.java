@@ -1,5 +1,6 @@
 package com.xdsty.orderservice.orderback;
 
+import com.xdsty.orderbackclient.message.OrderRollBackInfo;
 import com.xdsty.orderservice.common.Constant;
 import com.xdsty.orderservice.util.RedisUtil;
 import com.xdsty.orderservice.util.ZSetListUtil;
@@ -8,6 +9,7 @@ import com.xdsty.orderservice.util.ZSetListUtil;
 /**
  * 将订单信息放入redis任务
  */
+@Deprecated
 public class OrderRollbackTask implements Runnable{
 
     private OrderRollBackInfo orderRollBackInfo;

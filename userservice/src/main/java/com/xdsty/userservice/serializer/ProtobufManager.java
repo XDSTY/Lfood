@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2020/8/6 17:45
  */
 @Configuration
-public class ProtobufConvertorManager extends AbstractProtobufConvertManager implements ApplicationRunner {
+public class ProtobufManager extends AbstractProtobufConvertManager implements ApplicationRunner {
 
     @Override
     public void initProtobufMapInfo() {

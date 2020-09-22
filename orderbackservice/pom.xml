@@ -24,6 +24,7 @@
         <springfox.swagger.ui.version>2.9.2</springfox.swagger.ui.version>
         <nacos.config.version>0.2.7</nacos.config.version>
         <nacos.discovery.version>0.2.7</nacos.discovery.version>
+        <orderrollbackclient.version>1.0-SNAPSHOT</orderrollbackclient.version>
     </properties>
 
     <dependencies>
@@ -112,6 +113,11 @@
             <groupId>com.alibaba.boot</groupId>
             <artifactId>nacos-discovery-spring-boot-starter</artifactId>
             <version>${nacos.discovery.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.xdsty</groupId>
+            <artifactId>orderbackclient</artifactId>
+            <version>${orderrollbackclient.version}</version>
         </dependency>
     </dependencies>
 

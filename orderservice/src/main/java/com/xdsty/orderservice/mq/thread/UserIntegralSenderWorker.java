@@ -5,7 +5,7 @@ import com.xdsty.orderservice.entity.UserIntegral;
 import com.xdsty.orderservice.mq.MessageSendCallback;
 import com.xdsty.orderservice.mq.MqSender;
 import com.xdsty.orderservice.mq.UserIntegralBlockingQueue;
-import com.xdsty.userclient.message.UserIntegralMessage;
+import com.xdsty.userclient.serializer.UserIntegralMessageProto;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
@@ -28,8 +28,8 @@ public class UserIntegralSenderWorker implements Runnable {
                     log.error("从积分集合获取数据失败", e);
                 }
                 if(userIntegral != null) {
-                    UserIntegralMessage message = convert2UserIntegralMessage(userIntegral);
-                    ProducerRecord<String, UserIntegralMessage> record = new ProducerRecord<>(Constant.USER_INTEGRAL_TOPIC, message);
+                    UserIntegralMessageProto.UserIntegralMessage message = convert2UserIntegralMessage(userIntegral);
+                    ProducerRecord<String, UserIntegralMessageProto.UserIntegralMessage> record = new ProducerRecord<>(Constant.USER_INTEGRAL_TOPIC, message);
                     producer.send(record, new MessageSendCallback(record));
                 }
             } catch (Exception e) {
@@ -38,12 +38,12 @@ public class UserIntegralSenderWorker implements Runnable {
         }
     }
 
-    private static UserIntegralMessage convert2UserIntegralMessage(UserIntegral userIntegral) {
-        UserIntegralMessage message = new UserIntegralMessage();
-        message.setId(userIntegral.getId());
-        message.setUserId(userIntegral.getUserId());
-        message.setIntegral(userIntegral.getIntegral());
-        message.setOrderId(userIntegral.getOrderId());
-        return message;
+    private static UserIntegralMessageProto.UserIntegralMessage convert2UserIntegralMessage(UserIntegral userIntegral) {
+        return UserIntegralMessageProto.UserIntegralMessage.newBuilder()
+                .setId(userIntegral.getId())
+                .setIntegral(userIntegral.getIntegral())
+                .setOrderId(userIntegral.getOrderId())
+                .setUserId(userIntegral.getUserId())
+                .build();
     }
 }

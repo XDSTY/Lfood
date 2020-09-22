@@ -1,5 +1,7 @@
 package com.xdsty.orderbackservice.service;
 
+import com.xdsty.orderbackclient.message.OrderRollBackInfo;
+import com.xdsty.orderbackclient.serializer.OrderBackMessageProto;
 import com.xdsty.orderbackservice.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,5 +60,11 @@ public class OrderBackWorker implements Runnable {
                 }
             }
         }
+    }
+
+    public static void main(String[] args) {
+        long val = 268435456;
+        val = val / 1024 / 1024;
+        System.out.println(val);
     }
 }

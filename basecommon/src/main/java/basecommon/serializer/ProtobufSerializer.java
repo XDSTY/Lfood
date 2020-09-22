@@ -18,7 +18,6 @@ public class ProtobufSerializer implements Serializer {
         if (t == null) {
             throw new NullPointerException();
         }
-
         //for cross language,write FullName to data,which defines in proto file
         GeneratedMessageV3 newBody = (GeneratedMessageV3) t;
         byte[] body = ProtobufInnerSerializer.serializeContent(newBody);
@@ -49,7 +48,6 @@ public class ProtobufSerializer implements Serializer {
         Object protobufObject = ProtobufInnerSerializer.deserializeContent(descriptorName, body);
         return (T) protobufObject;
     }
-
 
     private static class InnerInstance {
         static ProtobufSerializer protobufSerializer = new ProtobufSerializer();

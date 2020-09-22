@@ -3,6 +3,7 @@ package com.xdsty.orderservice.orderback;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Deprecated
 public class OrderRollbackThreadFactory implements ThreadFactory {
 
     private static final AtomicInteger poolNumber = new AtomicInteger(1);

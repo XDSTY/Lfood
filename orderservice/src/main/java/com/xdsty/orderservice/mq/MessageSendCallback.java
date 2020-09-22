@@ -3,7 +3,7 @@ package com.xdsty.orderservice.mq;
 import com.xdsty.orderservice.entity.enums.UserIntegralEnum;
 import com.xdsty.orderservice.mapper.UserIntegralRecordMapper;
 import com.xdsty.orderservice.util.ApplicationContextHolder;
-import com.xdsty.userclient.message.UserIntegralMessage;
+import com.xdsty.userclient.serializer.UserIntegralMessageProto;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
@@ -18,11 +18,11 @@ public class MessageSendCallback implements Callback {
 
     private static final Logger log = LoggerFactory.getLogger(MessageSendCallback.class);
 
-    private ProducerRecord<String, UserIntegralMessage> record;
+    private ProducerRecord<String, UserIntegralMessageProto.UserIntegralMessage> record;
 
     private static int RETRY = 3;
 
-    public MessageSendCallback(ProducerRecord<String, UserIntegralMessage> record) {
+    public MessageSendCallback(ProducerRecord<String, UserIntegralMessageProto.UserIntegralMessage> record) {
         this.record = record;
     }
 

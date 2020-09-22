@@ -1,6 +1,6 @@
 package com.xdsty.userservice.mq;
 
-import com.xdsty.userclient.message.UserIntegralMessage;
+import com.xdsty.userclient.serializer.UserIntegralMessageProto;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -20,8 +20,8 @@ public class MqConsumer {
         MqConsumer.kafkaConfig = kafkaConfig;
     }
 
-    private static KafkaConsumer<String, UserIntegralMessage> initConsumer() {
-        KafkaConsumer<String, UserIntegralMessage> consumer;
+    private static KafkaConsumer<String, UserIntegralMessageProto.UserIntegralMessage> initConsumer() {
+        KafkaConsumer<String, UserIntegralMessageProto.UserIntegralMessage> consumer;
         Properties properties = new Properties();
         properties.setProperty("bootstrap.servers", kafkaConfig.getBootstrapServers());
         properties.setProperty("group.id", kafkaConfig.getGroupId());
@@ -33,7 +33,7 @@ public class MqConsumer {
         return consumer;
     }
 
-    public static KafkaConsumer<String, UserIntegralMessage> newConsumer() {
+    public static KafkaConsumer<String, UserIntegralMessageProto.UserIntegralMessage> newConsumer() {
         return initConsumer();
     }
 }

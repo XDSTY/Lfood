@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 订单15分钟回滚线程池
  */
+@Deprecated
 public class OrderRollbackThreadPool{
 
     private static ExecutorService pool = new ThreadPoolExecutor(1,
