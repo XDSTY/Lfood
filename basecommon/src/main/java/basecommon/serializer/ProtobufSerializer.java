@@ -19,13 +19,10 @@ public class ProtobufSerializer implements Serializer {
             throw new NullPointerException();
         }
 
-        //translate to pb
-        final PbConvertor pbConvertor = AbstractProtobufConvertManager.fetchConvertor(
-                t.getClass().getName());
         //for cross language,write FullName to data,which defines in proto file
-        GeneratedMessageV3 newBody = (GeneratedMessageV3)pbConvertor.convert2Proto(t);
+        GeneratedMessageV3 newBody = (GeneratedMessageV3) t;
         byte[] body = ProtobufInnerSerializer.serializeContent(newBody);
-        final String name = newBody.getDescriptorForType().getFullName();
+        final String name = newBody.getDescriptorForType().getName();
         final byte[] nameBytes = name.getBytes(UTF8);
         ByteBuffer byteBuffer = ByteBuffer.allocate(4 + nameBytes.length + body.length);
         byteBuffer.putInt(nameBytes.length);
@@ -50,10 +47,7 @@ public class ProtobufSerializer implements Serializer {
         byteBuffer.get(body);
         final String descriptorName = new String(clazzName, UTF8);
         Object protobufObject = ProtobufInnerSerializer.deserializeContent(descriptorName, body);
-        //translate back to core model
-        final PbConvertor pbConvertor = AbstractProtobufConvertManager.fetchReversedConvertor(descriptorName);
-        Object newBody = pbConvertor.convert2Model(protobufObject);
-        return (T)newBody;
+        return (T) protobufObject;
     }
 
 

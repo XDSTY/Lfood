@@ -1,8 +1,6 @@
 package com.xdsty.orderservice.serializer;
 
 import basecommon.serializer.AbstractProtobufConvertManager;
-import com.xdsty.orderservice.serializer.convertor.UserIntergalMessageConvertor;
-import com.xdsty.userclient.message.UserIntegralMessage;
 import com.xdsty.userclient.serializer.UserIntegralMessageProto;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -19,9 +17,7 @@ public class ProtobufConvertorManager extends AbstractProtobufConvertManager imp
 
     @Override
     public void initProtobufMapInfo() {
-        putConvertMapItem(UserIntegralMessage.class.getName(), new UserIntergalMessageConvertor());
-        putReverseConvertorMapItem(UserIntegralMessage.class.getSimpleName(), new UserIntergalMessageConvertor());
-        putParseClassMap(UserIntegralMessage.class.getSimpleName(), UserIntegralMessageProto.UserIntegralMessage.class.getName());
+        putParseClassMap(UserIntegralMessageProto.UserIntegralMessage.class.getSimpleName(), UserIntegralMessageProto.UserIntegralMessage.class.getName());
     }
 
     @Override

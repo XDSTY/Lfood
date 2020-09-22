@@ -16,5 +16,4 @@ public final class Constant {
      * redis分布式锁前缀
      */
     public static final String REDIS_LOCK_PREFIX = "redis_lock_prefix";
-
 }

@@ -28,6 +28,7 @@
         <nacos.starter.version>0.2.7</nacos.starter.version>
         <nacos.discovery.version>0.2.7</nacos.discovery.version>
         <seata.version>1.3.0</seata.version>
+        <orderbackclient.version>1.0-SNAPSHOT</orderbackclient.version>
     </properties>
 
     <dependencies>
@@ -136,6 +137,12 @@
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xdsty</groupId>
+            <artifactId>orderbackclient</artifactId>
+            <version>${orderbackclient.version}</version>
         </dependency>
     </dependencies>
 

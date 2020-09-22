@@ -1,13 +1,12 @@
-package com.xdsty.orderservice.serializer.convertor;
+package com.xdsty.userclient.convertor;
 
 import basecommon.serializer.PbConvertor;
 import com.xdsty.userclient.message.UserIntegralMessage;
 import com.xdsty.userclient.serializer.UserIntegralMessageProto;
-import java.util.Date;
 
 /**
  * @author 张富华
- * @date 2020/8/6 17:49
+ * @date 2020/9/22 14:54
  */
 public class UserIntergalMessageConvertor implements PbConvertor<UserIntegralMessage, UserIntegralMessageProto.UserIntegralMessage> {
 

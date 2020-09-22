@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_package="com.xdsty.orderbackclient.serializer";
+option java_outer_classname = "OrderRollBackProductMessageProto";
+
+message OrderRollBackProductMessage{
+
+	int64 productId = 1;
+	
+	int32 productNum = 2;
+	
+}

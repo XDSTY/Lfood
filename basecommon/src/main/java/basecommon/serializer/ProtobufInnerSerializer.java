@@ -33,7 +33,7 @@ public class ProtobufInnerSerializer {
                         + ".toByteArray(), please check the generated code.", e);
             }
         }
-        byte[] bytes = new byte[0];
+        byte[] bytes;
         try {
             bytes = (byte[])method.invoke(request);
         } catch (Exception e) {
