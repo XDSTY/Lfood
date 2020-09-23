@@ -1,4 +1,4 @@
-package com.xdsty.orderservice.mq;
+package com.xdsty.orderservice.mq.integral;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @date 2020/8/7 14:11
  */
 @ConfigurationProperties(prefix = "kafka")
-public class KafkaConfig {
+public class IntegralMqConfig {
 
     private String bootstrapServers;
 

@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
  * @author 张富华
  * @date 2020/8/7 15:01
  */
-public class MqSenderTest extends BaseTest {
+public class IntegralMqSenderTest extends BaseTest {
 
     @Test
     public void send() {

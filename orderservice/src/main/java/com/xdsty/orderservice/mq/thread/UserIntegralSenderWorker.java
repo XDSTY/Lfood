@@ -3,7 +3,7 @@ package com.xdsty.orderservice.mq.thread;
 import com.xdsty.orderservice.common.Constant;
 import com.xdsty.orderservice.entity.UserIntegral;
 import com.xdsty.orderservice.mq.MessageSendCallback;
-import com.xdsty.orderservice.mq.MqSender;
+import com.xdsty.orderservice.mq.integral.IntegralMqSender;
 import com.xdsty.orderservice.mq.UserIntegralBlockingQueue;
 import com.xdsty.userclient.serializer.UserIntegralMessageProto;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -19,7 +19,7 @@ public class UserIntegralSenderWorker implements Runnable {
     public void run() {
         log.error("发送者线程开始" + Thread.currentThread().getName());
         UserIntegral userIntegral = null;
-        KafkaProducer producer = MqSender.newKafkaProducer();
+        KafkaProducer producer = IntegralMqSender.newKafkaProducer();
         while (true) {
             try {
                 try {

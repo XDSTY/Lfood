@@ -5,7 +5,9 @@ import com.xdsty.orderbackclient.serializer.OrderBackMessageProto;
 import com.xdsty.orderbackclient.serializer.OrderRollBackProductMessageProto;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ProtobufManager extends AbstractProtobufConvertManager implements ApplicationRunner {
 
     @Override

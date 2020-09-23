@@ -3,7 +3,7 @@ package com.xdsty.userservice.mq.thread;
 import com.xdsty.userclient.serializer.UserIntegralMessageProto;
 import com.xdsty.userservice.entity.UserIntegral;
 import com.xdsty.userservice.mapper.UserIntegralMapper;
-import com.xdsty.userservice.mq.MqConsumer;
+import com.xdsty.userservice.mq.IntegralMqConsumer;
 import com.xdsty.userservice.util.ApplicationContextHolder;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -23,7 +23,7 @@ public class UserIntegralConsumerThread implements Runnable {
     public void run() {
         log.error("消费者线程开始" + Thread.currentThread().getName());
         UserIntegralMapper mapper = (UserIntegralMapper) ApplicationContextHolder.context.getBean("userIntegralMapper");
-        KafkaConsumer<String, UserIntegralMessageProto.UserIntegralMessage> consumer = MqConsumer.newConsumer();
+        KafkaConsumer<String, UserIntegralMessageProto.UserIntegralMessage> consumer = IntegralMqConsumer.newConsumer();
         Duration duration = Duration.ofMillis(1000);
         while (true) {
             // 获取数据

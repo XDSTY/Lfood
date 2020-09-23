@@ -3,7 +3,7 @@ package com.xdsty.userservice.mq;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "kafka")
-public class KafkaConfig {
+public class IntegralMqConfig {
 
     private String bootstrapServers;
 

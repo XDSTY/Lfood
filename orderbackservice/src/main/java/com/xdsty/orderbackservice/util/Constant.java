@@ -1,5 +1,6 @@
 package com.xdsty.orderbackservice.util;
 
+
 public final class Constant {
 
     /**
@@ -16,4 +17,9 @@ public final class Constant {
      * redis分布式锁前缀
      */
     public static final String REDIS_LOCK_PREFIX = "redis_lock_prefix";
+
+    /**
+     * 订单回滚topic
+     */
+    public static final String ORDER_ROLLBACK_TOPIC = "order-rollback";
 }

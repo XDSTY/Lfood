@@ -26,4 +26,9 @@ nacos:
     server-addr: 127.0.0.1:8848
 
 kafka:
-  topic: order-rollback
+  bootstrapServers: '@kafka.servers@'
+  keySerializer: org.apache.kafka.common.serialization.StringSerializer
+  valueSerializer: com.xdsty.orderbackservice.serializer.KafkaProtobufSerializer
+  acks: 1
+  blockOnBufferFull: true
+  retries: 32
