@@ -4,7 +4,7 @@ import basecommon.exception.BusinessRuntimeException;
 import com.xdsty.productclient.dto.ProductStorageDto;
 import com.xdsty.productclient.dto.ProductStorageListDto;
 import com.xdsty.productclient.service.StorageAtTxService;
-import com.xdsty.productservice.entity.ProductDeductStorage;
+import com.xdsty.productservice.entity.ProductModifyStorage;
 import com.xdsty.productservice.mapper.ProductStorageMapper;
 import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
@@ -43,8 +43,8 @@ public class ProductAtTxServiceImpl implements StorageAtTxService {
         }
     }
 
-    private ProductDeductStorage convert2ProductDeductStorage(ProductStorageDto dto) {
-        ProductDeductStorage storage = new ProductDeductStorage();
+    private ProductModifyStorage convert2ProductDeductStorage(ProductStorageDto dto) {
+        ProductModifyStorage storage = new ProductModifyStorage();
         storage.setProductId(dto.getProductId());
         storage.setStorage(dto.getProductNum());
         return storage;

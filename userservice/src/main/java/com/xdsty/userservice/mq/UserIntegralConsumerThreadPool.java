@@ -11,7 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-//@Component
+@Component
 public class UserIntegralConsumerThreadPool implements ApplicationRunner {
 
     private static ExecutorService pool = new ThreadPoolExecutor(1,

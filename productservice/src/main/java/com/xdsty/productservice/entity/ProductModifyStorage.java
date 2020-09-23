@@ -9,7 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ProductDeductStorage {
+public class ProductModifyStorage {
 
     private Long productId;
 

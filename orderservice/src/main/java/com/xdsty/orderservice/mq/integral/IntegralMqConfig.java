@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author 张富华
  * @date 2020/8/7 14:11
  */
-@ConfigurationProperties(prefix = "kafka")
+@ConfigurationProperties(prefix = "kafka.integral")
 public class IntegralMqConfig {
 
     private String bootstrapServers;

@@ -26,4 +26,9 @@
         SET available_qty = available_qty - #{storage}
         WHERE product_id = #{productId} AND available_qty >= #{storage}
     </update>
+    <update id="incrProductStorage">
+        UPDATE tb_product_storage
+        SET available_qty = available_qty + #{storage}
+        WHERE product_id = #{productId}
+    </update>
 </mapper>

@@ -1,6 +1,6 @@
 package com.xdsty.productservice.mapper;
 
-import com.xdsty.productservice.entity.ProductDeductStorage;
+import com.xdsty.productservice.entity.ProductModifyStorage;
 import com.xdsty.productservice.entity.ProductStorage;
 import org.springframework.stereotype.Repository;
 
@@ -37,6 +37,12 @@ public interface ProductStorageMapper {
      * @param storage 库存
      * @return
      */
-    int deductProductStorage(ProductDeductStorage storage);
+    int deductProductStorage(ProductModifyStorage storage);
+
+    /**
+     * 订单失效回滚库存
+     * @return
+     */
+    int incrProductStorage(ProductModifyStorage storage);
 
 }

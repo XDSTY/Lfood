@@ -27,7 +27,10 @@ public class OrderBackWorker implements Runnable {
 
     private KafkaProducer kafkaProducer;
 
-    public void setKafkaProducer(KafkaProducer kafkaProducer) {
+    public OrderBackWorker() {
+    }
+
+    public OrderBackWorker(KafkaProducer kafkaProducer) {
         this.kafkaProducer = kafkaProducer;
     }
 

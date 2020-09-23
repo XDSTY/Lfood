@@ -3,7 +3,6 @@ package com.xdsty.orderservice.common;
 import com.google.common.collect.Lists;
 import com.xdsty.orderclient.enums.OrderStatusEnum;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
@@ -57,4 +56,9 @@ public final class Constant {
      * 代付款订单保存到数据库中的前缀  order_back_{orderId}
      */
     public static final String ORDER_BACK_PREFIX = "order_back_";
+
+    /**
+     * 订单回滚topic
+     */
+    public static final String ORDER_ROLLBACK_TOPIC = "order-rollback";
 }

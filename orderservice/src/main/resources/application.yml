@@ -66,9 +66,17 @@ seata:
   service-group-name: tx-service-group
 
 kafka:
-  bootstrapServers: '@kafka.servers@'
-  keySerializer: org.apache.kafka.common.serialization.StringSerializer
-  valueSerializer: com.xdsty.orderservice.serializer.KafkaProtobufSerializer
-  acks: 1
-  blockOnBufferFull: true
-  retries: 32
+  integral:
+    bootstrapServers: '@kafka.servers@'
+    keySerializer: org.apache.kafka.common.serialization.StringSerializer
+    valueSerializer: com.xdsty.orderservice.serializer.KafkaProtobufSerializer
+    acks: 1
+    blockOnBufferFull: true
+    retries: 32
+  orderback:
+    bootstrapServers: '@kafka.servers@'
+    groupId: userIntegralConsumerGroup2
+    keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
+    valueDeserializer: com.xdsty.orderservice.serializer.KafkaProtobufSerializer
+    topic: order-rollback
+    enableAutoCommit: false

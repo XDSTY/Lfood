@@ -1,5 +1,6 @@
 package com.xdsty.orderbackservice.service;
 
+import com.xdsty.orderbackservice.mq.MqSender;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,6 @@ public class OrderBackThreadPool implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        pool.submit(new OrderBackWorker());
+        pool.submit(new OrderBackWorker(MqSender.newKafkaProducer()));
     }
 }
