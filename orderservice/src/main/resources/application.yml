@@ -75,8 +75,8 @@ kafka:
     retries: 32
   orderback:
     bootstrapServers: '@kafka.servers@'
-    groupId: userIntegralConsumerGroup2
+    groupId: orderrollbackgroup1
     keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
-    valueDeserializer: com.xdsty.orderservice.serializer.KafkaProtobufSerializer
+    valueDeserializer: com.xdsty.orderservice.serializer.KafkaProtobufDeserializer
     topic: order-rollback
     enableAutoCommit: false

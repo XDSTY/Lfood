@@ -20,27 +20,35 @@ public class OrderBackConsumerWorker implements Runnable {
 
     @Override
     public void run() {
-        log.error("消费订单回滚消息线程启动");
-        OrderMapper orderMapper = (OrderMapper) ApplicationContextHolder.context.getBean("orderMapper");
-        KafkaConsumer<String, OrderBackMessageProto.OrderRollBackMessage> consumer = OrderBackMqConsumer.newConsumer();
-        Duration duration = Duration.ofMillis(1000);
-        while (true) {
-            try {
-                // 获取数据
-                ConsumerRecords<String, OrderBackMessageProto.OrderRollBackMessage> records = consumer.poll(duration);
-                log.error("订阅订单回滚接收到消息个数{}", records.count());
-                for (ConsumerRecord<String, OrderBackMessageProto.OrderRollBackMessage> record : records) {
-                    OrderBackMessageProto.OrderRollBackMessage orderRollBackMessage = record.value();
-                    // 更新订单信息
-                    Order order = new Order();
-                    order.setOrderId(orderRollBackMessage.getOrderId());
-                    order.setStatus(OrderStatusEnum.ORDER_OVERTIME.getStatus());
-                    orderMapper.updateOrder(order);
+        try {
+            log.error("消费订单回滚消息线程启动");
+            OrderMapper orderMapper = (OrderMapper) ApplicationContextHolder.context.getBean("orderMapper");
+            KafkaConsumer<String, OrderBackMessageProto.OrderRollBackMessage> consumer = OrderBackMqConsumer.newConsumer();
+            Duration duration = Duration.ofMillis(1000);
+            while (true) {
+                try {
+                    // 获取数据
+                    ConsumerRecords<String, OrderBackMessageProto.OrderRollBackMessage> records = consumer.poll(duration);
+                    log.error("订阅订单回滚接收到消息个数{}", records.count());
+                    if (records.count() == 0) {
+                        continue;
+                    }
+                    for (ConsumerRecord<String, OrderBackMessageProto.OrderRollBackMessage> record : records) {
+                        OrderBackMessageProto.OrderRollBackMessage orderRollBackMessage = record.value();
+                        // 更新订单信息
+                        Order order = new Order();
+                        order.setOrderId(orderRollBackMessage.getOrderId());
+                        order.setStatus(OrderStatusEnum.ORDER_OVERTIME.getStatus());
+                        log.error("处理订单回滚消息, {}", order);
+                        orderMapper.updateOrder(order);
+                    }
+                    consumer.commitSync();
+                } catch (Exception e) {
+                    log.error("处理回滚订单失败", e);
                 }
-                consumer.commitSync();
-            }catch (Exception e) {
-                log.error("处理回滚订单失败", e);
             }
+        }catch (Exception e) {
+            log.error("ee", e);
         }
     }
 }

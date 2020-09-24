@@ -1,8 +1,10 @@
 package com.xdsty.orderservice.entity;
 
+import lombok.ToString;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@ToString
 public class Order {
 
     private Long orderId;

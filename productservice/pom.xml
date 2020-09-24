@@ -90,6 +90,7 @@
             <artifactId>productclient</artifactId>
             <version>${productclient.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.xdsty</groupId>
             <artifactId>basecommon</artifactId>

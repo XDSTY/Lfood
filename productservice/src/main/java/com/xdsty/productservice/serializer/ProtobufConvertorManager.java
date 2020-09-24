@@ -1,8 +1,7 @@
-package com.xdsty.orderservice.serializer;
+package com.xdsty.productservice.serializer;
 
 import basecommon.serializer.AbstractProtobufConvertManager;
 import com.xdsty.orderbackclient.serializer.OrderBackMessageProto;
-import com.xdsty.userclient.serializer.UserIntegralMessageProto;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +17,6 @@ public class ProtobufConvertorManager extends AbstractProtobufConvertManager imp
 
     @Override
     public void initProtobufMapInfo() {
-        putParseClassMap(UserIntegralMessageProto.UserIntegralMessage.class.getSimpleName(), UserIntegralMessageProto.UserIntegralMessage.class.getName());
         putParseClassMap(OrderBackMessageProto.OrderRollBackMessage.class.getSimpleName(), OrderBackMessageProto.OrderRollBackMessage.class.getName());
     }
 

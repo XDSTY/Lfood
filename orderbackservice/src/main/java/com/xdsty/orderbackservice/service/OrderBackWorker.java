@@ -43,8 +43,12 @@ public class OrderBackWorker implements Runnable {
                 //随机获取一个zset并尝试加锁 加锁失败则重试
                 uuidKey = UUID.randomUUID().toString();
                 zsetName = ZsetListUtil.random();
+                if (Objects.isNull(zsetName)) {
+                    Thread.sleep(1000);
+                    continue;
+                }
                 redisKeyName = Constant.REDIS_LOCK_PREFIX + zsetName;
-                if (Objects.isNull(zsetName) || !RedisLockUtil.lock(redisKeyName, uuidKey)) {
+                if (!RedisLockUtil.lock(redisKeyName, uuidKey)) {
                     Thread.sleep(1000);
                     log.error("加锁失败重试");
                     continue;

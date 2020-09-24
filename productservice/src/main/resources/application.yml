@@ -55,11 +55,11 @@ nacos:
 seata:
   service-group-name: tx-service-group
 
-kakfa:
+kafka:
   orderback:
     bootstrapServers: '@kafka.servers@'
-    groupId: userIntegralConsumerGroup2
+    groupId: orderrollbackgroup2
     keyDeserializer: org.apache.kafka.common.serialization.StringDeserializer
-    valueDeserializer: com.xdsty.orderservice.serializer.KafkaProtobufSerializer
+    valueDeserializer: com.xdsty.productservice.serializer.KafkaProtobufDeserializer
     topic: order-rollback
     enableAutoCommit: false
