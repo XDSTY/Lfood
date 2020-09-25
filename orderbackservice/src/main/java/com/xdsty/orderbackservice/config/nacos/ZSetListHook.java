@@ -1,7 +1,6 @@
 package com.xdsty.orderbackservice.config.nacos;
 
 import com.xdsty.orderbackservice.util.JsonUtil;
-import com.xdsty.orderbackservice.util.RedisUtil;
 import com.xdsty.orderbackservice.util.ZsetListUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

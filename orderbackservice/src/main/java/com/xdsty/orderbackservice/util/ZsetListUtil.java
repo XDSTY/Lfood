@@ -23,10 +23,14 @@ public class ZsetListUtil {
      * @return
      */
     public static String random() {
-        // TODO 并发问题
         if(CollectionUtils.isEmpty(zsetList)) {
             return null;
         }
-        return zsetList.get((int) (Math.random() * zsetList.size()));
+        // 有可能报空指针
+        try {
+            return zsetList.get((int) (Math.random() * zsetList.size()));
+        }catch (Exception e) {
+            return null;
+        }
     }
 }

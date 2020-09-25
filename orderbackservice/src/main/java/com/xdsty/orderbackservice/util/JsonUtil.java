@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author 张富华
@@ -57,6 +58,23 @@ public class JsonUtil {
      */
     public static <T> List<T> parseArrJson(String json, Class<T> clazz) {
         CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, clazz);
+        try {
+            return mapper.readValue(json, listType);
+        } catch (JsonProcessingException e) {
+            logger.error("json转化失败，class: {}, json: {}", clazz.getSimpleName(), json);
+        }
+        return null;
+    }
+
+    /**
+     * copyOnWriteArrayList json转化
+     * @param json
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> CopyOnWriteArrayList<T> parseCopyOnWriteArrayListJson(String json, Class<T> clazz) {
+        CollectionType listType = mapper.getTypeFactory().constructCollectionType(CopyOnWriteArrayList.class, clazz);
         try {
             return mapper.readValue(json, listType);
         } catch (JsonProcessingException e) {
