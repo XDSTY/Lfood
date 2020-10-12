@@ -286,6 +286,7 @@ public class OrderController {
     private OrderAddDto convert2OrderAddDto(OrderAddParam param) {
         OrderAddDto dto = new OrderAddDto();
         dto.setTotalPrice(param.getTotalPrice());
+        dto.setUniqueRow(param.getUniqueRow());
         dto.setProductDtos(param.getOrderProductAdds().stream().map(this::convert2OrderProductAddDto).collect(Collectors.toList()));
         return dto;
     }

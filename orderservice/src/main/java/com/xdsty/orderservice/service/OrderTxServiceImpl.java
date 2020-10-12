@@ -133,6 +133,7 @@ public class OrderTxServiceImpl implements OrderTxService {
         order.setOrderId(orderId);
         order.setUserId(dto.getUserId());
         order.setTotalPrice(dto.getTotalPrice());
+        order.setUniqueRow(dto.getUniqueRow());
         // 设置订单的下单时间和支付结束时间
         Date now = new Date();
         order.setCreateTime(now);

@@ -19,6 +19,8 @@ public class Order {
 
     private Date payEndTime;
 
+    private Long uniqueRow;
+
     public Date getCreateTime() {
         return createTime;
     }
@@ -65,5 +67,13 @@ public class Order {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Long getUniqueRow() {
+        return uniqueRow;
+    }
+
+    public void setUniqueRow(Long uniqueRow) {
+        this.uniqueRow = uniqueRow;
     }
 }

@@ -14,6 +14,8 @@ public class OrderAddDto implements Serializable {
 
     private BigDecimal totalPrice;
 
+    private Long uniqueRow;
+
     private List<OrderProductAddDto> productDtoList;
 
     public Long getUserId() {
@@ -22,6 +24,14 @@ public class OrderAddDto implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Long getUniqueRow() {
+        return uniqueRow;
+    }
+
+    public void setUniqueRow(Long uniqueRow) {
+        this.uniqueRow = uniqueRow;
     }
 
     public BigDecimal getTotalPrice() {

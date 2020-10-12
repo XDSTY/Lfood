@@ -15,6 +15,11 @@ public class OrderAddParam {
     private BigDecimal totalPrice;
 
     /**
+     * 前端传来的唯一key
+     */
+    private Long uniqueRow;
+
+    /**
      * 订单中商品
      */
     private List<OrderProductParam> orderProductAdds;
