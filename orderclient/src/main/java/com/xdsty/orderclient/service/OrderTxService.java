@@ -1,6 +1,7 @@
 package com.xdsty.orderclient.service;
 
 import com.xdsty.orderclient.dto.OrderAddDto;
+import com.xdsty.orderclient.re.OrderAddRe;
 import io.seata.rm.tcc.api.BusinessActionContext;
 import io.seata.rm.tcc.api.BusinessActionContextParameter;
 import io.seata.rm.tcc.api.TwoPhaseBusinessAction;
@@ -19,8 +20,8 @@ public interface OrderTxService {
      * @return 是否操作成功
      */
     @TwoPhaseBusinessAction(name = "OrderTxService", commitMethod = "commit", rollbackMethod = "rollback")
-    long prepare(BusinessActionContext context,
-                 @BusinessActionContextParameter(paramName = "orderAddDto") OrderAddDto orderAddDto);
+    OrderAddRe prepare(BusinessActionContext context,
+                       @BusinessActionContextParameter(paramName = "orderAddDto") OrderAddDto orderAddDto);
 
     /**
      * 下单tcc分布式事务，commit阶段

@@ -1,6 +1,7 @@
 package com.xdsty.txclient.service;
 
 import com.xdsty.orderclient.dto.OrderAddDto;
+import com.xdsty.orderclient.re.OrderAddRe;
 
 public interface OrderTransactionService {
 
@@ -9,6 +10,6 @@ public interface OrderTransactionService {
      * @param dto
      * @return
      */
-    Long placeOrder(OrderAddDto dto);
+    OrderAddRe placeOrder(OrderAddDto dto);
 
 }

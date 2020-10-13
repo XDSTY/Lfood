@@ -110,6 +110,19 @@ public final class RedisUtil {
         return Optional.ofNullable(exist).orElse(false);
     }
 
+    /**
+     * 不存在则加锁，可以作为简单的redis分布式锁
+     * @param key
+     * @param value
+     * @param time
+     * @param timeUnit
+     * @return
+     */
+    public static boolean setnx(String key, String value, long time, TimeUnit timeUnit) {
+        Boolean res = redisTemplate.opsForValue().setIfAbsent(key, value, time, timeUnit);
+        return Optional.ofNullable(res).orElse(false);
+    }
+
     /* ****** zset接口 ****** */
 
     /**

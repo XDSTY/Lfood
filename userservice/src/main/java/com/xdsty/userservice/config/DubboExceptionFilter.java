@@ -62,7 +62,6 @@ public class DubboExceptionFilter implements Filter, Filter.Listener {
                 if (className.startsWith("java.") || className.startsWith("javax.")) {
                     return;
                 }
-                logger.error("测试dubbo exception filter");
                 // 自定义的异常也直接抛出
                 if (className.startsWith("basecommon.exception")) {
                     return;

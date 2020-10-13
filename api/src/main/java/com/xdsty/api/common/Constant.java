@@ -30,6 +30,13 @@ public final class Constant {
 
     public static final String CONF_CENTER_GROUPID = "API_SERVICE_GROUP";
 
+    /**
+     * 防止重复下单redis前缀
+     */
+    public static final String ORDER_DISTINCT_PREFIX = "order_distinct_";
 
-
+    /**
+     * 防止重复下单key保存时间
+     */
+    public static final long ORDER_DISTINCT_KEY_TTL = 60000;
 }

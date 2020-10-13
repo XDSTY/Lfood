@@ -2,6 +2,7 @@ package com.xdsty.txservice.service;
 
 import com.xdsty.orderclient.dto.OrderAddDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
+import com.xdsty.orderclient.re.OrderAddRe;
 import com.xdsty.orderclient.service.OrderTxService;
 import com.xdsty.productclient.dto.ProductStorageDto;
 import com.xdsty.productclient.dto.ProductStorageListDto;
@@ -27,10 +28,9 @@ public class OrderTransactionServiceImpl implements OrderTransactionService {
 
     @Override
     @GlobalTransactional
-    public Long placeOrder(OrderAddDto dto) {
+    public OrderAddRe placeOrder(OrderAddDto dto) {
         List<ProductStorageDto> storageDtos = dto.getProductDtos().stream().map(this::convert2ProductStorageDto).collect(Collectors.toList());
         ProductStorageListDto listDto = new ProductStorageListDto();
-        listDto.setUserId(1L);
         listDto.setProductStorageDtos(storageDtos);
         storageTxService.prepare(null, listDto);
         return orderTxService.prepare(null, dto);

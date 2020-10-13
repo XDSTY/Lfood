@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class OrderAddParam {
+public class OrderAddParam extends CommonParam {
 
     /**
      * 订单总价

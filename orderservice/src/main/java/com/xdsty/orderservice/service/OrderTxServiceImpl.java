@@ -6,7 +6,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.xdsty.orderclient.dto.OrderAddDto;
 import com.xdsty.orderclient.dto.OrderProductAddDto;
 import com.xdsty.orderclient.dto.OrderProductAdditionalDto;
+import com.xdsty.orderclient.enums.OrderAddEnum;
 import com.xdsty.orderclient.enums.OrderStatusEnum;
+import com.xdsty.orderclient.re.OrderAddRe;
 import com.xdsty.orderclient.service.OrderTxService;
 import com.xdsty.orderservice.common.Constant;
 import com.xdsty.orderservice.entity.Order;
@@ -30,6 +32,7 @@ import io.seata.rm.tcc.api.BusinessActionContext;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -68,7 +71,7 @@ public class OrderTxServiceImpl implements OrderTxService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public long prepare(BusinessActionContext context, OrderAddDto dto) {
+    public OrderAddRe prepare(BusinessActionContext context, OrderAddDto dto) {
         log.error("context: {}", context);
         if (CollectionUtils.isEmpty(dto.getProductDtos())) {
             throw new BusinessRuntimeException("订单商品信息不能为空");
@@ -76,13 +79,19 @@ public class OrderTxServiceImpl implements OrderTxService {
         OrderTransaction transactionRecord = transactionMapper.getTransaction(context.getXid(), context.getBranchId());
         // 该事务已存在  表明该请求是重复请求
         if (transactionRecord != null) {
-            return -1L;
+            log.error("重复事务请求");
+            return new OrderAddRe();
         }
         // 雪花算法生成分布式唯一id
         long orderId = IdWorker.getNextId();
         //新建订单和订单商品
         Order order = convert2Order(dto, orderId);
-        int count = orderMapper.insertOrder(order);
+        int count = 0;
+        try{
+            count = orderMapper.insertOrder(order);
+        }catch (DuplicateKeyException ex) {
+            throw new BusinessRuntimeException(OrderAddEnum.OPERATION_REPEAT.getStatus(), "重复操作");
+        }
         if (count <= 0) {
             throw new BusinessRuntimeException("新建订单失败，xid: " + context.getXid() + ", branchId:" + context.getBranchId());
         }
@@ -104,7 +113,7 @@ public class OrderTxServiceImpl implements OrderTxService {
         if (transactionMapper.insertTransaction(transaction) <= 0) {
             throw new BusinessRuntimeException("新建事务记录失败，xid: " + context.getXid() + ", branchId:" + context.getBranchId());
         }
-        return orderId;
+        return new OrderAddRe(OrderAddEnum.SUCCESS.getStatus(), orderId);
     }
 
     /**

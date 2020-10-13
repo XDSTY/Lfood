@@ -3,6 +3,7 @@ package com.xdsty.api.controller;
 import basecommon.exception.BusinessRuntimeException;
 import basecommon.util.PageUtil;
 import com.google.common.collect.Lists;
+import com.xdsty.api.common.Constant;
 import com.xdsty.api.config.annotation.PackageResult;
 import com.xdsty.api.config.nacos.ConfigCenter;
 import com.xdsty.api.config.nacos.ConfigKeyEnum;
@@ -22,9 +23,12 @@ import com.xdsty.api.controller.param.order.PayOrderParam;
 import com.xdsty.api.service.IntegralCalculateService;
 import com.xdsty.api.service.OrderCheckService;
 import com.xdsty.api.util.JsonUtil;
+import com.xdsty.api.util.RedisUtil;
 import com.xdsty.api.util.SessionUtil;
 import com.xdsty.orderclient.dto.*;
+import com.xdsty.orderclient.enums.OrderAddEnum;
 import com.xdsty.orderclient.enums.OrderStatusEnum;
+import com.xdsty.orderclient.re.OrderAddRe;
 import com.xdsty.orderclient.re.OrderListProductRe;
 import com.xdsty.orderclient.re.OrderListRe;
 import com.xdsty.orderclient.re.OrderModuleRe;
@@ -48,6 +52,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @PackageResult
@@ -86,16 +92,34 @@ public class OrderController {
     @PostMapping("placeOrder")
     public OrderPlaceContent placeOrder(@RequestBody OrderAddParam param) {
         Long userId = SessionUtil.getUserId();
+
+        // 防止重复下单key
+        String distinctKey = Constant.ORDER_DISTINCT_PREFIX + param.getUserId() + "_" + param.getUniqueRow();
+        if (!RedisUtil.setnx(distinctKey, "", Constant.ORDER_DISTINCT_KEY_TTL, TimeUnit.MILLISECONDS)) {
+            throw new BusinessRuntimeException("后台处理中，请不要重复操作");
+        }
+
         // 校验商品是否有效和是价格否变化
         orderCheckService.checkOrderProductValid(param);
 
         // 添加订单
         OrderAddDto dto = convert2OrderAddDto(param);
         dto.setUserId(userId);
-        Long orderId = orderTransactionService.placeOrder(dto);
-
+        OrderAddRe orderRe;
+        try {
+            orderRe  = orderTransactionService.placeOrder(dto);
+        } catch (BusinessRuntimeException e) {
+            if(Objects.nonNull(e.getCode()) && OrderAddEnum.OPERATION_REPEAT.getStatus().equals(e.getCode())) {
+                // TODO 重复操作异常，延长redis的key的过期时间
+                throw new BusinessRuntimeException("后台处理中，请不要重复操作");
+            }
+            // 其他异常引起的下单失败需要删除对应的key
+            RedisUtil.expire(distinctKey, 0L);
+            throw e;
+        }
         OrderPlaceContent content = new OrderPlaceContent();
-        content.setOrderId(orderId);
+        content.setOrderId(orderRe.getOrderId());
+        content.setTotalPrice(param.getTotalPrice());
         return content;
     }
 
