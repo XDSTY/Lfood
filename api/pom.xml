@@ -21,7 +21,7 @@
         <basecommon.version>1.0-SNAPSHOT</basecommon.version>
         <txclient.version>1.0-SNAPSHOT</txclient.version>
         <payclient.version>1.0-SNAPSHOT</payclient.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <curator.version>4.3.0</curator.version>
         <commons.lang.version>2.6</commons.lang.version>
         <validation.version>2.0.1.Final</validation.version>
